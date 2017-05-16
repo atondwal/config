@@ -14,6 +14,8 @@ ln -s `pwd`/.xmonad ~/.xmonad
 ln -s `pwd`/.conkyrc ~/.conkyrc
 ln -s `pwd`/.Xdefaults ~/.Xdefaults
 ln -s `pwd`/.urxvt-perl ~/.urxvt-perl
+mkdir -p ~/.fonts/
+ln -s `pwd`/input.ttf ~/.fonts/
 
 git clone https://github.com/windelicato/dotfiles windelicato
 ln -s `pwd`/windelicato/.colors ~/.colors
