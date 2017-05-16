@@ -1,0 +1,72 @@
+#include "/home/atondwal/.colors/s3r0"
+
+! Font change settings
+URxvt.iso14755: false
+URxvt.iso14755_52: false
+!URxvt.keysym.C-7: command:\033]710;-lokaltog-fixed-medium-r-normal--10-100-75-75-c-60-iso8859-1\007\033]711;-lokaltog-fixed-medium-r-normal--10-100-75-75-c-60-iso8859-1\007
+!URxvt.keysym.C-8: command:\033]710;-*-neep-medium-r-semicondensed-*-11-*-*-*-*-*-*-*\007\033]711;-*-neep-medium-r-semicondensed-*-11-*-*-*-*-*-*-*\007
+!URxvt.keysym.C-8: command:\033]710;-*-lemon-*-*-*-*-*-*-*-*-*-*-*-*\007\033]711;-*-lemon-*-*-*-*-*-*-*-*-*-*-*-*\007
+!URxvt.keysym.C-9: command:\033]710;-*-tewi-medium-r-normal-*-*-*-*-*-*-*-*-*\007\033]711;-*-tewi-medium-r-normal-*-*-*-*-*-*-*-*-*\007
+!URxvt.keysym.C-9: command:\033]710;-*-tamzen-medium-r-normal-*-*-87-*-*-*-*-*-*\007\033]711;-*-tamzen-medium-r-normal-*-*-87-*-*-*-*-*-*\007
+!URxvt.keysym.C-0: command:\033]710;xft:monaco:size=10\007\033]711;xft:monaco:size=10\007
+URxvt.keysym.C-equal:   perl:font-size:increase
+URxvt.keysym.C-minus:   perl:font-size:decrease
+
+urxvt*font: xft:InputMonoCompressed Light:size=10
+!urxvt*font: xft:Iosevka:size=10
+!urxvt*boldFont: xft:Source Code Pro for Powerline
+!urxvt*italicFont: -*-tamzen-medium-r-normal-*-*-87-*-*-*-*-*-*
+!urxvt*bolditalicFont: -*-tamzen-medium-r-normal-*-*-87-*-*-*-*-*-*
+
+!urxvt*font: -*-tamzen-medium-r-normal-*-*-87-*-*-*-*-*-*
+!urxvt*boldFont: -*-tamzen-medium-r-normal-*-*-87-*-*-*-*-*-*
+!urxvt*italicFont: -*-tamzen-medium-r-normal-*-*-87-*-*-*-*-*-*
+!urxvt*bolditalicFont: -*-tamzen-medium-r-normal-*-*-87-*-*-*-*-*-*
+
+URxvt.depth:                32
+URxvt.cursorBlink:          false
+URxvt.internalBorder:       0
+URxvt.scrollTtyKeypress:    true
+URxvt.scrollTtyOutput:      false
+URxvt.scrollstyle:          plain
+URxvt.underlineURLs:        true
+URxvt.url-launcher:         /usr/sbin/brave-bin
+URxvt.xftAntialias:         true
+Urxvt.loginShell:           true
+URxvt.saveLines:            12000
+URxvt.scrollBar:            false
+urxvt*dynamicColors: on
+urxvt.urgentOnBell:  true
+!urxvt*letterspace: 0
+
+URxvt.perl-lib:             /home/atondwal/.urxvt-perl/
+URxvt.perl-ext-common:      default,matcher,keyboard-select,clipboard,font-size
+URxvt.keysym.M-Escape:      perl:keyboard-select:activate
+URxvt.keysym.M-v:           perl:keyboard-select:activate
+URxvt.keysym.M-p:           perl:clipboard:paste
+URxvt.clipboard.autocopy:   true
+URxvt.clipboard.copycmd:    xclip -i -selection clipboard
+URxvt.clipboard.pastecmd:   xclip -o -selection clipboard
+URxvt.keysym.C-Up:     perl:font-size:increase
+URxvt.keysym.C-Down:   perl:font-size:decrease
+URxvt.keysym.C-S-Up:   perl:font-size:incglobal
+URxvt.keysym.C-S-Down: perl:font-size:decglobal
+
+URxvt.matcher.button:       1
+URxvt.keysym.Shift-Down:    command:\033]721;1\007
+URxvt.keysym.Shift-Up:      command:\033]720;1\007
+URxvt.copyCommand:          xclip -i -selection clipboard
+URxvt.pasteCommand:         xclip -o -selection clipboard
+!URxvt.skipBuiltinGlyphs:    true
+
+Xft.antialias:              true
+Xft.dpi:                    96
+Xft.autohint:               false
+Xft.hinting:                full
+Xft.hintstyle:              hintfull
+Xft.lcdfilter:              lcddefault
+Xft.rgba:                   rgb
+
+! ImageMagick display command
+Display.font:               xft:Droid Sans Mono:size=11
+Display.boldFont:           xft:Droid Sans Mono:size=11
