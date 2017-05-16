@@ -23,5 +23,5 @@ ln -s `pwd`/windelicato/.colors ~/.colors
 git clone --recursive https://github.com/atondwal/prezto.git ".zprezto"
 setopt EXTENDED_GLOB
 for rcfile in .zprezto/runcoms/^README.md(.N); do
-  ln -s "$rcfile" `pwd`"/.${rcfile:t}"
+  ln -s `pwd`/"$rcfile" ~"/.${rcfile:t}"
 done

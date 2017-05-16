@@ -30,27 +30,27 @@ Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
-Plug 'SuperTab'
+Plug 'ervandew/supertab'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 " }}}
 " {{{ Tweaks
-Plug 'surround.vim'
-Plug 'unimpaired.vim'
-Plug 'repeat.vim'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-repeat'
 "Plug 'vim-indent-object'
-Plug 'matchit.zip'
-Plug 'argtextobj.vim'
+Plug 'tmhedberg/matchit'
+Plug 'vim-scripts/argtextobj.vim'
 Plug 'kana/vim-niceblock'
 Plug 'zirrostig/vim-schlepp'
-Plug 'vim-fetch'
+Plug 'kopischke/vim-fetch'
 Plug 'machakann/vim-swap'
 "Plug 'RelOps'
 " }}}
 " {{{ Features
 Plug 'dyng/ctrlsf.vim'
 "Plug 'vimwiki/vimwiki'
-Plug 'loremipsum'
+Plug 'vim-scripts/loremipsum'
 "Plug 'FredKSchott/CoVim'
 Plug 'simnalamburt/vim-mundo'
 "Plug 'godlygeek/tabular'
@@ -77,30 +77,32 @@ Plug 'mattn/emmet-vim'
   let g:user_zen_mode='a'
 " }}}
 " {{{ English
-Plug 'LanguageTool'
+"Plug 'LanguageTool'
 " }}}
 " {{{ orgmode
 Plug 'Detegr/vim-orgmode'
 let g:org_agenda_files = ['~/org/*.org']
 Plug 'dhruvasagar/vim-table-mode'
-Plug 'utl.vim'
-Plug 'calendar.vim'
-Plug 'SyntaxRange'
-Plug 'speeddating.vim'
+Plug 'vim-scripts/utl.vim'
+"Plug 'vim-scripts/calendar.vim'
+Plug 'itchyny/calendar.vim' " mattn/calendar.vim?
+Plug 'vim-scripts/SyntaxRange'
+Plug 'tpope/vim-speeddating'
 " }}}
 " {{{ git
-Plug 'vimagit' | Plug 'airblade/vim-gitgutter'
+Plug 'jreybert/vimagit' | Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive' "for fzf
 Plug 'tweekmonster/gitbusy.vim'
 " }}}
 "}}}
 " {{{ Colors
 "Plug 'jasonlong/lavalamp'
-Plug 'vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'vim-airline/vim-airline'
   " set laststatus=2
   let g:airline_powerline_fonts = 1
   let g:airline#extensions#tabline#enabled = 1
-Plug 'wombat256.vim'
+Plug 'vim-scripts/wombat256.vim'
 " }}}
 " All of your Plugs must be added before the following line
 call plug#end()            " required
