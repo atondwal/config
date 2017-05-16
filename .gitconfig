@@ -1,0 +1,11 @@
+[user]
+	email = anish@archlinux.info
+	name = Anish Tondwalkar
+[push]
+	default = matching
+[pull]
+	ff = only
+[merge]
+	tool = vimdiff
+[core]
+	editor = /bin/nvim

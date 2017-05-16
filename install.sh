@@ -1,11 +1,15 @@
 #!/bin/zsh
 # needs: zsh, xmonad, urxvt, git
 # provides: vim, emacs, color schemes, conky
+
 ln -s `pwd`/bin ~/bin
+ln -s `pwd`/.gitconfig ~/.gitconfig
+
 mkdir -p ~/.config/nvim/
 ln -s `pwd`/init.vim ~/.config/nvim/init.vim
 mkdir -p ~/.emacs/
 ln -s `pwd`/init.el ~/.emacs/init.el
+
 ln -s `pwd`/.xmonad ~/.xmonad
 ln -s `pwd`/.conkyrc ~/.conkyrc
 ln -s `pwd`/.Xdefaults ~/.Xdefaults
