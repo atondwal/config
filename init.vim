@@ -22,8 +22,8 @@ endif
 call plug#begin('~/.config/nvim/autoload/plugged')
 " }}}
 " {{{ Make
-Plug 'neomake/neomake' | "Plug 'dojoteef/neomake-autolint'
-autocmd! BufWritePost * Neomake
+Plug 'neomake/neomake' | Plug 'dojoteef/neomake-autolint'
+"autocmd! BufWritePost * Neomake
 " }}}
 " {{{ Completion & Snippets
 Plug 'Shougo/vimproc.vim', { 'do': 'make' }
@@ -92,7 +92,10 @@ Plug 'tpope/vim-speeddating'
 " {{{ git
 Plug 'jreybert/vimagit' | Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive' "for fzf
-Plug 'tweekmonster/gitbusy.vim'
+" Plug 'tweekmonster/gitbusy.vim'
+" }}}
+" {{{ latex
+Plug 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX'
 " }}}
 "}}}
 " {{{ Colors
@@ -136,7 +139,7 @@ set tabstop=2
 let mapleader = "\<Space>"
 
 set undofile                " Save undo's after file closes
-set undodir=$HOME/.vim/undo " where to save undo histories
+set undodir=~/.nvim/undo " where to save undo histories
 set undolevels=10000         " How many undos
 set undoreload=100000        " number of lines to save for undo
 " }}}
@@ -206,14 +209,18 @@ autocmd WinEnter term://* startinsert
 
 " map <silent> <leader>o :call hlintRefactorVim#ApplyOneSuggestion()<CR>
 " map <silent> <leader>a :call hlintRefactorVim#ApplyAllSuggestions()<CR>
-map <silent> <leader>g :GhcModSigCodegen<CR>
-map <silent> <leader>s :GhcModSplitFunCase<CR>
-map <silent> <leader>t :GhcModTypeInsert<CR>
+autocmd FileType haskell map <buffer><silent> <leader>g :GhcModSigCodegen<CR>
+autocmd FileType haskell map <buffer><silent> <leader>s :GhcModSplitFunCase<CR>
+autocmd FileType haskell map <buffer><silent> <leader>t :GhcModTypeInsert<CR>
 "map <silent> <leader>r :Hrename
 "         }}}
 " orgmode {{{
 nmap  <localleader>cc
 "         }}}
+" {{{ latex
+let g:tex_flavor='latex'
+let g:Tex_DefaultTargetFormat = 'pdf'
+" }}}
 
 " Automatically source vimrc on save.
 autocmd! bufwritepost $MYVIMRC source $MYVIMRC
