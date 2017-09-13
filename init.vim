@@ -55,13 +55,26 @@ Plug 'vim-scripts/loremipsum'
 Plug 'simnalamburt/vim-mundo'
 "Plug 'godlygeek/tabular'
 Plug 'metakirby5/codi.vim'
+Plug 'majutsushi/tagbar'
 " }}}
 " {{{ Languages
+Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
+Plug 'Shougo/echodoc.vim'
+
+let g:LanguageClient_serverCommands = {
+    \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+    \ 'haskell': ['hie', '--lsp'],
+    \ }
+
+" Automatically start language servers.
+let g:LanguageClient_autoStart = 1
 " {{{ Haskell
 " https://github.com/ucsd-progsys/liquid-types.vim
 " Plug 'glittershark/vim-hare'
-Plug 'eagletmt/ghcmod-vim'
-Plug 'eagletmt/neco-ghc'
+"" Superceeded by language-client-server
+"" Plug 'eagletmt/ghcmod-vim'
+"" Plug 'eagletmt/neco-ghc'
+Plug 'bitc/lushtags'
 " Plug 'bitc/vim-hdevtools' " Used with syntastic
 " Plug 'myfreeweb/intero.nvim'
 " Plug 'mpickering/hlint-refactor-vim'
@@ -69,23 +82,16 @@ Plug 'eagletmt/neco-ghc'
 " {{{ Coq
 Plug 'epdtry/neovim-coq'
 Plug 'idris-hackers/idris-vim'
-" Plug 'the-lambda-church/coquille'
-  " Plug 'def-lkb/vimbufsync'
+" Plug 'the-lambda-church/coquille' |  Plug 'def-lkb/vimbufsync'
 " }}}
-" {{{ HTML
 Plug 'mattn/emmet-vim'
   let g:user_zen_mode='a'
-" }}}
-" {{{ English
-"Plug 'LanguageTool'
-" }}}
 " {{{ orgmode
 Plug 'Detegr/vim-orgmode'
 let g:org_agenda_files = ['~/org/*.org']
 Plug 'dhruvasagar/vim-table-mode'
 Plug 'vim-scripts/utl.vim'
-"Plug 'vim-scripts/calendar.vim'
-Plug 'itchyny/calendar.vim' " mattn/calendar.vim?
+Plug 'itchyny/calendar.vim' " mattn/calendar.vim?  Plug 'vim-scripts/calendar.vim'
 Plug 'vim-scripts/SyntaxRange'
 Plug 'tpope/vim-speeddating'
 " }}}
@@ -94,17 +100,16 @@ Plug 'jreybert/vimagit' | Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive' "for fzf
 " Plug 'tweekmonster/gitbusy.vim'
 " }}}
-" {{{ latex
 Plug 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX'
-" }}}
+Plug 'vim-pandoc/vim-pandoc'
 "}}}
 " {{{ Colors
 "Plug 'jasonlong/lavalamp'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'vim-airline/vim-airline'
-  " set laststatus=2
-  let g:airline_powerline_fonts = 1
-  let g:airline#extensions#tabline#enabled = 1
+"Plug 'vim-airline/vim-airline-themes'
+"Plug 'vim-airline/vim-airline'
+"  " set laststatus=2
+"  let g:airline_powerline_fonts = 1
+"  let g:airline#extensions#tabline#enabled = 1
 Plug 'vim-scripts/wombat256.vim'
 " }}}
 " All of your Plugs must be added before the following line
@@ -119,7 +124,6 @@ set hidden
 set showcmd
 "set number
 set numberwidth=2
-set pastetoggle=<F7>
 set so=7
 set ruler
 set wildmenu
@@ -136,7 +140,6 @@ set smarttab
 set expandtab
 set shiftwidth=2
 set tabstop=2
-let mapleader = "\<Space>"
 
 set undofile                " Save undo's after file closes
 set undodir=~/.nvim/undo " where to save undo histories
@@ -213,6 +216,8 @@ autocmd FileType haskell map <buffer><silent> <leader>g :GhcModSigCodegen<CR>
 autocmd FileType haskell map <buffer><silent> <leader>s :GhcModSplitFunCase<CR>
 autocmd FileType haskell map <buffer><silent> <leader>t :GhcModTypeInsert<CR>
 "map <silent> <leader>r :Hrename
+
+
 "         }}}
 " orgmode {{{
 nmap  <localleader>cc
@@ -221,6 +226,9 @@ nmap  <localleader>cc
 let g:tex_flavor='latex'
 let g:Tex_DefaultTargetFormat = 'pdf'
 " }}}
+
+let mapleader = "\<Space>"
+set pastetoggle=<F7>
 
 " Automatically source vimrc on save.
 autocmd! bufwritepost $MYVIMRC source $MYVIMRC
@@ -236,7 +244,7 @@ nmap [<Space> <Plug>unimpairedBlankUpk
 nmap ]<Space> <Plug>unimpairedBlankDownj
 nnoremap  :CtrlSF
 nmap <silent> <leader>u :MundoToggle<CR>
-nmap <leader>gb :GitBusy
+"nmap <leader>gb :GitBusy
 
 vnoremap <Leader>y "+y
 vnoremap <Leader>d "+d
@@ -271,5 +279,4 @@ hi Search cterm=NONE ctermfg=grey ctermbg=blue
 hi Folded cterm=NONE ctermfg=3 ctermbg=234
 hi VertSplit cterm=NONE
 " au FileType org color desert
-autocmd BufCreate term://* set readonly
-let g:airline_theme='raven'
+"let g:airline_theme='raven'

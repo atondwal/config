@@ -8,4 +8,4 @@
 [merge]
 	tool = vimdiff
 [core]
-	editor = /bin/nvim
+	editor = nvim
