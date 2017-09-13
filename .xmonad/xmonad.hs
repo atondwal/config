@@ -126,7 +126,7 @@ keyBindings = [
               ]
     where
       dmenu      = concat [
-                    "exe=`dmenu_path | ~/.cabal/bin/yeganesh",
+                    "exe=`dmenu_path | yeganesh",
                     " -x ",
                     " -- -i -b ",
                     "-sb \"#689d6a\" ",

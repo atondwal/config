@@ -12,12 +12,13 @@ URxvt.iso14755_52: false
 URxvt.keysym.C-equal:   perl:font-size:increase
 URxvt.keysym.C-minus:   perl:font-size:decrease
 
-urxvt*font: xft:InputMonoCompressed Light:size=10
+!urxvt*font: xft:InputMonoCompressed Light:size=10
 !urxvt*font: xft:Iosevka:size=10
 !urxvt*boldFont: xft:Source Code Pro for Powerline
 !urxvt*italicFont: -*-tamzen-medium-r-normal-*-*-87-*-*-*-*-*-*
 !urxvt*bolditalicFont: -*-tamzen-medium-r-normal-*-*-87-*-*-*-*-*-*
 
+!urxvt*font: -*-iosevka thin-*-*-*-*-*-*-*-*-*-*-*-*
 !urxvt*font: -*-tamzen-medium-r-normal-*-*-87-*-*-*-*-*-*
 !urxvt*boldFont: -*-tamzen-medium-r-normal-*-*-87-*-*-*-*-*-*
 !urxvt*italicFont: -*-tamzen-medium-r-normal-*-*-87-*-*-*-*-*-*
@@ -37,6 +38,7 @@ URxvt.saveLines:            12000
 URxvt.scrollBar:            false
 urxvt*dynamicColors: on
 urxvt.urgentOnBell:  true
+URxvt.buffered: false
 !urxvt*letterspace: 0
 
 URxvt.perl-lib:             /home/atondwal/.urxvt-perl/
@@ -70,3 +72,6 @@ Xft.rgba:                   rgb
 ! ImageMagick display command
 Display.font:               xft:Droid Sans Mono:size=11
 Display.boldFont:           xft:Droid Sans Mono:size=11
+
+XTerm*eightBitInput: false
+st.borderpx:     1
