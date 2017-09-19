@@ -11,22 +11,7 @@ if !filereadable(path)
 endif
 
 call plug#begin('~/.config/nvim/autoload/plugged')
-" {{{ Make
-" somehow run in terminal?
-Plug 'neomake/neomake'
-" Only on AC power
-"autocmd! BufWritePost * Neomake
-"Plug 'dojoteef/neomake-autolint'
-" }}}
-" {{{ Completion, Snippets, FZF
-Plug 'Shougo/vimproc.vim', { 'do': 'make' }
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-Plug 'ervandew/supertab'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
-" }}}
+Plug 'morhetz/gruvbox'
 " {{{ Tweaks
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
@@ -47,6 +32,22 @@ Plug 'simnalamburt/vim-mundo'
 "Plug 'godlygeek/tabular'
 Plug 'metakirby5/codi.vim'
 Plug 'majutsushi/tagbar'
+" }}}
+" {{{ Completion, Snippets, FZF
+Plug 'Shougo/vimproc.vim', { 'do': 'make' }
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+Plug 'ervandew/supertab'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+" }}}
+" {{{ Make
+" somehow run in terminal?
+Plug 'neomake/neomake'
+" Only on AC power
+"autocmd! BufWritePost * Neomake
+"Plug 'dojoteef/neomake-autolint'
 " }}}
 " {{{ Languages
 Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
@@ -82,7 +83,6 @@ Plug 'tpope/vim-fugitive' "for fzf
 Plug 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX', { 'for': 'tex' }
 Plug 'vim-pandoc/vim-pandoc'
 "}}}
-Plug 'morhetz/gruvbox'
 call plug#end() | if exists("doinstall") | PlugInstall | endif
 " }}}
 
@@ -131,27 +131,34 @@ let g:UltiSnipsExpandTrigger="<c-e>"
 autocmd VimResized * :wincmd =
 
 " Window Navigation with Alt
+nnor <A-h> <C-w>h
+nnor <A-j> <C-w>j
+nnor <A-k> <C-w>k
+nnor <A-l> <C-w>l
 
-nnor <A-h> <C-w>h | nnor <A-j> <C-w>j | nnor <A-k> <C-w>k | nnor <A-l> <C-w>l
-inor <A-h> <Esc><C-w>h | inor <A-j> <Esc><C-w>j | inor <A-k> <Esc><C-w>k | inor <A-l> <Esc><C-w>l
+inor <A-h> <Esc><C-w>h
+inor <A-j> <Esc><C-w>j
+inor <A-k> <Esc><C-w>k
+inor <A-l> <Esc><C-w>l
+
 if has("nvim")
   tnoremap <A-h> <C-\><C-n><C-w>h | tnoremap <A-j> <C-\><C-n><C-w>j | tnoremap <A-k> <C-\><C-n><C-w>k | tnoremap <A-l> <C-\><C-n><C-w>l
 endif
 
 " Tab navigation with Ctrl-Shift
 if has("nvim")
-  tnoremap <A-S-k> <C-\><C-n>:tabprev<CR>
-  tnoremap <A-S-j> <C-\><C-n>:tabnext<CR>
+  tnoremap <A-S-h> <C-\><C-n>:tabprev<CR>
+  tnoremap <A-S-l> <C-\><C-n>:tabnext<CR>
   tnoremap <A-S-n> <C-\><C-n>:tabnew term://zsh<CR>
   tnoremap  
 endif
 
-nnoremap <A-S-k> :tabprev<CR>
-nnoremap <A-S-j> :tabnext<CR>
+nnoremap <A-S-h> :tabprev<CR>
+nnoremap <A-S-l> :tabnext<CR>
 nnoremap <A-S-n> :tabnew term://zsh<CR>
 
-inoremap <A-S-k> :tabprev<CR>
-inoremap <A-S-j> :tabnext<CR>
+inoremap <A-S-h> :tabprev<CR>
+inoremap <A-S-l> :tabnext<CR>
 inoremap <A-S-n> :tabnew term://zsh<CR>
 
 autocmd WinEnter term://* startinsert
