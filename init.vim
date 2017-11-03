@@ -4,6 +4,10 @@ if has("nvim") | let path=$HOME."/.config/nvim/autoload/plug.vim"
 else           | let path=$HOME."/.vim/autoload/plug.vim"
 endif
 
+function! MyOnBattery()
+  return readfile('/sys/class/power_supply/ADP0/online') == ['0']
+endfunction
+
 if !filereadable(path)
     echo "Installing Plug..." | echo ""
     silent exec "!curl -fLo ".path." --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
@@ -16,41 +20,35 @@ Plug 'morhetz/gruvbox'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-repeat'
-"Plug 'vim-indent-object'
 Plug 'tmhedberg/matchit'
 Plug 'vim-scripts/argtextobj.vim'
 Plug 'kana/vim-niceblock'
 Plug 'zirrostig/vim-schlepp'
 Plug 'kopischke/vim-fetch'
 Plug 'machakann/vim-swap'
-"Plug 'RelOps'
 " }}}
 " {{{ Features
 Plug 'dyng/ctrlsf.vim'
 Plug 'vim-scripts/loremipsum', { 'on' : 'LoremIpsum' }
 Plug 'simnalamburt/vim-mundo'
-"Plug 'godlygeek/tabular'
+Plug 'godlygeek/tabular'
 Plug 'metakirby5/codi.vim'
 Plug 'majutsushi/tagbar'
 " }}}
 " {{{ Completion, Snippets, FZF
-Plug 'Shougo/vimproc.vim', { 'do': 'make' }
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'Shougo/vimproc.vim'   , { 'do': 'make' }
+Plug 'Shougo/deoplete.nvim' , { 'do': ':UpdateRemotePlugins' }
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'ervandew/supertab'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
+Plug 'junegunn/fzf'         , { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'     "forgot what this is a dep of, but it's nice anyway
 " }}}
 " {{{ Make
 " somehow run in terminal?
 Plug 'neomake/neomake'
-" Only on AC power
-"autocmd! BufWritePost * Neomake
-"Plug 'dojoteef/neomake-autolint'
 " }}}
 " {{{ Languages
-Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/echodoc.vim'
 " {{{ Haskell
 Plug 'bitc/lushtags'
@@ -87,7 +85,7 @@ call plug#end() | if exists("doinstall") | PlugInstall | endif
 " }}}
 
 " {{{ Options
-"syntax enable
+if !exists(g:syntax_on) | syntax enable | endif
 set hidden
 set showcmd
 set mouse=a
@@ -96,12 +94,17 @@ set numberwidth=2
 set ruler so=7
 set wildmenu wildmode=list:longest,full
 set path+=**
+set foldlevelstart=20
 
-if &term=~'st-256colors'
-    set termguicolors!
+if &term=~'st-256colors' || &term=~'nvim'
+    set termguicolors
 endif
 set bg=dark
 colors gruvbox
+
+if MyOnBattery() | call neomake#configure#automake('w')
+else             | call neomake#configure#automake('rnw', 700)
+endif
 
 set list listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
 set fillchars+=vert:│
@@ -161,21 +164,7 @@ inoremap <A-S-h> :tabprev<CR>
 inoremap <A-S-l> :tabnext<CR>
 inoremap <A-S-n> :tabnew term://zsh<CR>
 
-autocmd WinEnter term://* startinsert
 " }}}
-"{{{ Language Client
-let g:LanguageClient_serverCommands = {
-    \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
-    \ 'haskell': ['hie', '--lsp'],
-    \ }
-
-" Automatically start language servers.
-let g:LanguageClient_autoStart = 1
-"}}}
-" {{{ Coq
-" noremap <F5> :CoqLaunch<CR>
-" au FileType coq call coquille#FNMapping()
-" }}}}
 " Haskell {{{
 
 " map <silent> <leader>o :call hlintRefactorVim#ApplyOneSuggestion()<CR>
@@ -253,4 +242,20 @@ vnoremap > >gv
 "if filereadable("Session.vim")
 "    source Session.vim
 "endif
+"autocmd WinEnter term://* startinsert
+"Plug 'vim-indent-object'
+"Plug 'RelOps'
+"Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
+"{{{ Language Client
+"let g:LanguageClient_serverCommands = {
+"    \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+"    \ 'haskell': ['stack', 'exec', '--', 'hie', '--lsp', '-d', '-l', '/tmp/hie.log'],
+"    \ }
 
+" Automatically start language servers.
+"let g:LanguageClient_autoStart = 1
+"}}}
+" {{{ Coq
+" noremap <F5> :CoqLaunch<CR>
+" au FileType coq call coquille#FNMapping()
+" }}}}
