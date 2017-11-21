@@ -52,16 +52,19 @@ Plug 'neomake/neomake'
 " {{{ Languages
 Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/echodoc.vim'
+Plug 'rust-lang/rust.vim'
 " {{{ Haskell
+"Plug 'parsonsmatt/intero-neovim'
 Plug 'bitc/lushtags'
 " https://github.com/ucsd-progsys/liquid-types.vim
-Plug 'glittershark/vim-hare'
-Plug 'eagletmt/ghcmod-vim'
+"Plug 'glittershark/vim-hare'
+"Plug 'eagletmt/ghcmod-vim'
 "" Superceeded by language-client-server
 "" Plug 'eagletmt/neco-ghc'
 " Plug 'bitc/vim-hdevtools' " Used with syntastic
 " Plug 'myfreeweb/intero.nvim'
 " Plug 'mpickering/hlint-refactor-vim'
+Plug 'ndmitchell/ghcid', { 'rtp': 'plugins/nvim' }
 " }}}
 Plug 'epdtry/neovim-coq'
 Plug 'idris-hackers/idris-vim'
@@ -128,7 +131,7 @@ let g:UltiSnipsExpandTrigger="<c-e>"
 " }}}
 " {{{ Windows and Tabs
 " let terminal resize scale the internal windows
-autocmd VimResized * :wincmd =
+"autocmd VimResized * :wincmd =
 
 " Window Navigation with Alt
 nnor <A-h> <C-w>h
@@ -161,7 +164,7 @@ inoremap <A-S-h> :tabprev<CR>
 inoremap <A-S-l> :tabnext<CR>
 inoremap <A-S-n> :tabnew term://zsh<CR>
 
-autocmd WinEnter term://* startinsert
+"autocmd WinEnter term://* startinsert
 " }}}
 "{{{ Language Client
 let g:LanguageClient_serverCommands = {
