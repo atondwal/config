@@ -2,7 +2,7 @@
 	email = anish@archlinux.info
 	name = Anish Tondwalkar
 [push]
-	default = matching
+	default = current
 [pull]
 	ff = only
 [merge]
