@@ -14,6 +14,7 @@ call plug#begin('~/.config/nvim/autoload/plugged')
 Plug 'morhetz/gruvbox'
 " {{{ Tweaks
 "Plug 'andrep/vimacs'
+Plug 'kana/vim-arpeggio'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-repeat'
@@ -192,7 +193,7 @@ inoremap <A-S-n> :tabnew term://zsh<CR>
 
 " orgmode {{{
 nmap  <localleader>cc
-let g:org_agenda_files = ['~/org/*.org']
+let g:org_agenda_files = ['~/org/asdf.org']
 "         }}}
 " {{{ latex
 let g:tex_flavor='latex'
@@ -274,6 +275,18 @@ map Y y$
 " Reselect visual block after indent
 vnoremap < <gv
 vnoremap > >gv
+
+call arpeggio#load()
+Arpeggio imap jk <Esc>
+Arpeggio map kl l
+Arpeggio map hj h
+Arpeggio map ui k
+Arpeggio map nm j
+Arpeggio map il gt
+Arpeggio map hu gT
+Arpeggio map ag :Ag<CR>
+Arpeggio imap ag <Esc>:Ag<CR>
+
 
 map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 
