@@ -19,6 +19,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-repeat'
 Plug 'tmhedberg/matchit'
+Plug 'vim-scripts/argtextobj.vim'
 Plug 'kana/vim-niceblock'
 Plug 'zirrostig/vim-schlepp'
 Plug 'kopischke/vim-fetch'
@@ -82,7 +83,7 @@ Plug 'vim-scripts/SyntaxRange'
 Plug 'jreybert/vimagit', {'on': 'Magit'}
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive' "for fzf
-" Plug 'tweekmonster/gitbusy.vim'
+Plug 'tweekmonster/gitbusy.vim'
 " }}}
 Plug 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX', { 'for': 'tex' }
 Plug 'vim-pandoc/vim-pandoc'
@@ -224,10 +225,8 @@ let g:LanguageClient_autoStart = 1
 " au FileType coq call coquille#FNMapping()
 " }}}}
 
+" {{{ Mappings
 let mapleader = "\<Space>"
-
-" Automatically source vimrc on save.
-autocmd! bufwritepost $MYVIMRC source $MYVIMRC
 
 autocmd VimEnter SpeedDatingFormat! ^%v
 autocmd VimEnter SpeedDatingFormat! %v
@@ -244,7 +243,9 @@ xmap <leader><tab> <plug>(fzf-maps-x)
 omap <leader><tab> <plug>(fzf-maps-o)
 nmap [<Space> <Plug>unimpairedBlankUpk
 nmap ]<Space> <Plug>unimpairedBlankDownj
-"nnoremap  :CtrlSF 
+nmap [, :tabp<CR>
+nmap ]. :tabn<CR>
+nnoremap  :CtrlSF
 nmap <silent> <leader>u :MundoToggle<CR>
 
 "clipboard
@@ -289,6 +290,10 @@ Arpeggio imap ag <Esc>:Ag<CR>
 
 
 map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+" }}}
+
+" Automatically source vimrc on save.
+autocmd! bufwritepost $MYVIMRC source $MYVIMRC
 
 " Graveyard
 "Plug 'vimwiki/vimwiki'
