@@ -17,6 +17,8 @@ import XMonad.Layout.NoBorders (smartBorders)
 
 import XMonad.Util.NamedScratchpad
 
+import XMonad.Actions.FloatKeys
+
 import Data.Map (union, fromList)
 
 term :: String
@@ -52,6 +54,7 @@ startup = do
 myManageHook = namedScratchpadManageHook scratchpads <+> composeAll
    [ className =? "mpv"      --> doFloat
    , className =? "pidgin"   --> doFloat
+   , className =? "Gvim"   --> doFloat
    , stringProperty "WM_WINDOW_ROLE" =? "devtools" --> doFloat
    ]
 
@@ -97,6 +100,10 @@ keyBindings = [
                 ((mMask, xK_x), sendMessage $ Toggle FULL)
               , ((mMask, xK_bracketright),   incSpacing (-2))
               , ((mMask, xK_bracketleft),    incSpacing  2)
+              , ((mMask, xK_Down), withFocused $ keysMoveWindow (0,5))
+              , ((mMask, xK_Up), withFocused $ keysMoveWindow (0,-5))
+              , ((mMask, xK_Right), withFocused $ keysMoveWindow (5,0))
+              , ((mMask, xK_Left), withFocused $ keysMoveWindow (-5,0))
               -- Scratchpads
               , ((mMask, xK_a),
                  namedScratchpadAction scratchpads "term")
@@ -108,8 +115,6 @@ keyBindings = [
                  namedScratchpadAction scratchpads "term4")
               , ((mMask, xK_o),
                  namedScratchpadAction scratchpads "ranger")
-              , ((mMask, xK_m),
-                 namedScratchpadAction scratchpads "mocp")
               -- Menus
               , ((mMask, xK_p), spawn dmenu)
               -- Thunar
