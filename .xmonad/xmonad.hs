@@ -1,3 +1,4 @@
+{-# LANGUAGE DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 import XMonad
 import XMonad.Config.Mate (mateConfig, desktopLayoutModifiers)
 
@@ -24,6 +25,7 @@ import qualified XMonad.StackSet as W
 import XMonad.Actions.FloatKeys
 
 import Data.Map (Map, union, fromList)
+import Data.Set (toList)
 
 main :: IO ()
 main = do
@@ -33,7 +35,7 @@ main = do
   spawn "setxkbmap -option caps:escape"
   spawn "synclient MaxTapTime=0"
   spawn "/usr/lib/kdeconnectd"
-  spawn "/usr/lib/notify-osd/notify-osd" 
+  spawn "/usr/lib/notify-osd/notify-osd"
   spawn "redshift"
   spawn "st" -- preload into RAM :)
   xmonad $ mateConfig {
@@ -43,6 +45,7 @@ main = do
         , layoutHook      = desktopLayoutModifiers .
                             smartBorders .
                             mkToggle (single FULL) .
+                            ModifiedLayout (WideBorder 2) $
                             spacingWithEdge 10 $
                                 tiled ||| Grid ||| tabbed shrinkText def
         , logHook         = ewmhDesktopsLogHook <+> fadeInactiveLogHook 0.90
@@ -58,6 +61,30 @@ main = do
             nmaster = 1      -- The default number of windows in the master pane
             ratio   = 1/2    -- Default proportion of screen occupied by master pane
             delta   = 3/100  -- Percent of screen to increment by when resizing panes
+
+data BorderMessage = IncBorder | DecBorder deriving (Read, Show, Typeable)
+instance Message BorderMessage
+
+data WideBorder a = WideBorder Dimension deriving (Read, Show)
+instance LayoutModifier WideBorder Window where
+    unhook (WideBorder _) = do
+      width <- asks (borderWidth . config)
+      ws <- toList <$> gets mapped
+      setBorders width ws
+
+    redoLayout (WideBorder n) _ _ wrs = do
+        setBorders n ws
+        return (wrs, Just $ WideBorder n)
+     where
+        ws = map fst wrs
+
+    pureMess (WideBorder n) m = doinc <$> fromMessage m
+      where
+        doinc IncBorder = WideBorder $ (n + 1)
+        doinc DecBorder = WideBorder $ if n == 0 then 0 else (n - 1)
+
+setBorders :: Dimension -> [Window] -> X ()
+setBorders bw ws = withDisplay $ \d -> mapM_ (\w -> io $ setWindowBorderWidth d w bw) ws
 
 scratchpads :: [NamedScratchpad]
 scratchpads =
@@ -82,6 +109,8 @@ keyBindings XConfig{modMask = mMask, terminal = term} = fromList [
       ((mMask, xK_x), sendMessage $ Toggle FULL)
     , ((mMask, xK_bracketright), incSpacing (-5))
     , ((mMask, xK_bracketleft),  incSpacing  5)
+    , ((mMask .|. shiftMask , xK_bracketright), sendMessage $ IncBorder)
+    , ((mMask .|. shiftMask , xK_bracketleft),  sendMessage $ DecBorder)
     , ((mMask, xK_Down),  withFocused $ keysMoveWindow (0,5))
     , ((mMask, xK_Up),    withFocused $ keysMoveWindow (0,-5))
     , ((mMask, xK_Right), withFocused $ keysMoveWindow (5,0))
