@@ -19,10 +19,6 @@ import XMonad.Util.NamedScratchpad
 
 import XMonad.Actions.FloatKeys
 
-import Data.Map (union, fromList)
-
-import XMonad.Util.NamedScratchpad
-
 import Data.Map (Map, union, fromList)
 
 main :: IO ()
