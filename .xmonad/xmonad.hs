@@ -1,21 +1,25 @@
-import qualified XMonad.StackSet as W
-
 import XMonad
 import XMonad.Config.Mate (mateConfig, desktopLayoutModifiers)
 
 import XMonad.Hooks.FadeInactive (fadeInactiveLogHook)
 import XMonad.Hooks.FadeWindows  (fadeWindowsEventHook)
+-- Make mate-panel switcher work, and make dragonfly work
 import XMonad.Hooks.EwmhDesktops (ewmhDesktopsLogHook)
+
 
 import XMonad.Layout.Fullscreen (fullscreenEventHook)
 import XMonad.Layout.Grid
 import XMonad.Layout.Tabbed
 import XMonad.Layout.MultiToggle
 import XMonad.Layout.MultiToggle.Instances (StdTransformers (..))
+
 import XMonad.Layout.Spacing (spacingWithEdge, incSpacing)
 import XMonad.Layout.NoBorders (smartBorders)
+import XMonad.Layout.LayoutModifier
+
 
 import XMonad.Util.NamedScratchpad
+import qualified XMonad.StackSet as W
 
 import XMonad.Actions.FloatKeys
 
@@ -30,15 +34,16 @@ main = do
   spawn "synclient MaxTapTime=0"
   spawn "/usr/lib/kdeconnectd"
   spawn "/usr/lib/notify-osd/notify-osd" 
+  spawn "redshift"
+  spawn "st" -- preload into RAM :)
   xmonad $ mateConfig {
           terminal        = "st"
         , modMask         = mod4Mask
-        , borderWidth     = 1
         , manageHook      = manageHook mateConfig <+> myManageHook
         , layoutHook      = desktopLayoutModifiers .
                             smartBorders .
                             mkToggle (single FULL) .
-                            spacingWithEdge 0 $
+                            spacingWithEdge 10 $
                                 tiled ||| Grid ||| tabbed shrinkText def
         , logHook         = ewmhDesktopsLogHook <+> fadeInactiveLogHook 0.90
         , handleEventHook = fadeWindowsEventHook <+>
@@ -75,8 +80,8 @@ keyBindings :: XConfig y -> Map (KeyMask, KeySym) (X ())
 keyBindings XConfig{modMask = mMask, terminal = term} = fromList [
     -- Layout
       ((mMask, xK_x), sendMessage $ Toggle FULL)
-    , ((mMask, xK_bracketright), incSpacing (-2))
-    , ((mMask, xK_bracketleft),  incSpacing  2)
+    , ((mMask, xK_bracketright), incSpacing (-5))
+    , ((mMask, xK_bracketleft),  incSpacing  5)
     , ((mMask, xK_Down),  withFocused $ keysMoveWindow (0,5))
     , ((mMask, xK_Up),    withFocused $ keysMoveWindow (0,-5))
     , ((mMask, xK_Right), withFocused $ keysMoveWindow (5,0))
