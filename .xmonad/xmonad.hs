@@ -1,26 +1,19 @@
 {-# LANGUAGE DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 import XMonad
-import XMonad.Config.Mate (mateConfig, desktopLayoutModifiers)
+import XMonad.Config.Mate        (mateConfig, desktopLayoutModifiers)
 
 import XMonad.Hooks.FadeInactive (fadeInactiveLogHook)
-import XMonad.Hooks.FadeWindows  (fadeWindowsEventHook)
--- Make mate-panel switcher work, and make dragonfly work
-import XMonad.Hooks.EwmhDesktops (ewmhDesktopsLogHook)
 
-
-import XMonad.Layout.Fullscreen (fullscreenEventHook)
-import XMonad.Layout.Grid
-import XMonad.Layout.Tabbed
-import XMonad.Layout.MultiToggle
-import XMonad.Layout.MultiToggle.Instances (StdTransformers (..))
-
-import XMonad.Layout.Spacing (spacingWithEdge, incSpacing)
-import XMonad.Layout.NoBorders (smartBorders)
+import XMonad.Layout.Grid                  (Grid(..))
+import XMonad.Layout.Accordion             (Accordion(..))
+import XMonad.Layout.MultiToggle           (mkToggle, single, Toggle(..), (??), EOT(..))
+import XMonad.Layout.MultiToggle.Instances (StdTransformers(..))
+import XMonad.Layout.Spacing               (spacingWithEdge, incSpacing)
+import XMonad.Layout.NoBorders             (smartBorders)
 import XMonad.Layout.LayoutModifier
 
-
 import XMonad.Util.NamedScratchpad
-import qualified XMonad.StackSet as W
+import XMonad.StackSet (RationalRect(..))
 
 import XMonad.Actions.FloatKeys
 
@@ -37,52 +30,52 @@ main = do
   spawn "/usr/lib/kdeconnectd"
   spawn "/usr/lib/notify-osd/notify-osd"
   spawn "redshift"
-  spawn "st" -- preload into RAM :)
+  -- preload st into RAM :)
+  spawn "st -n term2 "
   xmonad $ mateConfig {
-          terminal        = "st"
-        , modMask         = mod4Mask
-        , manageHook      = manageHook mateConfig <+> myManageHook
-        , layoutHook      = desktopLayoutModifiers .
-                            smartBorders .
-                            mkToggle (single FULL) .
-                            ModifiedLayout (WideBorder 2) $
-                            spacingWithEdge 10 $
-                                tiled ||| Grid ||| tabbed shrinkText def
-        , logHook         = ewmhDesktopsLogHook <+> fadeInactiveLogHook 0.90
-        , handleEventHook = fadeWindowsEventHook <+>
-                            fullscreenEventHook <+>
-                            handleEventHook mateConfig
-        , keys            = \cfg -> keyBindings cfg `union`
-                                    keys def cfg `union`
-                                    keys mateConfig cfg
-        }
-  where tiled = Tall nmaster delta ratio
-          where
-            nmaster = 1      -- The default number of windows in the master pane
-            ratio   = 1/2    -- Default proportion of screen occupied by master pane
-            delta   = 3/100  -- Percent of screen to increment by when resizing panes
+      terminal   = "st"
+    , modMask    = mod4Mask -- Super
+    , manageHook = manageHook mateConfig <+> myManageHook
+    , logHook    = logHook mateConfig    <+> fadeInactiveLogHook 0.90
+    , layoutHook = desktopLayoutModifiers   .
+                   -- hide borders if only one window is visible
+                   smartBorders             .
+                   -- mod+x (bound in myKeys) toggles fullscreen
+                   mkToggle (single NBFULL) $
+                     (spacingWithEdge 10            . -- gaps (starting at 10)
+                      ModifiedLayout (WideBorder 2) $ -- my resizable borders (see BorderMessage)
+                       Tall 1 (3/100) (1/2)
+                       ||| Grid
+                     )
+                     ||| ModifiedLayout (WideBorder 0) Accordion
+    , keys       = \cfg -> myKeys cfg `union`
+                           keys def cfg `union`
+                           keys mateConfig cfg
+    }
 
+-- increase or decrease border thickness
 data BorderMessage = IncBorder | DecBorder deriving (Read, Show, Typeable)
 instance Message BorderMessage
 
 data WideBorder a = WideBorder Dimension deriving (Read, Show)
 instance LayoutModifier WideBorder Window where
-    unhook (WideBorder _) = do
-      width <- asks (borderWidth . config)
-      ws <- toList <$> gets mapped
-      setBorders width ws
+  unhook (WideBorder _) = do
+    width <- asks (borderWidth . config)
+    ws <- toList <$> gets mapped
+    setBorders width ws
 
-    redoLayout (WideBorder n) _ _ wrs = do
-        setBorders n ws
-        return (wrs, Just $ WideBorder n)
-     where
-        ws = map fst wrs
+  redoLayout (WideBorder n) _ _ wrs = do
+    setBorders n ws
+    return (wrs, Just $ WideBorder n)
+   where
+    ws = map fst wrs
 
-    pureMess (WideBorder n) m = doinc <$> fromMessage m
-      where
-        doinc IncBorder = WideBorder $ (n + 1)
-        doinc DecBorder = WideBorder $ if n == 0 then 0 else (n - 1)
+  pureMess (WideBorder n) m = doinc <$> fromMessage m
+   where
+    doinc IncBorder = WideBorder $ (n + 1)
+    doinc DecBorder = WideBorder $ if n == 0 then 0 else (n - 1)
 
+-- copied wholesale from NoBorders.hs (it doesn't export this fn)
 setBorders :: Dimension -> [Window] -> X ()
 setBorders bw ws = withDisplay $ \d -> mapM_ (\w -> io $ setWindowBorderWidth d w bw) ws
 
@@ -92,43 +85,45 @@ scratchpads =
   , NS "term2" "st -n term2" (resource =? "term2") (geo (1/3) (2/3) (1/3) (1/3))
   , NS "term3" "st -n term3" (resource =? "term3") (geo (2/3) (2/3) (1/3) (1/3))
   , NS "term4" "st -n term4" (resource =? "term4") (geo 0 0 1 (1/3))
-  , NS "ranger" "uxvtcd -name ranger -e ranger" (resource =? "ranger") (geo (1/5) (1/5) (1/5) (1/5))
+  , NS "ranger" "urxvtcd -name ranger -e ranger" (resource =? "ranger") (geo (1/5) (1/5) (1/5) (1/5))
   ]
-  where geo a b c d = customFloating (W.RationalRect a b c d)
+ where
+  geo a b c d = customFloating (RationalRect a b c d)
 
 myManageHook = namedScratchpadManageHook scratchpads <+> composeAll
-   [ className =? "mpv"      --> doFloat
-   , className =? "pidgin"   --> doFloat
-   , className =? "Gvim"   --> doFloat
-   , stringProperty "WM_WINDOW_ROLE" =? "devtools" --> doFloat
-   ]
+  [ className =? "mpv"      --> doFloat
+  , className =? "pidgin"   --> doFloat
+  , className =? "Gvim"   --> doFloat
+  , stringProperty "WM_WINDOW_ROLE" =? "devtools" --> doFloat
+  ]
 
-keyBindings :: XConfig y -> Map (KeyMask, KeySym) (X ())
-keyBindings XConfig{modMask = mMask, terminal = term} = fromList [
-    -- Layout
-      ((mMask, xK_x), sendMessage $ Toggle FULL)
-    , ((mMask, xK_bracketright), incSpacing (-5))
-    , ((mMask, xK_bracketleft),  incSpacing  5)
-    , ((mMask .|. shiftMask , xK_bracketright), sendMessage $ IncBorder)
-    , ((mMask .|. shiftMask , xK_bracketleft),  sendMessage $ DecBorder)
-    , ((mMask, xK_Down),  withFocused $ keysMoveWindow (0,5))
-    , ((mMask, xK_Up),    withFocused $ keysMoveWindow (0,-5))
-    , ((mMask, xK_Right), withFocused $ keysMoveWindow (5,0))
-    , ((mMask, xK_Left),  withFocused $ keysMoveWindow (-5,0))
+myKeys :: XConfig y -> Map (KeyMask, KeySym) (X ())
+myKeys XConfig{modMask = m, terminal = term} = fromList [
+  -- Layout
+    ((m               , xK_x)            , sendMessage $ Toggle NBFULL)
+  , ((m               , xK_bracketright) , incSpacing (-5))
+  , ((m               , xK_bracketleft)  , incSpacing   5)
+  , ((m .|. shiftMask , xK_bracketright) , sendMessage $ IncBorder)
+  , ((m .|. shiftMask , xK_bracketleft)  , sendMessage $ DecBorder)
+  , ((m               , xK_Down)         , withFocused $ keysMoveWindow ( 0, 5))
+  , ((m               , xK_Up)           , withFocused $ keysMoveWindow ( 0,-5))
+  , ((m               , xK_Right)        , withFocused $ keysMoveWindow ( 5, 0))
+  , ((m               , xK_Left)         , withFocused $ keysMoveWindow (-5, 0))
 
-    -- Scratchpads
-    , ((mMask, xK_a), namedScratchpadAction scratchpads "term")
-    , ((mMask, xK_s), namedScratchpadAction scratchpads "term2")
-    , ((mMask, xK_d), namedScratchpadAction scratchpads "term3")
-    , ((mMask, xK_z), namedScratchpadAction scratchpads "term4")
-    , ((mMask, xK_o), namedScratchpadAction scratchpads "ranger")
+  -- Scratchpads
+  , ((m, xK_a), namedScratchpadAction scratchpads "term")
+  , ((m, xK_s), namedScratchpadAction scratchpads "term2")
+  , ((m, xK_d), namedScratchpadAction scratchpads "term3")
+  , ((m, xK_z), namedScratchpadAction scratchpads "term4")
+  , ((m, xK_o), namedScratchpadAction scratchpads "ranger")
 
-    , ((mMask .|. shiftMask, xK_o), spawn "thunar")
-    , ((mMask, xK_p),               spawn  dmenu)
+  , ((m .|. shiftMask, xK_o), spawn "thunar")
+  , ((m, xK_p),               spawn  dmenu)
 
-    , ((mMask, xK_F8),              spawn "ibacklight -dec 10")
-    , ((mMask, xK_F9),              spawn "ibacklight -inc 10")
-    , ((mMask, xK_m),               spawn "mpv `xclip -o`")
-    , ((mMask .|. mod1Mask, xK_w),  spawn "sh ~/bin/wall.sh")
-    ]
- where dmenu = "exe=`dmenu_path | yeganesh -x -- -i -b -sb \"#689d6a\" -sf \"#2d2d2d\" -nb \"#2d2d2d\" -nf grey -fn 'Source Code Pro-9'` && eval \"$exe\""
+  , ((m, xK_F8),              spawn "ibacklight -dec 10")
+  , ((m, xK_F9),              spawn "ibacklight -inc 10")
+  , ((m, xK_m),               spawn "mpv `xclip -o`")
+  , ((m .|. mod1Mask, xK_w),  spawn "sh ~/bin/wall.sh")
+  ]
+ where
+  dmenu = "exe=`dmenu_path | yeganesh -x -- -i -b -sb \"#689d6a\" -sf \"#2d2d2d\" -nb \"#2d2d2d\" -nf grey -fn 'Source Code Pro-9'` && eval \"$exe\""
