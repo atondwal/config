@@ -1,18 +1,31 @@
-st.background: #1f1f1f
-st.foreground: #c0b18b
-st.color0:#4A3637
-st.color8:#4A3637
-st.color1:#d17b49
-st.color9:#d17b49
-st.color2:#7b8748
-st.color10:#7b8748
-st.color3:#af865a
-st.color11:#af865a
-st.color4:#535C5C
-st.color12:#535C5C
-st.color5:#775759
-st.color13:#775759
-st.color6:#6d715e
-st.color14:#6d715e
-st.color7:#c0b18b
-st.color15:#c0b18b
+!! Transparency (0-1):
+st.alpha: 1
+
+!! Set a default font and font size as below:
+st.font: Terminus-9;
+
+! st.termname: st-256color
+! st.borderpx: 2
+
+!! Set the background, foreground and cursor colors as below:
+*.background: #282828
+*.foreground: white
+*.cursorColor: white
+
+/* !! gruvbox: */
+*.color0: #1d2021
+*.color1: #cc241d
+*.color2: #98971a
+*.color3: #d79921
+*.color4: #458588
+*.color5: #b16286
+*.color6: #689d6a
+*.color7: #a89984
+*.color8: #928374
+*.color9: #fb4934
+*.color10: #b8bb26
+*.color11: #fabd2f
+*.color12: #83a598
+*.color13: #d3869b
+*.color14: #8ec07c
+*.color15: #ebdbb2
