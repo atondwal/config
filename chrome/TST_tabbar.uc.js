@@ -5,11 +5,14 @@
     "use strict";
 
     const tabbar = document.getElementById("TabsToolbar");
+    const navbar = document.getElementById("nav-bar");
     function showHideTabbar() {
         const sidebarBox = document.getElementById("sidebar-box");
         const sidebarCommand = sidebarBox.getAttribute("sidebarcommand");
-        tabbar.style.visibility = (
-            (!sidebarBox.hidden && sidebarCommand === "treestyletab_piro_sakura_ne_jp-sidebar-action") ? "collapse" : "visible");
+        navbar.style.marginRight = (
+            (!sidebarBox.hidden && sidebarCommand === "treestyletab_piro_sakura_ne_jp-sidebar-action") ? "0" : "60vw");
+        tabbar.style.opacity = (
+            (!sidebarBox.hidden && sidebarCommand === "treestyletab_piro_sakura_ne_jp-sidebar-action") ? "0" : "1");
     }
     const observer = new MutationObserver(showHideTabbar);
     observer.observe(document.getElementById("sidebar-box"), {

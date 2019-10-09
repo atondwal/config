@@ -1,184 +1,247 @@
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
 
-/* Private Browsing indicator in toolbar*/
-#main-window[privatebrowsingmode="temporary"]  #PanelUI-button::after {
-    background-image: url("chrome://browser/skin/private-browsing.svg");
-    background-repeat: no-repeat;
-    background-size: 100% auto;
-    background-position: center;
-    width: 24px;
-    height: 24px;
-    margin-left: 7px;
-    margin-right: 7px;
-    display: block;
-    content: "";
+/* https://gist.github.com/Sporif/db6b3440fba0b1bcf5477afacf93f875#gistcomment-2927062 */
+
+toolbarbutton#alltabs-button {
+    -moz-binding: url(data:text/plain;charset=utf-8;base64,PD94bWwgdmVyc2lvbj0iMS4wIj8+DQo8IS0tIENvcHlyaWdodCAoYykgMjAxNyBIYWdnYWkgTnVjaGkNCkF2YWlsYWJsZSBmb3IgdXNlIHVuZGVyIHRoZSBNSVQgTGljZW5zZToNCmh0dHBzOi8vb3BlbnNvdXJjZS5vcmcvbGljZW5zZXMvTUlUDQogLS0+DQoNCjwhLS0gUnVuIHVzZXJDaHJvbWUuanMvdXNlckNocm9tZS54dWwgYW5kIC51Yy5qcy8udWMueHVsLy5jc3MgZmlsZXMgIC0tPg0KPGJpbmRpbmdzIHhtbG5zPSJodHRwOi8vd3d3Lm1vemlsbGEub3JnL3hibCI+DQogICAgPGJpbmRpbmcgaWQ9ImpzIj4NCiAgICAgICAgPGltcGxlbWVudGF0aW9uPg0KICAgICAgICAgICAgPGNvbnN0cnVjdG9yPjwhW0NEQVRBWw0KICAgICAgICAgICAgICAgIGlmKHdpbmRvdy51c2VyQ2hyb21lSnNNb2QpIHJldHVybjsNCiAgICAgICAgICAgICAgICB3aW5kb3cudXNlckNocm9tZUpzTW9kID0gdHJ1ZTsNCg0KICAgICAgICAgICAgICAgIHZhciBjaHJvbWVGaWxlcyA9IEZpbGVVdGlscy5nZXREaXIoIlVDaHJtIiwgW10pLmRpcmVjdG9yeUVudHJpZXM7DQogICAgICAgICAgICAgICAgdmFyIHh1bEZpbGVzID0gW107DQogICAgICAgICAgICAgICAgdmFyIHNzcyA9IENjWydAbW96aWxsYS5vcmcvY29udGVudC9zdHlsZS1zaGVldC1zZXJ2aWNlOzEnXS5nZXRTZXJ2aWNlKENpLm5zSVN0eWxlU2hlZXRTZXJ2aWNlKTsNCg0KICAgICAgICAgICAgICAgIHdoaWxlKGNocm9tZUZpbGVzLmhhc01vcmVFbGVtZW50cygpKSB7DQogICAgICAgICAgICAgICAgICAgIHZhciBmaWxlID0gY2hyb21lRmlsZXMuZ2V0TmV4dCgpLlF1ZXJ5SW50ZXJmYWNlKENpLm5zSUZpbGUpOw0KICAgICAgICAgICAgICAgICAgICB2YXIgZmlsZVVSSSA9IFNlcnZpY2VzLmlvLm5ld0ZpbGVVUkkoZmlsZSk7DQoNCiAgICAgICAgICAgICAgICAgICAgaWYoZmlsZS5pc0ZpbGUoKSkgew0KICAgICAgICAgICAgICAgICAgICAgICAgdHlwZSA9ICJub25lIjsNCiAgICAgICAgICAgICAgICAgICAgICAgIGlmKC8oXnVzZXJDaHJvbWV8LnVjKS5qcyQvaS50ZXN0KGZpbGUubGVhZk5hbWUpKSB7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgdHlwZSA9ICJ1c2VyY2hyb21lL2pzIjsNCiAgICAgICAgICAgICAgICAgICAgICAgIH0NCiAgICAgICAgICAgICAgICAgICAgICAgIGVsc2UgaWYoLyhedXNlckNocm9tZXwudWMpLnh1bCQvaS50ZXN0KGZpbGUubGVhZk5hbWUpKSB7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgdHlwZSA9ICJ1c2VyY2hyb21lL3h1bCI7DQogICAgICAgICAgICAgICAgICAgICAgICB9DQogICAgICAgICAgICAgICAgICAgICAgICBlbHNlIGlmKC8uYXMuY3NzJC9pLnRlc3QoZmlsZS5sZWFmTmFtZSkpIHsNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICB0eXBlID0gImFnZW50c2hlZXQiOw0KICAgICAgICAgICAgICAgICAgICAgICAgfQ0KICAgICAgICAgICAgICAgICAgICAgICAgZWxzZSBpZigvXig/ISh1c2VyQ2hyb21lfHVzZXJDb250ZW50KS5jc3MkKS4rLmNzcyQvaS50ZXN0KGZpbGUubGVhZk5hbWUpKSB7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgdHlwZSA9ICJ1c2Vyc2hlZXQiOw0KICAgICAgICAgICAgICAgICAgICAgICAgfQ0KICAgICAgICAgICAgICAgICAgICAgICAgaWYodHlwZSAhPSAibm9uZSIpIHsNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb25zb2xlLmxvZygiLS0tLS0tLS0tLVwgIiArIGZpbGUubGVhZk5hbWUgKyAiICgiICsgdHlwZSArICIpIik7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgdHJ5IHsNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgaWYodHlwZSA9PSAidXNlcmNocm9tZS9qcyIpIHsNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFNlcnZpY2VzLnNjcmlwdGxvYWRlci5sb2FkU3ViU2NyaXB0V2l0aE9wdGlvbnMoZmlsZVVSSS5zcGVjLCB7dGFyZ2V0OiB3aW5kb3csIGlnbm9yZUNhY2hlOiB0cnVlfSk7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIH0NCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZWxzZSBpZih0eXBlID09ICJ1c2VyY2hyb21lL3h1bCIpIHsNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHh1bEZpbGVzLnB1c2goZmlsZVVSSS5zcGVjKTsNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfQ0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBlbHNlIGlmKHR5cGUgPT0gImFnZW50c2hlZXQiKSB7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBpZighc3NzLnNoZWV0UmVnaXN0ZXJlZChmaWxlVVJJLCBzc3MuQUdFTlRfU0hFRVQpKQ0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHNzcy5sb2FkQW5kUmVnaXN0ZXJTaGVldChmaWxlVVJJLCBzc3MuQUdFTlRfU0hFRVQpOw0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB9DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGVsc2UgaWYodHlwZSA9PSAidXNlcnNoZWV0Iikgew0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgaWYoIXNzcy5zaGVldFJlZ2lzdGVyZWQoZmlsZVVSSSwgc3NzLlVTRVJfU0hFRVQpKQ0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHNzcy5sb2FkQW5kUmVnaXN0ZXJTaGVldChmaWxlVVJJLCBzc3MuVVNFUl9TSEVFVCk7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIH0NCiAgICAgICAgICAgICAgICAgICAgICAgICAgICB9IGNhdGNoKGUpIHsNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgY29uc29sZS5sb2coIiMjIyMjIyMjIyMgRVJST1I6ICIgKyBlICsgIiBhdCAiICsgZS5saW5lTnVtYmVyICsgIjoiICsgZS5jb2x1bW5OdW1iZXIpOw0KICAgICAgICAgICAgICAgICAgICAgICAgICAgIH0NCiAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb25zb2xlLmxvZygiLS0tLS0tLS0tLS8gIiArIGZpbGUubGVhZk5hbWUpOw0KICAgICAgICAgICAgICAgICAgICAgICAgfQ0KICAgICAgICAgICAgICAgICAgICB9DQogICAgICAgICAgICAgICAgfQ0KDQogICAgICAgICAgICAgICAgc2V0VGltZW91dChmdW5jdGlvbiBsb2FkWFVMKCkgew0KICAgICAgICAgICAgICAgICAgICBpZih4dWxGaWxlcy5sZW5ndGggPiAwKSB7DQogICAgICAgICAgICAgICAgICAgICAgICBkb2N1bWVudC5sb2FkT3ZlcmxheSh4dWxGaWxlcy5zaGlmdCgpLCBudWxsKTsNCiAgICAgICAgICAgICAgICAgICAgICAgIHNldFRpbWVvdXQobG9hZFhVTCwgNSk7DQogICAgICAgICAgICAgICAgICAgIH0NCiAgICAgICAgICAgICAgICB9LCAwKTsNCiAgICAgICAgICAgIF1dPjwvY29uc3RydWN0b3I+DQogICAgICAgIDwvaW1wbGVtZW50YXRpb24+DQogICAgPC9iaW5kaW5nPg0KPC9iaW5kaW5ncz4=);
 }
 
-
-@-moz-document url(chrome://browser/content/browser.xul)
-{
-   #main-window,
-   browser[type="content-primary"],
-   browser[type="content"],
-   tabbrowser#content,
-   #content,
-   browser[type="content"] > html
-   {
-      background: #323234 !important;
-   }
+toolbar#PersonalToolbar {
+  font-size: 8pt !important;
+}
+#PersonalToolbar toolbarbutton {
+/*   margin-top: 1px !important; */
+  margin-bottom: -3px !important;
+  margin-right: -2px !important;
+  margin-left: -3px !important;
 }
 
-#toolbar-menubar[inactive] + #TabsToolbar {
-  visibility: collapse;
+/* Hide splitter, when using Tree Style Tab. */
+#sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"] + #sidebar-splitter {
+    opacity: 0;
+    margin-right: -30px !important;
+    width:  30px !important;
+    border:  none !important;
 }
-
-/* Hide sidebar header, when using Tree Style Tab. */
 #sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"] #sidebar-header {
   display: none;
 }
-
-/* Sidebar, min and max width removal */
-#sidebar {
-    max-width: none !important;
-    min-width: 0px !important;
-}
-hbox#browser { direction: rtl; }
-hbox#browser > vbox { direction: ltr; }
-/* Invisible splitter */
-splitter {
-  padding: 5px;
-  opacity: 0;
-  margin: -6px;
-}
+#sidebar { min-width: 10px !important; }
 
 
-/* Shrink sidebar until hovered, when using Tree Style Tab. */
-:root {
-    --thin-tab-width: 25px;
-    --wide-tab-width: 300px;
+/* Back & Forward buttons */  
+#back-button[disabled = "true"] {display:none;}
+#forward-button {display:none;}
+
+/* All buttons */
+#nav-bar .toolbarbutton-icon {
+  transform: scale(0.9, 0.9) !important;
+  margin-left: -2px !important;
+  margin-right: -2px !important;
+  margin-top: -2px !important;
 }
-#sidebar-box:not([sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"]) {
-    min-width: var(--wide-tab-width) !important;
-    max-width: none !important;
+#nav-bar toolbarbutton {
+  margin-top: 1px !important;
+  margin-bottom: 0px !important;
+  margin-right: 0px !important;
+  margin-left: -3px !important;
+}
+#nav-bar .toolbarbutton-badge{
+  margin-top: -4px !important;
+  font-size: 5pt !important;
+}
+#PanelUI-button {
+  transform: scale(1.12, 1.12) !important;
+  position: absolute;
+  right: -60vw;
+  top: 3px;
+  background: #444;
+  max-height: 23px;
 }
 
-#sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"] {
-    position: relative !important;
-    transition: all 100ms !important;
-    transition-delay: 500ms !important;
-    min-width: var(--thin-tab-width) !important;
-    max-width: var(--thin-tab-width) !important;
-}
-#sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"]:hover {
-    transition: all 200ms !important;
-    transition-delay: 1s !important;
-    min-width: var(--wide-tab-width) !important;
-/*     max-width: var(--wide-tab-width) !important; */
-    margin-left: calc((var(--wide-tab-width) - var(--thin-tab-width)) * -1) !important;
-}
-
-/* Hide buttons I don't like */
-#back-button[disabled], #forward-button[disabled] {
-  visibility: hidden;
-}
 .scrollbutton-up, .scrollbutton-down, #new-tab-button, #alltabs-button {
-  visibility: collapse;
+  display: none;
 }
 
 
-/* Tab Line At Bottom */
-.tab-line {
-  -moz-box-ordinal-group: 2;
-  min-height: 3px;
-}
-/* Autohide Tabs */
-/*
-#TabsToolbar {
-  min-height: 40px !important;
-  margin-top: -38px !important;
-  transition: all 0.3s ease 0s !important;
-  -moz-box-ordinal-group: 2 !important;
-  opacity: 0.6;
-}
-#nav-bar {
-  z-index: 3;
-}
-#navigator-toolbox {
-  transition: all 0.3s ease 0s !important;
-
-}
-#navigator-toolbox:hover {
-  margin-bottom: -38px !important;
-  transition: all 0.3s ease 0s !important;
-}
-#navigator-toolbox:hover > #TabsToolbar {
-  margin-top: -1px !important;
-  transition: all 0.3s ease 0s !important;
-  opacity: 1;
-}
-
+/* 
+Original layout by /u/Herkt https://www.reddit.com/r/FirefoxCSS/comments/7eazix/my_attempt_at_a_oneline_interface/ 
 */
-/* Tabs don't move when dragging. */
-#TabsToolbar[movingtab] {
-  padding-bottom: -0px !important;
-}
-#TabsToolbar[movingtab] > .tabbrowser-tabs {
-  padding-bottom: -0px !important;
-  margin-bottom: -0px !important;
-}
-#TabsToolbar[movingtab] + #nav-bar {
-  margin-top: -0px !important;
-  pointer-events: none;
+
+:root:-moz-lwtheme-brighttext {                                      /* minor color changes to the default dark theme */
+  --color-overflow: #222;                                            /* >> button color */
+  --chrome-background-color: #111 !important;                        /* tab strip background & inactive tabs */
+  --chrome-secondary-background-color: #222 !important;              /* nav bar & active tab */
+  --chrome-color: #ccc !important;                                   /* url & tab text, close tab & new tab buttons */
+  background-color: #444 !important;                                 /* top border of out of focus window */
 }
 
-
-/* misc */
-.tabbrowser-tab[pinned][first-visible-tab]{
-  padding-left: 34px !important;
+:root:-moz-lwtheme-darktext {                                        /* minor changes to the default light theme */
+  --color-overflow: #ddd;                                            /* >> button color */
+  --chrome-background-color: #ccc !important;                        /* tab strip background & inactive tabs */
 }
 
-/* Minimalist Theme */
-
-#back-button, #forward-button { opacity: 0.2; }
-
-tab[pinned] {
-  opacity: 0.4;
-}
-tab[pinned]:hover {
-  opacity: 1;
+:root {
+  --tabs-border: transparent !important;                             /* active tab left & right borders - not working in 58?*/
+  --toolbox-border-bottom-color: transparent !important;             /* 1px line under background tabs */
+  --chrome-nav-bar-controls-border-color: transparent !important;    /* border around url bar */
 }
 
-#titlebar-buttonbox,
-#TabsToolbar,
-#PersonalToolbar,
-#urlbar,
-#nav-bar {
-  background: #31363b !important;
+/* Tabs */
+
+/* Move Tab-bar beside Nav-bar */
+#TabsToolbar {
+    margin-left: 40vw !important;
+}
+
+/* unset the tab bar min-height */
+#tabbrowser-tabs, #tabbrowser-tabs > .tabbrowser-arrowscrollbox, #tabbrowser-tabs[positionpinnedtabs] > .tabbrowser-tab[pinned] {
+    min-height: initial !important;
+}
+#tabbrowser-tabs {
+  margin-left : -3px !important;;
+}
+#tabbrowser-tabs, #tabbrowser-tabs > * {
+    line-height: 20px; max-height: 20px;
+}
+tab {
+    font-size: 8pt;
+}
+.tab-content[pinned] {
+    display: none;
+}
+
+/* Remove border between tabs*/
+.tabbrowser-tab::after, .tabbrowser-tab::before {
+  border-left: none !important;
+} 
+.tab-line {
+  height: 0px !important;
+  }
+
+/* URL bar */
+
+#nav-bar {      
+  margin-top: -20px !important;
+  margin-right: 60vw;
+  line-height: 20px !important;
+  max-height: 20px !important;
+  min-height: 20px !important;
+}
+
+#nav-bar > * {
+    font-size: 9pt;
+    margin-top: -5px !important;
 }
 
 #urlbar {
+	margin-left: 1px !important;
+	margin-right: 1px !important;
   border: none !important;
-  box-shadow: none !important;
+  padding-right: 7px !important;;
+  padding-left: 7px !important;;
 }
 
-.tab-close-button.tab-close-button {
-  visibility: collapse !important;
+
+#connection-icon {
+  display: none;
 }
 
-#identity-box, #page-action-buttons, #nav-bar toolbarbutton { opacity: 0.2; }
-
-#page-action-buttons:hover,
-#identity-box:hover,
-#nav-bar toolbarbutton:hover{
-  opacity: 1;
-}
-#nav-bar toolbaritem {
-  border: none !important;
-}
-#nav-bar #PanelUI-button {
-  padding-left: 15px;
+#identity-box {
+  margin-top: 2px !important;
+  margin-left: -10px !important;;
+  padding-right: 0 !important;
+  padding-left: 0px !important;
+  /* width: 10px !important;*/
 }
 
-#urlbar .urlbar-input-box {
-    text-align: center;
+#identity-icon {
+  opacity: 0;
+  width: 15px !important;
+  height: 15px !important;
+}
+
+/*
+ * Originally from:
+ * http://forums.mozillazine.org/viewtopic.php?p=14404121#p14404121
+ */
+
+#urlbar {
+  position: relative;
+  z-index: 1;
+}
+
+#identity-box:after {
+  content: '';
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: -1;
+  background: white;
+  opacity: 0.2;
+}
+
+/* There is also grantedPermissions, but irrelevant. */
+
+/* about:about */
+#urlbar[pageproxystate='valid'] #identity-box.unknownIdentity:after {
+  background: #ff0039; /* Firefox Red 50 */
+}
+
+/* about:config */
+#urlbar[pageproxystate='valid'] #identity-box.chromeUI:after {
+  background: #0a84ff; /* Firefox Blue 50 */
+}
+
+/* uBlock Origin Dashboard */
+#urlbar[pageproxystate='valid'] #identity-box.extensionPage:after {
+  background: #45a1ff; /* Firefox Blue 40 */
+}
+
+/* https://www.github.com/ */
+#urlbar[pageproxystate='valid'] #identity-box.verifiedIdentity:after{
+  background: #058b00; /* Firefox Green 70 */
+}
+
+/* https://www.google.com/ */
+#urlbar[pageproxystate='valid'] #identity-box.verifiedDomain:after{
+  background: #12bc00; /* Firefox Green 60 */
+}
+
+/* https://mixed-script.badssl.com/ */
+#urlbar[pageproxystate='valid'] #identity-box.mixedActiveBlocked:after {
+  background: #30e60b; /* Firefox Green 50 */
+}
+
+/* https://mixed.badssl.com/ */
+#urlbar[pageproxystate='valid'] #identity-box.mixedDisplayContent:after {
+  background: #d7b600; /* Firefox Yellow 60 */
+}
+
+/* https://very.badssl.com/ */
+#urlbar[pageproxystate='valid'] #identity-box.mixedDisplayContentLoadedActiveBlocked:after {
+  background: #d7b600; /* Firefox Yellow 60 */
+}
+
+/* https://self-signed.badssl.com/ but add certificate exception */
+#urlbar[pageproxystate='valid'] #identity-box.certUserOverridden:after {
+  background: #ffe900; /* Firefox Yellow 50 */
+}
+
+/* Don't know an example for this */
+#urlbar[pageproxystate='valid'] #identity-box.weakCipher:after {
+  background: #a47f00; /* Firefox Yellow 70 */
+}
+
+/* https://mixed-script.badssl.com/ but disable protection */
+#urlbar[pageproxystate='valid'] #identity-box.mixedActiveContent:after {
+  background: #d70022;  /* Firefox Red 60 */
+}
+
+/* http://http-login.badssl.com/ */
+#urlbar[pageproxystate='valid'] #identity-box.insecureLoginForms:after {
+  background: #a4000f;  /* Firefox Red 70 */
 }
