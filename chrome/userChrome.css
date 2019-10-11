@@ -1,57 +1,48 @@
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
 
-/* https://gist.github.com/Sporif/db6b3440fba0b1bcf5477afacf93f875#gistcomment-2927062 */
+/* USERJS https://gist.github.com/Sporif/db6b3440fba0b1bcf5477afacf93f875#gistcomment-2927062 */
 
 toolbarbutton#alltabs-button {
     -moz-binding: url(data:text/plain;charset=utf-8;base64,PD94bWwgdmVyc2lvbj0iMS4wIj8+DQo8IS0tIENvcHlyaWdodCAoYykgMjAxNyBIYWdnYWkgTnVjaGkNCkF2YWlsYWJsZSBmb3IgdXNlIHVuZGVyIHRoZSBNSVQgTGljZW5zZToNCmh0dHBzOi8vb3BlbnNvdXJjZS5vcmcvbGljZW5zZXMvTUlUDQogLS0+DQoNCjwhLS0gUnVuIHVzZXJDaHJvbWUuanMvdXNlckNocm9tZS54dWwgYW5kIC51Yy5qcy8udWMueHVsLy5jc3MgZmlsZXMgIC0tPg0KPGJpbmRpbmdzIHhtbG5zPSJodHRwOi8vd3d3Lm1vemlsbGEub3JnL3hibCI+DQogICAgPGJpbmRpbmcgaWQ9ImpzIj4NCiAgICAgICAgPGltcGxlbWVudGF0aW9uPg0KICAgICAgICAgICAgPGNvbnN0cnVjdG9yPjwhW0NEQVRBWw0KICAgICAgICAgICAgICAgIGlmKHdpbmRvdy51c2VyQ2hyb21lSnNNb2QpIHJldHVybjsNCiAgICAgICAgICAgICAgICB3aW5kb3cudXNlckNocm9tZUpzTW9kID0gdHJ1ZTsNCg0KICAgICAgICAgICAgICAgIHZhciBjaHJvbWVGaWxlcyA9IEZpbGVVdGlscy5nZXREaXIoIlVDaHJtIiwgW10pLmRpcmVjdG9yeUVudHJpZXM7DQogICAgICAgICAgICAgICAgdmFyIHh1bEZpbGVzID0gW107DQogICAgICAgICAgICAgICAgdmFyIHNzcyA9IENjWydAbW96aWxsYS5vcmcvY29udGVudC9zdHlsZS1zaGVldC1zZXJ2aWNlOzEnXS5nZXRTZXJ2aWNlKENpLm5zSVN0eWxlU2hlZXRTZXJ2aWNlKTsNCg0KICAgICAgICAgICAgICAgIHdoaWxlKGNocm9tZUZpbGVzLmhhc01vcmVFbGVtZW50cygpKSB7DQogICAgICAgICAgICAgICAgICAgIHZhciBmaWxlID0gY2hyb21lRmlsZXMuZ2V0TmV4dCgpLlF1ZXJ5SW50ZXJmYWNlKENpLm5zSUZpbGUpOw0KICAgICAgICAgICAgICAgICAgICB2YXIgZmlsZVVSSSA9IFNlcnZpY2VzLmlvLm5ld0ZpbGVVUkkoZmlsZSk7DQoNCiAgICAgICAgICAgICAgICAgICAgaWYoZmlsZS5pc0ZpbGUoKSkgew0KICAgICAgICAgICAgICAgICAgICAgICAgdHlwZSA9ICJub25lIjsNCiAgICAgICAgICAgICAgICAgICAgICAgIGlmKC8oXnVzZXJDaHJvbWV8LnVjKS5qcyQvaS50ZXN0KGZpbGUubGVhZk5hbWUpKSB7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgdHlwZSA9ICJ1c2VyY2hyb21lL2pzIjsNCiAgICAgICAgICAgICAgICAgICAgICAgIH0NCiAgICAgICAgICAgICAgICAgICAgICAgIGVsc2UgaWYoLyhedXNlckNocm9tZXwudWMpLnh1bCQvaS50ZXN0KGZpbGUubGVhZk5hbWUpKSB7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgdHlwZSA9ICJ1c2VyY2hyb21lL3h1bCI7DQogICAgICAgICAgICAgICAgICAgICAgICB9DQogICAgICAgICAgICAgICAgICAgICAgICBlbHNlIGlmKC8uYXMuY3NzJC9pLnRlc3QoZmlsZS5sZWFmTmFtZSkpIHsNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICB0eXBlID0gImFnZW50c2hlZXQiOw0KICAgICAgICAgICAgICAgICAgICAgICAgfQ0KICAgICAgICAgICAgICAgICAgICAgICAgZWxzZSBpZigvXig/ISh1c2VyQ2hyb21lfHVzZXJDb250ZW50KS5jc3MkKS4rLmNzcyQvaS50ZXN0KGZpbGUubGVhZk5hbWUpKSB7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgdHlwZSA9ICJ1c2Vyc2hlZXQiOw0KICAgICAgICAgICAgICAgICAgICAgICAgfQ0KICAgICAgICAgICAgICAgICAgICAgICAgaWYodHlwZSAhPSAibm9uZSIpIHsNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb25zb2xlLmxvZygiLS0tLS0tLS0tLVwgIiArIGZpbGUubGVhZk5hbWUgKyAiICgiICsgdHlwZSArICIpIik7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgdHJ5IHsNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgaWYodHlwZSA9PSAidXNlcmNocm9tZS9qcyIpIHsNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFNlcnZpY2VzLnNjcmlwdGxvYWRlci5sb2FkU3ViU2NyaXB0V2l0aE9wdGlvbnMoZmlsZVVSSS5zcGVjLCB7dGFyZ2V0OiB3aW5kb3csIGlnbm9yZUNhY2hlOiB0cnVlfSk7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIH0NCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZWxzZSBpZih0eXBlID09ICJ1c2VyY2hyb21lL3h1bCIpIHsNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHh1bEZpbGVzLnB1c2goZmlsZVVSSS5zcGVjKTsNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfQ0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBlbHNlIGlmKHR5cGUgPT0gImFnZW50c2hlZXQiKSB7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBpZighc3NzLnNoZWV0UmVnaXN0ZXJlZChmaWxlVVJJLCBzc3MuQUdFTlRfU0hFRVQpKQ0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHNzcy5sb2FkQW5kUmVnaXN0ZXJTaGVldChmaWxlVVJJLCBzc3MuQUdFTlRfU0hFRVQpOw0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB9DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGVsc2UgaWYodHlwZSA9PSAidXNlcnNoZWV0Iikgew0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgaWYoIXNzcy5zaGVldFJlZ2lzdGVyZWQoZmlsZVVSSSwgc3NzLlVTRVJfU0hFRVQpKQ0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHNzcy5sb2FkQW5kUmVnaXN0ZXJTaGVldChmaWxlVVJJLCBzc3MuVVNFUl9TSEVFVCk7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIH0NCiAgICAgICAgICAgICAgICAgICAgICAgICAgICB9IGNhdGNoKGUpIHsNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgY29uc29sZS5sb2coIiMjIyMjIyMjIyMgRVJST1I6ICIgKyBlICsgIiBhdCAiICsgZS5saW5lTnVtYmVyICsgIjoiICsgZS5jb2x1bW5OdW1iZXIpOw0KICAgICAgICAgICAgICAgICAgICAgICAgICAgIH0NCiAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb25zb2xlLmxvZygiLS0tLS0tLS0tLS8gIiArIGZpbGUubGVhZk5hbWUpOw0KICAgICAgICAgICAgICAgICAgICAgICAgfQ0KICAgICAgICAgICAgICAgICAgICB9DQogICAgICAgICAgICAgICAgfQ0KDQogICAgICAgICAgICAgICAgc2V0VGltZW91dChmdW5jdGlvbiBsb2FkWFVMKCkgew0KICAgICAgICAgICAgICAgICAgICBpZih4dWxGaWxlcy5sZW5ndGggPiAwKSB7DQogICAgICAgICAgICAgICAgICAgICAgICBkb2N1bWVudC5sb2FkT3ZlcmxheSh4dWxGaWxlcy5zaGlmdCgpLCBudWxsKTsNCiAgICAgICAgICAgICAgICAgICAgICAgIHNldFRpbWVvdXQobG9hZFhVTCwgNSk7DQogICAgICAgICAgICAgICAgICAgIH0NCiAgICAgICAgICAgICAgICB9LCAwKTsNCiAgICAgICAgICAgIF1dPjwvY29uc3RydWN0b3I+DQogICAgICAgIDwvaW1wbGVtZW50YXRpb24+DQogICAgPC9iaW5kaW5nPg0KPC9iaW5kaW5ncz4=);
 }
 
-toolbar#PersonalToolbar {
-  font-size: 8pt !important;
-}
-#PersonalToolbar toolbarbutton {
-/*   margin-top: 1px !important; */
-  margin-bottom: -3px !important;
-  margin-right: -2px !important;
-  margin-left: -3px !important;
-}
+/* /USERJS */
 
 /* Hide splitter, when using Tree Style Tab. */
 #sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"] + #sidebar-splitter {
     opacity: 0;
-    margin-right: -30px !important;
-    width:  30px !important;
+    margin-right: -10px !important;
+    width:  10px !important;
     border:  none !important;
 }
 #sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"] #sidebar-header {
   display: none;
 }
+#sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"]:hover {
+    transition: all 300ms !important;
+    min-width: 200px !important;
+}
 #sidebar { min-width: 10px !important; }
 
+#sidebar-box {
+/*  https://www.reddit.com/r/FirefoxCSS/comments/bhtba7/minimal_tree_tabs/  */
+  /* now handled by userjs */
+/*   margin-top: -20px !important; */
+}
 
-/* Back & Forward buttons */  
-#back-button[disabled = "true"] {display:none;}
-#forward-button {display:none;}
+/* Buttons */
 
-/* All buttons */
-#nav-bar .toolbarbutton-icon {
-  transform: scale(0.9, 0.9) !important;
-  margin-left: -2px !important;
-  margin-right: -2px !important;
-  margin-top: -2px !important;
+.scrollbutton-up, .scrollbutton-down, #new-tab-button, #alltabs-button {
+  display: none;
 }
-#nav-bar toolbarbutton {
-  margin-top: 1px !important;
-  margin-bottom: 0px !important;
-  margin-right: 0px !important;
-  margin-left: -3px !important;
+
+
+:root[uidensity=compact] #nav-bar {
+  min-height: 20px;
 }
-#nav-bar .toolbarbutton-badge{
-  margin-top: -4px !important;
-  font-size: 5pt !important;
-}
-#PanelUI-button {
-  transform: scale(1.12, 1.12) !important;
+
+:root[uidensity=compact] #PanelUI-button {
+/*   transform: scale(1.12, 1.12) !important; */
   position: absolute;
   right: -60vw;
   top: 3px;
@@ -59,10 +50,72 @@ toolbar#PersonalToolbar {
   max-height: 23px;
 }
 
-.scrollbutton-up, .scrollbutton-down, #new-tab-button, #alltabs-button {
-  display: none;
+:root[uidensity=compact] #nav-bar toolbarbutton {
+  margin-top: 5px !important;
+  margin-bottom: 0px !important;
+  margin-right: 0px !important;
+  margin-left: -3px !important;
+}
+:root[uidensity=compact] #nav-bar .toolbarbutton-icon {
+/*   transform: scale(0.9, 0.9) !important; */
+  margin-left: -2px !important;
+  margin-right: -2px !important;
+  margin-top: -2px !important;
 }
 
+:root[uidensity=compact] toolbar#PersonalToolbar {
+  font-size: 8pt !important;
+}
+:root[uidensity=compact] #PersonalToolbar toolbarbutton {
+  margin-top: 1px !important;
+  margin-bottom: -3px !important;
+  margin-right: -2px !important;
+  margin-left: -3px !important;
+}
+
+
+/* Contextual toolbar buttons, only show on hover,
+https://github.com/moamenk/Firefox-Minimal-Responsive-Theme/blob/master/userChrome.css
+*/
+
+:root:not([customizing]) #nav-bar toolbarbutton .toolbarbutton-icon {
+    opacity: 0;
+    right: 0px;
+/*     transform: scale(.7, .7) !important; */
+    pointer-events: none !important;
+    transition: all 100ms var(--animation-easing-function) !important;
+}
+
+:root:not([customizing]) #nav-bar toolbarbutton .toolbarbutton-badge {
+  margin-top: -1px !important;
+  font-weight: bold;
+/*   opacity: .6; */
+  font-size: 7pt !important;
+}
+
+
+:root:not([customizing]) :hover > #nav-bar toolbarbutton  .toolbarbutton-icon,
+:root:not([customizing]) #navigator-toolbox:focus-within #nav-bar toolbarbutton .toolbarbutton-icon,
+:root:not([customizing]) :hover > #titlebar toolbarbutton  .toolbarbutton-icon {
+/*     transform: scale(1, 1) !important; */
+    opacity: 1;
+/*     visibility: unset; */
+    pointer-events: auto !important;
+}
+
+:root:not([customizing]) :hover > #nav-bar toolbarbutton  .toolbarbutton-badge,
+:root:not([customizing]) #navigator-toolbox:focus-within #nav-bar toolbarbutton  .toolbarbutton-badge,
+:root:not([customizing]) :hover > #titlebar toolbarbutton .toolbarbutton-badge {
+  margin-top: -2px !important;
+  font-size: 5pt !important;
+  opacity: 1;
+}
+
+
+/* Back & Forward buttons */  
+
+:root:not([customizing]) #back-button[disabled = "true"] {opacity : 0 !important;;}
+:root:not([customizing]) #forward-button[disabled = "true"] {opacity : 0 !important;}
 
 /* 
 Original layout by /u/Herkt https://www.reddit.com/r/FirefoxCSS/comments/7eazix/my_attempt_at_a_oneline_interface/ 
@@ -89,39 +142,44 @@ Original layout by /u/Herkt https://www.reddit.com/r/FirefoxCSS/comments/7eazix/
 
 /* Tabs */
 
-/* Move Tab-bar beside Nav-bar */
-#TabsToolbar {
+/* Move Tab-bar beside Nav-bar --- deprecated in favor of userjs */
+:root[uidensity=compact] #TabsToolbar {
     margin-left: 40vw !important;
 }
 
 /* unset the tab bar min-height */
-#tabbrowser-tabs, #tabbrowser-tabs > .tabbrowser-arrowscrollbox, #tabbrowser-tabs[positionpinnedtabs] > .tabbrowser-tab[pinned] {
+:root[uidensity=compact] #tabbrowser-tabs,
+:root[uidensity=compact] #tabbrowser-tabs > .tabbrowser-arrowscrollbox,
+:root[uidensity=compact] #tabbrowser-tabs[positionpinnedtabs] > .tabbrowser-tab[pinned] {
     min-height: initial !important;
 }
-#tabbrowser-tabs {
-  margin-left : -3px !important;;
+:root[uidensity=compact] #tabbrowser-tabs {
+    margin-left : -3px !important;
 }
-#tabbrowser-tabs, #tabbrowser-tabs > * {
-    line-height: 20px; max-height: 20px;
+:root[uidensity=compact] #tabbrowser-tabs,
+:root[uidensity=compact] #tabbrowser-tabs > * {
+    line-height: 20px;
+  max-height: 20px;
 }
-tab {
+:root[uidensity=compact] tab {
     font-size: 8pt;
 }
-.tab-content[pinned] {
+:root[uidensity=compact] .tab-content[pinned] {
     display: none;
 }
 
 /* Remove border between tabs*/
-.tabbrowser-tab::after, .tabbrowser-tab::before {
+:root[uidensity=compact] .tabbrowser-tab::after,
+:root[uidensity=compact] .tabbrowser-tab::before {
   border-left: none !important;
 } 
-.tab-line {
+:root[uidensity=compact] .tab-line {
   height: 0px !important;
-  }
+}
 
 /* URL bar */
 
-#nav-bar {      
+:root[uidensity=compact] #nav-bar {      
   margin-top: -20px !important;
   margin-right: 60vw;
   line-height: 20px !important;
@@ -129,37 +187,74 @@ tab {
   min-height: 20px !important;
 }
 
-#nav-bar > * {
+:root[uidensity=compact] #nav-bar > * {
     font-size: 9pt;
-    margin-top: -5px !important;
+    margin-top: -7px !important;
 }
 
-#urlbar {
-	margin-left: 1px !important;
-	margin-right: 1px !important;
+:root[uidensity=compact] #urlbar,
+:root[uidensity=compact] .searchbar-textbox {
+  font-size: unset !important;
+  min-height: 20px !important;
+  max-height: 20px !important;
   border: none !important;
-  padding-right: 7px !important;;
-  padding-left: 7px !important;;
+  margin-top: 7px !important;
+  margin-left: -1px !important;
+  margin-right: -1px !important;
+  border-radius: 0 !important;
+}
+/* 
+#urlbar-container {
+  position: absolute;
+  z-index: 0 !important;
+}
+#urlbar {
+  min-width: 40vw !important;
+} */
+#nav-bar toolbarbutton {
+  z-index: 1 !important;
+  position: relative;
+/*   min-height: 30px !important */
+}
+#nav-bar .toolbarbutton-icon {
+  min-height: 16px !important;
+}
+#nav-bar {
+  background: none !important;
 }
 
 
-#connection-icon {
-  display: none;
+#navigator-toolbox {
+  border: none !important;
 }
 
-#identity-box {
+
+:root[uidensity=compact] #identity-box {
+  max-height: 20px;
+}
+
+:root[uidensity=compact] #identity-box {
   margin-top: 2px !important;
-  margin-left: -10px !important;;
-  padding-right: 0 !important;
+  margin-left: -10px !important;
+  margin-right: 0px !important;
+  padding-right: 8px !important;
   padding-left: 0px !important;
+  border: none !important;
   /* width: 10px !important;*/
 }
 
-#identity-icon {
+:root[uidensity=compact] #identity-icon {
   opacity: 0;
   width: 15px !important;
   height: 15px !important;
 }
+
+/* #urlbar { display: -moz-box; display: flex; flex-flow : row-reverse !important; position: absolute !important; top:0; left:1px; /* because of -1px elsewhere todo cancel them out } */
+/* .urlbar-input-box {flex-basis: 1170px !important; display: block;} */
+/* .urlbar-input {visibility: collapse !important;} */
+/* .urlbar-input .anonymous-div {min-width: 1000px !important;} */
+/* .urlbar-input {width: 100%;} */
+
 
 /*
  * Originally from:
@@ -169,66 +264,70 @@ tab {
 #urlbar {
   position: relative;
   z-index: 1;
+  background: none !important;
+}
+#connection-icon, #identity-icon-labels, #tracking-protection-icon-box {
+  display: none;
 }
 
 #identity-box:after {
   content: '';
   position: absolute;
   height: 100%;
-  width: 100%;
+  width: 60%;
   top: 0;
   left: 0;
   pointer-events: none;
   z-index: -1;
-  background: white;
-  opacity: 0.2;
+  opacity: 1;
 }
 
 /* There is also grantedPermissions, but irrelevant. */
 
 /* about:about */
 #urlbar[pageproxystate='valid'] #identity-box.unknownIdentity:after {
-  background: #ff0039; /* Firefox Red 50 */
+   background: linear-gradient(90deg, rgba(60,0,0,1), rgba(0,0,0,0));
 }
 
 /* about:config */
 #urlbar[pageproxystate='valid'] #identity-box.chromeUI:after {
-  background: #0a84ff; /* Firefox Blue 50 */
+    background: linear-gradient(90deg, rgba(0,48,0,1), rgba(0,0,0,0));
 }
 
 /* uBlock Origin Dashboard */
 #urlbar[pageproxystate='valid'] #identity-box.extensionPage:after {
-  background: #45a1ff; /* Firefox Blue 40 */
+  background: linear-gradient(90deg, rgba(0,0,64,1), rgba(0,0,0,0));
+/* Firefox Blue 40 */
 }
 
 /* https://www.github.com/ */
 #urlbar[pageproxystate='valid'] #identity-box.verifiedIdentity:after{
-  background: #058b00; /* Firefox Green 70 */
+  background: linear-gradient(90deg, rgba(0,64,0,1), rgba(0,0,0,0));
 }
 
 /* https://www.google.com/ */
 #urlbar[pageproxystate='valid'] #identity-box.verifiedDomain:after{
-  background: #12bc00; /* Firefox Green 60 */
+  background: linear-gradient(90deg, rgba(0,30,0,1), rgba(0,0,0,0));
 }
 
 /* https://mixed-script.badssl.com/ */
 #urlbar[pageproxystate='valid'] #identity-box.mixedActiveBlocked:after {
-  background: #30e60b; /* Firefox Green 50 */
+  background: linear-gradient(90deg, rgba(0,64,0,1), rgba(0,0,0,0));
 }
 
 /* https://mixed.badssl.com/ */
 #urlbar[pageproxystate='valid'] #identity-box.mixedDisplayContent:after {
-  background: #d7b600; /* Firefox Yellow 60 */
+  background: linear-gradient(90deg, rgba(150,150,0,1) 0% , rgba(100,100,0,1) 10%, rgba(0,0,0,0) 100%);
 }
 
 /* https://very.badssl.com/ */
 #urlbar[pageproxystate='valid'] #identity-box.mixedDisplayContentLoadedActiveBlocked:after {
-  background: #d7b600; /* Firefox Yellow 60 */
+  background: linear-gradient(90deg, rgba(128,64,0,1), rgba(0,0,0,0));
 }
 
 /* https://self-signed.badssl.com/ but add certificate exception */
 #urlbar[pageproxystate='valid'] #identity-box.certUserOverridden:after {
-  background: #ffe900; /* Firefox Yellow 50 */
+  background: linear-gradient(90deg, rgba(64,64,0,1), rgba(0,0,0,0));
 }
 
 /* Don't know an example for this */
@@ -243,5 +342,22 @@ tab {
 
 /* http://http-login.badssl.com/ */
 #urlbar[pageproxystate='valid'] #identity-box.insecureLoginForms:after {
-  background: #a4000f;  /* Firefox Red 70 */
+  background: linear-gradient(90deg, rgba(128,0,0,1), rgba(0,0,0,0));
+}
+
+/* #urlbar-results {
+  margin-left: 0px !important;
+}
+#urlbar-results .urlbarView-body-inner {
+  background: none !important;
+} */
+.search-panel-header, .search-panel-one-offs {
+    display: none !important;
+}
+panel#urlbar-results {
+  width: 1000px !important;
+  max-width: 1000px !important;
+  margin-left: 0 !important;
+  --item-padding-start: 0 !important;
+  --item-padding-end: 0 !important;
 }

@@ -41,3 +41,115 @@
     scrollbar-width: none;
 }
 */
+
+/* https://www.reddit.com/r/FirefoxCSS/comments/cs4yl5/show_action_buttons_enabledisable_options_etc_on/eysx7lg/ */
+
+@-moz-document url("chrome://mozapps/content/extensions/aboutaddons.html") {
+
+    panel-list {
+        border: none !important;
+        box-shadow: none !important;
+        display: inline !important;
+        min-width: unset !important;
+        padding: 0 !important;
+        right: 0px !important;
+        background: none !important;
+    }
+
+    addon-card:not([expanded]) > .addon.card[active="false"] {
+        opacity: 1 !important;
+        background-color: #20202399 !important;
+    }
+
+    addon-card:not([expanded]) > .addon.card[active="false"] .addon-card-collapsed>*:not(.more-options-menu) {
+        opacity: 0.6 !important;
+        transition: opacity 150ms !important;
+    }
+
+    panel-item {
+        display: inline-block !important;
+        margin-inline-start: 2px !important;
+    }
+
+    .more-options-menu {
+        margin: unset !important;
+    }
+
+    /* link + is needed to avoid styling check for updates buttons and tabs on add-on detail pages because shadowdom */
+    link+button {
+        background-color: var(--in-content-button-background) !important;
+        background-position: center !important;
+        border-radius: 2px !important;
+        cursor: pointer !important;
+        height: 32px !important;
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+    }
+
+    link+button:hover {
+        background-color: var(--in-content-button-background-hover) !important;
+    }
+
+    link+button:hover:active {
+        background-color: var(--in-content-button-background-active) !important;
+    }
+
+    link+button:focus {
+        box-shadow: 0 0 0 1px var(--in-content-border-active) inset, 0 0 0 1px var(--in-content-border-active), 0 0 0 4px var(--in-content-border-active-shadow) !important;
+    }
+
+    /* dot badging on update button */
+    link+button::after {
+        left: 22px !important;
+        top: 4px !important;
+    }
+
+    /* use icons, remove text */
+    panel-item[action="remove"],
+    panel-item[action="install-update"],
+    panel-item[action="always-activate"] {
+        font-size: 0px !important;
+        position: relative !important;
+        top: -6px !important;
+        fill: var(--in-content-page-color) !important;
+        width: 32px !important;
+    }
+
+    .more-options-button.ghost-button,
+    .arrow.top,
+    .arrow.bottom,
+    panel-item-separator,
+    panel-item[action="report"],
+    panel-item[action="expand"],
+    panel-item[hidden] {
+        display: none !important;
+    }
+
+    panel-item[action="preferences"][hidden],
+    panel-item[action="remove"][hidden] {
+        display: inline-block !important;
+        pointer-events: none !important;
+        opacity: 0.3 !important;
+    }
+
+    div[current-view="list"] .addon-description {
+        width: calc(var(--section-width) - var(--card-padding) * 17 - var(--addon-icon-size)) !important;
+        white-space: normal !important;
+        -webkit-line-clamp: 2 !important;
+        display: -webkit-inline-box !important;
+        overflow: hidden !important;
+        -webkit-box-orient: vertical !important;
+    }
+
+    div[current-view="detail"] .addon-description {
+        width: calc(var(--section-width) - var(--card-padding) * 17 - var(--addon-icon-size)) !important;
+        white-space: normal !important;
+        -webkit-line-clamp: initial !important;
+        display: block !important;
+        -webkit-box-orient: initial !important;
+    }
+
+    .card-contents {
+        align-self: center !important;
+    }
+}
