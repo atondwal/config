@@ -36,7 +36,7 @@ main = do
       terminal   = "st"
     , modMask    = mod4Mask -- Super
     , manageHook = manageHook mateConfig <+> myManageHook
-    , logHook    = logHook mateConfig    <+> fadeInactiveLogHook 0.90
+    , logHook    = logHook mateConfig    -- <+> fadeInactiveLogHook 0.90
     , layoutHook = desktopLayoutModifiers   .
                    -- hide borders if only one window is visible
                    smartBorders             .

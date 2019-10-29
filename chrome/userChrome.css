@@ -230,8 +230,8 @@ Original layout by /u/Herkt https://www.reddit.com/r/FirefoxCSS/comments/7eazix/
   min-height: 20px !important;
   max-height: 20px !important;
   border: none !important;
-  margin-top: 7px !important;
-  margin-left: -1px !important;
+  margin-top: 3px !important;
+  margin-left: -4px !important;
   margin-right: -1px !important;
   border-radius: 0 !important;
 }
@@ -269,7 +269,7 @@ Original layout by /u/Herkt https://www.reddit.com/r/FirefoxCSS/comments/7eazix/
 
 :root[uidensity=compact] #identity-box {
   margin-top: 2px !important;
-  margin-left: -10px !important;
+  margin-left: 0px !important;
   margin-right: 0px !important;
   padding-right: 8px !important;
   padding-left: 0px !important;
@@ -281,6 +281,7 @@ Original layout by /u/Herkt https://www.reddit.com/r/FirefoxCSS/comments/7eazix/
   opacity: 0;
   width: 15px !important;
   height: 15px !important;
+  margin-right: -20px;
 }
 
 /* #urlbar { display: -moz-box; display: flex; flex-flow : row-reverse !important; position: absolute !important; top:0; left:1px; /* because of -1px elsewhere todo cancel them out } */
@@ -309,6 +310,9 @@ Original layout by /u/Herkt https://www.reddit.com/r/FirefoxCSS/comments/7eazix/
 #tracking-protection-icon-box {
   display: none;
 }
+#tracking-protection-icon-container {
+ border-right: none !important; 
+}
 
 #identity-box:after {
   content: '';
@@ -320,6 +324,7 @@ Original layout by /u/Herkt https://www.reddit.com/r/FirefoxCSS/comments/7eazix/
   pointer-events: none;
   z-index: -1;
   opacity: 1;
+  background: linear-gradient(90deg, rgba(0,0,0,.5), rgba(0,0,0,0));
 }
 
 /* There is also grantedPermissions, but irrelevant. */
