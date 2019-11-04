@@ -20,6 +20,9 @@ import XMonad.Actions.FloatKeys
 import Data.Map (Map, union, fromList)
 import Data.Set (toList)
 
+import Foreign.C.Types
+import Data.Word
+
 main :: IO ()
 main = do
   spawn "conky"
@@ -51,6 +54,7 @@ main = do
     , keys       = \cfg -> myKeys cfg `union`
                            keys def cfg `union`
                            keys mateConfig cfg
+    , mouseBindings = \cfg -> myMouse cfg `union` mouseBindings mateConfig cfg
     }
 
 -- increase or decrease border thickness
@@ -97,6 +101,12 @@ myManageHook = namedScratchpadManageHook scratchpads <+> composeAll
   , stringProperty "WM_WINDOW_ROLE" =? "devtools" --> doFloat
   ]
 
+myMouse :: XConfig y -> Map (ButtonMask, Button) (Window -> X ())
+myMouse XConfig{modMask = m, terminal = term} = fromList [
+    ((m               , button4)         , updateOpacity (+ 0.1))
+  , ((m               , button5)         , updateOpacity (subtract 0.1))
+  ]
+
 myKeys :: XConfig y -> Map (KeyMask, KeySym) (X ())
 myKeys XConfig{modMask = m, terminal = term} = fromList [
   -- Layout
@@ -127,3 +137,32 @@ myKeys XConfig{modMask = m, terminal = term} = fromList [
   ]
  where
   dmenu = "exe=`dmenu_path | yeganesh -x -- -i -b -sb \"#689d6a\" -sf \"#2d2d2d\" -nb \"#2d2d2d\" -nf grey -fn 'Source Code Pro-9'` && eval \"$exe\""
+
+-- https://github.com/yuttie/dot-xmonad/blob/master/xmonad.hs
+-- http://hackage.haskell.org/package/xmonad-contrib-0.16/docs/src/XMonad.Hooks.FadeInactive.html#setOpacity
+rationalToOpacity :: Integral a => Rational -> a
+rationalToOpacity r = round $ r * 0xffffffff
+
+setOpacity :: Rational -> Window -> X ()
+setOpacity r w = withDisplay $ \dpy -> do
+    a <- getAtom "_NET_WM_WINDOW_OPACITY"
+    c <- getAtom "CARDINAL"
+    io $ changeProperty32 dpy w a c propModeReplace [rationalToOpacity r]
+
+opacityToRational :: Integral a => a -> Rational
+opacityToRational opacity = fromIntegral opacity / 0xffffffff
+
+getOpacity :: Window -> X Rational
+getOpacity w = withDisplay $ \dpy -> do
+    a <- getAtom "_NET_WM_WINDOW_OPACITY"
+    mval <- io $ getWindowProperty32 dpy a w
+    return $ maybe 1 (opacityToRational . asUnsigned . head) mval
+  where
+    asUnsigned :: CLong -> Word32
+    asUnsigned = fromIntegral
+
+updateOpacity :: (Rational -> Rational) -> Window -> X ()
+updateOpacity f w = do
+    r <- getOpacity w
+    let r' = max 0 $ min 1 $ f r
+    setOpacity r' w
