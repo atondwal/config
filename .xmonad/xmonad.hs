@@ -1,27 +1,23 @@
-{-# LANGUAGE DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
-import XMonad
-import XMonad.Config.Mate        (mateConfig, desktopLayoutModifiers)
+import Data.Map (Map, union, fromList)
 
-import XMonad.Hooks.FadeInactive (fadeInactiveLogHook)
+import XMonad
+import XMonad.Config.Mate                  (mateConfig, desktopLayoutModifiers)
 
 import XMonad.Layout.Grid                  (Grid(..))
 import XMonad.Layout.Accordion             (Accordion(..))
-import XMonad.Layout.MultiToggle           (mkToggle, single, Toggle(..), (??), EOT(..))
+
+import XMonad.Layout.MultiToggle           (mkToggle, single, Toggle(..))
 import XMonad.Layout.MultiToggle.Instances (StdTransformers(..))
 import XMonad.Layout.Spacing               (spacingWithEdge, incSpacing)
 import XMonad.Layout.NoBorders             (smartBorders)
-import XMonad.Layout.LayoutModifier
+
+import XMonad.Actions.FloatKeys
 
 import XMonad.Util.NamedScratchpad
 import XMonad.StackSet (RationalRect(..))
 
-import XMonad.Actions.FloatKeys
-
-import Data.Map (Map, union, fromList)
-import Data.Set (toList)
-
-import Foreign.C.Types
-import Data.Word
+import Opacity (updateOpacity)
+import ResizeableBorders
 
 main :: IO ()
 main = do
@@ -38,50 +34,28 @@ main = do
   xmonad $ mateConfig {
       terminal   = "st"
     , modMask    = mod4Mask -- Super
-    , manageHook = manageHook mateConfig <+> myManageHook
-    , logHook    = logHook mateConfig    -- <+> fadeInactiveLogHook 0.90
+    , manageHook = mconcat [
+                      manageHook mateConfig
+                    , namedScratchpadManageHook scratchpads
+                    , className =? "mpv"    --> doFloat
+                    , className =? "Gvim"   --> doFloat
+                    ]
     , layoutHook = desktopLayoutModifiers   .
                    -- hide borders if only one window is visible
                    smartBorders             .
                    -- mod+x (bound in myKeys) toggles fullscreen
                    mkToggle (single NBFULL) $
-                     (spacingWithEdge 10            . -- gaps (starting at 10)
-                      ModifiedLayout (WideBorder 2) $ -- my resizable borders (see BorderMessage)
+                     (spacingWithEdge 10    . -- gaps (starting at 10)
+                      borderWithWidth 2     $ -- my resizable borders (see ResizeableBorders)
                        Tall 1 (3/100) (1/2)
                        ||| Grid
                      )
-                     ||| ModifiedLayout (WideBorder 0) Accordion
+                     ||| borderWithWidth 0 Accordion
     , keys       = \cfg -> myKeys cfg `union`
                            keys def cfg `union`
                            keys mateConfig cfg
     , mouseBindings = \cfg -> myMouse cfg `union` mouseBindings mateConfig cfg
     }
-
--- increase or decrease border thickness
-data BorderMessage = IncBorder | DecBorder deriving (Read, Show, Typeable)
-instance Message BorderMessage
-
-data WideBorder a = WideBorder Dimension deriving (Read, Show)
-instance LayoutModifier WideBorder Window where
-  unhook (WideBorder _) = do
-    width <- asks (borderWidth . config)
-    ws <- toList <$> gets mapped
-    setBorders width ws
-
-  redoLayout (WideBorder n) _ _ wrs = do
-    setBorders n ws
-    return (wrs, Just $ WideBorder n)
-   where
-    ws = map fst wrs
-
-  pureMess (WideBorder n) m = doinc <$> fromMessage m
-   where
-    doinc IncBorder = WideBorder $ (n + 1)
-    doinc DecBorder = WideBorder $ if n == 0 then 0 else (n - 1)
-
--- copied wholesale from NoBorders.hs (it doesn't export this fn)
-setBorders :: Dimension -> [Window] -> X ()
-setBorders bw ws = withDisplay $ \d -> mapM_ (\w -> io $ setWindowBorderWidth d w bw) ws
 
 scratchpads :: [NamedScratchpad]
 scratchpads =
@@ -93,13 +67,6 @@ scratchpads =
   ]
  where
   geo a b c d = customFloating (RationalRect a b c d)
-
-myManageHook = namedScratchpadManageHook scratchpads <+> composeAll
-  [ className =? "mpv"      --> doFloat
-  , className =? "pidgin"   --> doFloat
-  , className =? "Gvim"   --> doFloat
-  , stringProperty "WM_WINDOW_ROLE" =? "devtools" --> doFloat
-  ]
 
 myMouse :: XConfig y -> Map (ButtonMask, Button) (Window -> X ())
 myMouse XConfig{modMask = m, terminal = term} = fromList [
@@ -113,8 +80,12 @@ myKeys XConfig{modMask = m, terminal = term} = fromList [
     ((m               , xK_x)            , sendMessage $ Toggle NBFULL)
   , ((m               , xK_bracketright) , incSpacing (-5))
   , ((m               , xK_bracketleft)  , incSpacing   5)
-  , ((m .|. shiftMask , xK_bracketright) , sendMessage $ IncBorder)
-  , ((m .|. shiftMask , xK_bracketleft)  , sendMessage $ DecBorder)
+  , ((m .|. shiftMask , xK_bracketright) , sendMessage IncBorder)
+  , ((m .|. shiftMask , xK_bracketleft)  , sendMessage DecBorder)
+  , ((m .|. shiftMask , xK_Down)         , withFocused $ keysResizeWindow ( 0, 5) (0,0))
+  , ((m .|. shiftMask , xK_Up)           , withFocused $ keysResizeWindow ( 0,-5) (0,0))
+  , ((m .|. shiftMask , xK_Right)        , withFocused $ keysResizeWindow ( 5, 0) (0,0))
+  , ((m .|. shiftMask , xK_Left)         , withFocused $ keysResizeWindow (-5, 0) (0,0))
   , ((m               , xK_Down)         , withFocused $ keysMoveWindow ( 0, 5))
   , ((m               , xK_Up)           , withFocused $ keysMoveWindow ( 0,-5))
   , ((m               , xK_Right)        , withFocused $ keysMoveWindow ( 5, 0))
@@ -137,32 +108,3 @@ myKeys XConfig{modMask = m, terminal = term} = fromList [
   ]
  where
   dmenu = "exe=`dmenu_path | yeganesh -x -- -i -b -sb \"#689d6a\" -sf \"#2d2d2d\" -nb \"#2d2d2d\" -nf grey -fn 'Source Code Pro-9'` && eval \"$exe\""
-
--- https://github.com/yuttie/dot-xmonad/blob/master/xmonad.hs
--- http://hackage.haskell.org/package/xmonad-contrib-0.16/docs/src/XMonad.Hooks.FadeInactive.html#setOpacity
-rationalToOpacity :: Integral a => Rational -> a
-rationalToOpacity r = round $ r * 0xffffffff
-
-setOpacity :: Rational -> Window -> X ()
-setOpacity r w = withDisplay $ \dpy -> do
-    a <- getAtom "_NET_WM_WINDOW_OPACITY"
-    c <- getAtom "CARDINAL"
-    io $ changeProperty32 dpy w a c propModeReplace [rationalToOpacity r]
-
-opacityToRational :: Integral a => a -> Rational
-opacityToRational opacity = fromIntegral opacity / 0xffffffff
-
-getOpacity :: Window -> X Rational
-getOpacity w = withDisplay $ \dpy -> do
-    a <- getAtom "_NET_WM_WINDOW_OPACITY"
-    mval <- io $ getWindowProperty32 dpy a w
-    return $ maybe 1 (opacityToRational . asUnsigned . head) mval
-  where
-    asUnsigned :: CLong -> Word32
-    asUnsigned = fromIntegral
-
-updateOpacity :: (Rational -> Rational) -> Window -> X ()
-updateOpacity f w = do
-    r <- getOpacity w
-    let r' = max 0 $ min 1 $ f r
-    setOpacity r' w
