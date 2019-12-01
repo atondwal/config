@@ -12,23 +12,27 @@ import XMonad.Layout.Spacing               (spacingWithEdge, incSpacing)
 import XMonad.Layout.NoBorders             (smartBorders)
 
 import XMonad.Actions.FloatKeys
+import XMonad.Actions.CopyWindow (copy)
+
+import XMonad.Prompt.Shell
+import XMonad.Prompt
 
 import XMonad.Util.NamedScratchpad
-import XMonad.StackSet (RationalRect(..))
+import XMonad.StackSet (RationalRect(..), view, shift)
 
 import Opacity (updateOpacity)
 import ResizeableBorders
 
 main :: IO ()
 main = do
-  spawn "conky"
+  -- spawn "conky"
   spawn "compton"
   spawn "sh ~/.fehbg"
   spawn "setxkbmap -option caps:escape"
   spawn "synclient MaxTapTime=0"
   spawn "/usr/lib/kdeconnectd"
   spawn "/usr/lib/notify-osd/notify-osd"
-  spawn "redshift"
+  -- spawn "redshift"
   -- preload st into RAM :)
   spawn "st -n term2 "
   xmonad $ mateConfig {
@@ -63,7 +67,7 @@ scratchpads =
   , NS "term2" "st -n term2" (resource =? "term2") (geo (1/3) (2/3) (1/3) (1/3))
   , NS "term3" "st -n term3" (resource =? "term3") (geo (2/3) (2/3) (1/3) (1/3))
   , NS "term4" "st -n term4" (resource =? "term4") (geo 0 0 1 (1/3))
-  , NS "ranger" "urxvtcd -name ranger -e ranger" (resource =? "ranger") (geo (1/5) (1/5) (1/5) (1/5))
+  , NS "ranger" "urxvtcd -name ranger -e ranger" (resource =? "ranger") (geo (1/5) (1/5) (7/10) (7/10))
   ]
  where
   geo a b c d = customFloating (RationalRect a b c d)
@@ -75,7 +79,7 @@ myMouse XConfig{modMask = m, terminal = term} = fromList [
   ]
 
 myKeys :: XConfig y -> Map (KeyMask, KeySym) (X ())
-myKeys XConfig{modMask = m, terminal = term} = fromList [
+myKeys XConfig{modMask = m, terminal = term, workspaces = sps} = fromList $ [
   -- Layout
     ((m               , xK_x)            , sendMessage $ Toggle NBFULL)
   , ((m               , xK_bracketright) , incSpacing (-5))
@@ -99,12 +103,14 @@ myKeys XConfig{modMask = m, terminal = term} = fromList [
   , ((m, xK_o), namedScratchpadAction scratchpads "ranger")
 
   , ((m .|. shiftMask, xK_o), spawn "thunar")
-  , ((m, xK_p),               spawn  dmenu)
+  , ((m              , xK_p), shellPrompt greenXPConfig)
 
   , ((m, xK_F8),              spawn "ibacklight -dec 10")
   , ((m, xK_F9),              spawn "ibacklight -inc 10")
   , ((m, xK_m),               spawn "mpv `xclip -o`")
   , ((m .|. mod1Mask, xK_w),  spawn "sh ~/bin/wall.sh")
-  ]
- where
-  dmenu = "exe=`dmenu_path | yeganesh -x -- -i -b -sb \"#689d6a\" -sf \"#2d2d2d\" -nb \"#2d2d2d\" -nf grey -fn 'Source Code Pro-9'` && eval \"$exe\""
+  , ((m .|. mod1Mask, xK_d),  spawn "sh ~/bin/floor.sh" >> spawn "sh ~/bin/wall.sh")
+  ] ++ do
+    (sp, k) <- zip sps [xK_1 ..]
+    (act, mod) <- [(view, 0), (shift, shiftMask), (copy, shiftMask .|. controlMask)]
+    [((m .|. mod, k), windows $ act sp)]
