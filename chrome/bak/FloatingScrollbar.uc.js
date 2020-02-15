@@ -60,13 +60,13 @@
     var sss = Cc['@mozilla.org/content/style-sheet-service;1'].getService(Ci.nsIStyleSheetService);
     var uri = makeURI('data:text/css;charset=UTF=8,' + encodeURIComponent(css));
 
-    let m = UC.rebuild.elBuilder(document, 'menuitem', {
-      //id: 'userChromejs_Tools_Menu',
-      label: 'Floating Scrollbars',
-      type: 'checkbox',
-      checked: enabled
-    })
-    let menuitem = document.getElementById('menu_ToolsPopup').insertBefore(m , document.getElementById('devToolsSeparator'));
+    var p = document.getElementById('menu_openAddons');
+    var m = document.createElement('menuitem');
+    m.setAttribute('label', "Floating Scrollbar");
+    m.setAttribute('type', 'checkbox');
+    //m.setAttribute('autocheck', 'false');
+    m.setAttribute('checked', enabled);
+    p.insertBefore(m, p);
     m.addEventListener('command', command, false);
 
     if (enabled) {
