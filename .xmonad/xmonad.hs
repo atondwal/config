@@ -10,6 +10,7 @@ import XMonad.Layout.MultiToggle           (mkToggle, single, Toggle(..))
 import XMonad.Layout.MultiToggle.Instances (StdTransformers(..))
 import XMonad.Layout.Spacing               (spacingWithEdge, incSpacing)
 import XMonad.Layout.NoBorders             (smartBorders)
+import XMonad.Layout.MouseResizableTile
 
 import XMonad.Actions.FloatKeys
 import XMonad.Actions.CopyWindow (copy)
@@ -51,7 +52,8 @@ main = do
                    mkToggle (single NBFULL) $
                      (spacingWithEdge 10    . -- gaps (starting at 10)
                       borderWithWidth 2     $ -- my resizable borders (see ResizeableBorders)
-                       Tall 1 (3/100) (1/2)
+                       mouseResizableTile { draggerType = BordersDragger }
+                       -- Tall 1 (3/100) (1/2)
                        ||| Grid
                      )
                      ||| borderWithWidth 0 Accordion
@@ -59,6 +61,8 @@ main = do
                            keys def cfg `union`
                            keys mateConfig cfg
     , mouseBindings = \cfg -> myMouse cfg `union` mouseBindings mateConfig cfg
+    , normalBorderColor = "#222222"
+    , focusedBorderColor = "#666666"
     }
 
 scratchpads :: [NamedScratchpad]
