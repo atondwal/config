@@ -36,7 +36,7 @@ Plug 'tpope/vim-speeddating'
 Plug 'simnalamburt/vim-mundo'
 Plug 'kshenoy/vim-signature'
 Plug 'godlygeek/tabular'
-"Plug 'majutsushi/tagbar'
+Plug 'majutsushi/tagbar'
 Plug 'joom/latex-unicoder.vim'
 Plug 'vim-scripts/loremipsum', { 'on' : 'Loremipsum' }
 Plug 'metakirby5/codi.vim'   , { 'on' : 'Codi' }
@@ -68,7 +68,42 @@ Plug 'dag/vim2hs' "Makes gf work on module names (broken?)
 " Plug 'bitc/vim-hdevtools' " Used with syntastic
 "Plug 'parsonsmatt/intero-neovim'
 " https://github.com/ucsd-progsys/liquid-types.vim
-"Plug 'ndmitchell/ghcid'   , { 'rtp': 'plugins/nvim', 'on' : 'Ghcid' }
+Plug 'ndmitchell/ghcid'   , { 'rtp': 'plugins/nvim', 'on' : 'Ghcid' }
+
+let g:tagbar_type_haskell = {
+    \ 'ctagsbin'  : 'hasktags',
+    \ 'ctagsargs' : '-x -c -o-',
+    \ 'kinds'     : [
+        \  'm:modules:0:1',
+        \  'd:data: 0:1',
+        \  'd_gadt: data gadt:0:1',
+        \  't:type names:0:1',
+        \  'nt:new types:0:1',
+        \  'c:classes:0:1',
+        \  'cons:constructors:1:1',
+        \  'c_gadt:constructor gadt:1:1',
+        \  'c_a:constructor accessors:1:1',
+        \  'ft:function types:1:1',
+        \  'fi:function implementations:0:1',
+        \  'i:instance:0:1',
+        \  'o:others:0:1'
+    \ ],
+    \ 'sro'        : '.',
+    \ 'kind2scope' : {
+        \ 'm' : 'module',
+        \ 'c' : 'class',
+        \ 'd' : 'data',
+        \ 't' : 'type',
+        \ 'i' : 'instance'
+    \ },
+    \ 'scope2kind' : {
+        \ 'module'   : 'm',
+        \ 'class'    : 'c',
+        \ 'data'     : 'd',
+        \ 'type'     : 't',
+        \ 'instance' : 'i'
+    \ }
+\ }
 " }}}
 "Plug 'epdtry/neovim-coq'
 "Plug 'idris-hackers/idris-vim'
