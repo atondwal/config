@@ -23,6 +23,7 @@ import XMonad.StackSet (RationalRect(..), view, shift)
 
 import Opacity (updateOpacity)
 import ResizeableBorders
+import MyAccordion
 
 main :: IO ()
 main = do
@@ -56,7 +57,7 @@ main = do
                        -- Tall 1 (3/100) (1/2)
                        ||| Grid
                      )
-                     ||| borderWithWidth 0 Accordion
+                     ||| borderWithWidth 0 MyAccordion
     , keys       = \cfg -> myKeys cfg `union`
                            keys def cfg `union`
                            keys mateConfig cfg
