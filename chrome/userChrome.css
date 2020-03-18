@@ -12,9 +12,21 @@
   display: none;
 }
 
+/* https://www.reddit.com/r/FirefoxCSS/comments/c40xtf/one_line_minimal_tree_style_tabs/ */
+
+#sidebar-box:not([sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"]) {
+    min-width: 200px !important;
+    max-width: none !important;
+}
+
+#sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"] {
+}
+
 #sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"]:hover {
-  transition: all 300ms !important;
   min-width: 200px !important;
+  margin-right: calc((200px - var(--thin-tab-width)) * -1);
+  z-index: 100;
+  position: relative;
 }
 
 #sidebar {
@@ -95,8 +107,9 @@ https://github.com/moamenk/Firefox-Minimal-Responsive-Theme/blob/master/userChro
 
 :root:not([customizing]) :not(:hover) > #nav-bar toolbarbutton[id="back-button"],
 :root:not([customizing]) :not(:hover) > #nav-bar toolbarbutton[id="weautopagerize_wantora_github_io-browser-action"],
+:root:not([customizing]) :not(:hover) > #nav-bar toolbarbutton[id="zotero_chnm_gmu_edu-browser-action"],
+:root:not([customizing]) :not(:hover) > #nav-bar #pageActionButton,
 :root:not([customizing]) :not(:hover) > #nav-bar toolbarbutton[id="forward-button"]
-/* :root:not([customizing]) #nav-bar:not(:hover) #page-action-buttons */
 {
   display: none;
 }
@@ -134,6 +147,7 @@ Original layout by /u/Herkt https://www.reddit.com/r/FirefoxCSS/comments/7eazix/
 */
 
 :root:-moz-lwtheme-brighttext {
+  --autocomplete-popup-highlight-background: #662244CC !important;
   /* minor color changes to the default dark theme */
   --color-overflow: #222;
   /* >> button color */
@@ -172,12 +186,30 @@ Original layout by /u/Herkt https://www.reddit.com/r/FirefoxCSS/comments/7eazix/
   :root[uidensity=compact] #TabsToolbar {
     margin-left: 40vw;
   }
+  /*
+  :root[uidensity=compact] #titlebar:hover + #nav-bar {
+    opacity: 0;
 }
-@media (max-width: 800px){
-  :root[uidensity=compact] #TabsToolbar {
-    margin-left: 0vw !important;
+@media (min-width: 800px) and (max-width: 1000px) {
+
+  :root[uidensity=compact] #nav-bar:hover {
+       margin-right: 0vw !important;
+  }*/
   }
 }
+
+@media (max-width: 800px){
+   :root[uidensity=compact] #TabsToolbar {
+    margin-left: 0vw !important;
+  } 
+}
+
+/*
+:root[uidensity=compact] #titlebar + #nav-bar {
+  background-color: #444 !important;
+  z-index: 1000;
+}
+*/
 
 /* unset the tab bar min-height */
 
@@ -304,16 +336,6 @@ Original layout by /u/Herkt https://www.reddit.com/r/FirefoxCSS/comments/7eazix/
   margin-right: -20px;
 }
 
-/* #urlbar { display: -moz-box; display: flex; flex-flow : row-reverse !important; position: absolute !important; top:0; left:1px; /* because of -1px elsewhere todo cancel them out } */
-
-/* .urlbar-input-box {flex-basis: 1170px !important; display: block;} */
-
-/* .urlbar-input {visibility: collapse !important;} */
-
-/* .urlbar-input .anonymous-div {min-width: 1000px !important;} */
-
-/* .urlbar-input {width: 100%;} */
-
 /*
  * Originally from:
  * http://forums.mozillazine.org/viewtopic.php?p=14404121#p14404121
@@ -321,8 +343,12 @@ Original layout by /u/Herkt https://www.reddit.com/r/FirefoxCSS/comments/7eazix/
 
 #urlbar {
   position: relative;
-  z-index: 1;
+/*   z-index: 101; */
   background: none !important;
+}
+
+#navigator-toolbox {
+  z-index: 101;
 }
 
 #connection-icon,
@@ -344,7 +370,7 @@ Original layout by /u/Herkt https://www.reddit.com/r/FirefoxCSS/comments/7eazix/
   pointer-events: none;
   z-index: -1;
   opacity: 1;
-  background: linear-gradient(90deg, rgba(0,0,0,.5), rgba(0,0,0,0));
+  background: linear-gradient(90deg, rgba(0,0,0,.5), rgba(68,68,68,1));
 }
 
 /* There is also grantedPermissions, but irrelevant. */
@@ -352,56 +378,56 @@ Original layout by /u/Herkt https://www.reddit.com/r/FirefoxCSS/comments/7eazix/
 /* about:about */
 
 #urlbar[pageproxystate='valid'] #identity-box.unknownIdentity:after {
-  background: linear-gradient(90deg, rgba(60,0,0,1), rgba(0,0,0,0));
+  background: linear-gradient(90deg, rgba(60,0,0,1), rgba(68,68,68,1));
 }
 
 /* about:config */
 
 #urlbar[pageproxystate='valid'] #identity-box.chromeUI:after {
-  background: linear-gradient(90deg, rgba(0,48,0,1), rgba(0,0,0,0));
+  background: linear-gradient(90deg, rgba(0,48,0,1), rgba(68,68,68,1));
 }
 
 /* uBlock Origin Dashboard */
 
 #urlbar[pageproxystate='valid'] #identity-box.extensionPage:after {
-  background: linear-gradient(90deg, rgba(0,0,64,1), rgba(0,0,0,0));
+  background: linear-gradient(90deg, rgba(0,0,64,1), rgba(68,68,68,1));
   /* Firefox Blue 40 */
 }
 
 /* https://www.github.com/ */
 
 #urlbar[pageproxystate='valid'] #identity-box.verifiedIdentity:after {
-  background: linear-gradient(90deg, rgba(0,64,0,1), rgba(0,0,0,0));
+  background: linear-gradient(90deg, rgba(0,64,0,1), rgba(68,68,68,1));
 }
 
 /* https://www.google.com/ */
 
 #urlbar[pageproxystate='valid'] #identity-box.verifiedDomain:after {
-  background: linear-gradient(90deg, rgba(0,30,0,1), rgba(0,0,0,0));
+  background: linear-gradient(90deg, rgba(0,30,0,1), rgba(68,68,68,1));
 }
 
 /* https://mixed-script.badssl.com/ */
 
 #urlbar[pageproxystate='valid'] #identity-box.mixedActiveBlocked:after {
-  background: linear-gradient(90deg, rgba(0,64,0,1), rgba(0,0,0,0));
+  background: linear-gradient(90deg, rgba(0,64,0,1), rgba(68,68,68,1));
 }
 
 /* https://mixed.badssl.com/ */
 
 #urlbar[pageproxystate='valid'] #identity-box.mixedDisplayContent:after {
-  background: linear-gradient(90deg, rgba(80,80,0,1) 0%, rgba(0,0,0,0) 100%);
+  background: linear-gradient(90deg, rgba(80,80,0,1) 0%, rgba(68,68,68,1) 100%);
 }
 
 /* https://very.badssl.com/ */
 
 #urlbar[pageproxystate='valid'] #identity-box.mixedDisplayContentLoadedActiveBlocked:after {
-  background: linear-gradient(90deg, rgba(128,64,0,1), rgba(0,0,0,0));
+  background: linear-gradient(90deg, rgba(128,64,0,1), rgba(68,68,68,1));
 }
 
 /* https://self-signed.badssl.com/ but add certificate exception */
 
 #urlbar[pageproxystate='valid'] #identity-box.certUserOverridden:after {
-  background: linear-gradient(90deg, rgba(64,64,0,1), rgba(0,0,0,0));
+  background: linear-gradient(90deg, rgba(64,64,0,1), rgba(68,68,68,1));
 }
 
 /* Don't know an example for this */
@@ -414,14 +440,15 @@ Original layout by /u/Herkt https://www.reddit.com/r/FirefoxCSS/comments/7eazix/
 /* https://mixed-script.badssl.com/ but disable protection */
 
 #urlbar[pageproxystate='valid'] #identity-box.mixedActiveContent:after {
-  background: #d70022;
+  background: linear-gradient(90deg, rgba(215,0,34,1), rgba(68,68,68,1));
+  /* background: #d70022; */
   /* Firefox Red 60 */
 }
 
 /* http://http-login.badssl.com/ */
 
 #urlbar[pageproxystate='valid'] #identity-box.insecureLoginForms:after {
-  background: linear-gradient(90deg, rgba(128,0,0,1), rgba(0,0,0,0));
+  background: linear-gradient(90deg, rgba(128,0,0,1), rgba(68,68,68,1));
 }
 
 /* #urlbar-results {
@@ -443,3 +470,24 @@ panel#urlbar-results {
   --item-padding-start: 0 !important;
   --item-padding-end: 0 !important;
 }
+
+#appcontent {
+/*   margin-top: -20px; */
+}
+
+.urlbarView {
+    background-image: url(./noise-512x512.png) !important;
+    background-color: #444444D8 !important;
+    backdrop-filter: blur(32px) !important;
+/*     padding-left: 0 !important; */
+}
+.search-one-offs {
+  display: none !important;
+}
+
+/*
+tab[selected] .tab-content {
+  background: black !important;
+  box-shadow: inset 0 0 23px #448877;
+}
+*/

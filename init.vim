@@ -25,7 +25,8 @@ Plug 'zirrostig/vim-schlepp'
 Plug 'kopischke/vim-fetch'
 Plug 'machakann/vim-swap'
 Plug 'vim-scripts/AnsiEsc.vim'
-Plug 'vim-scripts/argtextobj.vim', { 'for' : 'c' }
+Plug 'kana/vim-textobj-user'
+Plug 'kana/vim-textobj-entire'
 Plug 'vim-scripts/camelcasemotion'
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'tpope/vim-speeddating'
@@ -61,13 +62,13 @@ Plug 'autozimu/LanguageClient-neovim', { 'do': './install.sh', 'branch' : 'next'
 Plug 'rust-lang/rust.vim'  , { 'for' : 'rust' }
 " {{{ Haskell
 " TODO some sort of folding help
-Plug 'dag/vim2hs' "Makes gf work on module names
-Plug 'bitc/lushtags'       , { 'for' : 'haskell' }
-Plug 'eagletmt/ghcmod-vim' , { 'for' : 'haskell' }
+Plug 'dag/vim2hs' "Makes gf work on module names (broken?)
+"Plug 'bitc/lushtags'       , { 'for' : 'haskell' }
+"Plug 'eagletmt/ghcmod-vim' , { 'for' : 'haskell' }
 " Plug 'bitc/vim-hdevtools' " Used with syntastic
 "Plug 'parsonsmatt/intero-neovim'
 " https://github.com/ucsd-progsys/liquid-types.vim
-Plug 'ndmitchell/ghcid'   , { 'rtp': 'plugins/nvim', 'on' : 'Ghcid' }
+"Plug 'ndmitchell/ghcid'   , { 'rtp': 'plugins/nvim', 'on' : 'Ghcid' }
 " }}}
 "Plug 'epdtry/neovim-coq'
 "Plug 'idris-hackers/idris-vim'
@@ -85,7 +86,8 @@ Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive' "for fzf
 Plug 'tweekmonster/gitbusy.vim'
 " }}}
-Plug 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX', { 'for': 'tex' }
+"Plug 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX', { 'for': 'tex' }
+Plug 'lervag/vimtex'
 Plug 'vim-pandoc/vim-pandoc'
 "}}}
 call plug#end() | if exists("doinstall") | PlugInstall | endif

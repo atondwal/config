@@ -1,6 +1,6 @@
 @-moz-document url-prefix(about:blank), url-prefix(about:newtab) {
   html:not(#ublock0-epicker), html:not(#ublock0-epicker) body, #newtab-customize-overlay {
-    background: #323234 !important;
+    background: #000000 !important;
   }
 }
 
@@ -8,12 +8,12 @@
 @-moz-document url(about:newtab),
                url(about:home) {
    body{
-       background-color:#323234!important;
+       background-color:#000000!important;
        color:#D1D1D1!important;
       }
    .card,
    .prefs-pane .sidebar {
-      background-color:#202020!important;
+      background-color:#000000!important;
    }
    #snippets,
    .section-title,
@@ -44,6 +44,7 @@
 
 /* https://www.reddit.com/r/FirefoxCSS/comments/cs4yl5/show_action_buttons_enabledisable_options_etc_on/eysx7lg/ */
 
+  /*
 @-moz-document url("chrome://mozapps/content/extensions/aboutaddons.html") {
 
     panel-list {
@@ -153,3 +154,4 @@
         align-self: center !important;
     }
 }
+*/
