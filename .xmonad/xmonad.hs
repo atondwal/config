@@ -58,7 +58,7 @@ main = do
                        ||| Grid
                      )
                      ||| borderWithWidth 0 MyAccordion
-    , keys       = \cfg -> myKeys cfg `union`
+    , keys       = \cfg -> -- myKeys cfg `union`
                            keys def cfg `union`
                            keys mateConfig cfg
     , mouseBindings = \cfg -> myMouse cfg `union` mouseBindings mateConfig cfg
@@ -117,5 +117,5 @@ myKeys XConfig{modMask = m, terminal = term, workspaces = sps} = fromList $ [
   , ((m .|. mod1Mask, xK_d),  spawn "sh ~/bin/floor.sh" >> spawn "sh ~/bin/wall.sh")
   ] ++ do
     (sp, k) <- zip sps [xK_1 ..]
-    (act, mod) <- [(view, 0), (shift, shiftMask), (copy, shiftMask .|. controlMask)]
+    (act, mod) <- [(shift, shiftMask), (copy, shiftMask .|. controlMask)]
     [((m .|. mod, k), windows $ act sp)]
