@@ -1,0 +1,172 @@
+ .closebox {
+  display:none;
+}
+
+.tab {
+  height: 23px;
+  font-size: 9pt;
+}
+.tab.discarded .label {
+  opacity:.6;
+}
+
+.tab.discarded {
+  opacity:.5;
+}
+
+.tab.pinned{
+  //height: 20px;
+}
+
+/* Counters */
+#tabbar {
+  counter-reset: tabs;
+}
+.tab {
+  counter-increment: tabs;
+}
+span.counter{
+  padding-right: 2em;
+}
+.tab::before {
+  background: Highlight;
+  color: HighlightText;
+  content: counter(tabs);
+  font-size: xx-small;
+  right: 0.2em;
+  padding: .5em;
+  margin-right: -0.3em;
+  pointer-events: none;
+  position: absolute;
+  bottom: 0.2em;
+  z-index: 1000;
+}
+.tab.pinned::before {
+  display:none;
+}
+.after-tabs {
+  visibility: collapse;
+}
+
+.favicon {
+  margin-left: 3px;
+  margin-right: 5px;  
+}
+
+
+
+/* hide scrollbar */
+#tabbar { scrollbar-width: none; }
+
+.contextual-identity-marker {
+  position: absolute !important;
+  pointer-events: none;
+  z-index: 0;
+  
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  top: 0 !important;
+  
+  width: unset !important;
+  height: unset !important;  
+    
+  opacity: 0.15;
+}
+
+/* Hide border on tab bar, force its state to 'scroll', adjust margin-right for width of scrollbar. */
+@media (max-width: 150px) {
+  #tabbar {
+    border: 0;
+    overflow-y: scroll !important;
+    //margin-left: -1% !important;
+  }
+  .tab .label, .counter {
+     display: none;
+  }
+  .tab .twisty {
+    margin-right: -15px;
+    //opacity: 0.8;
+    position: absolute;
+    right: 38px;
+    //z-index: 1000;
+  }
+}
+@media (max-width: 70px) {
+  .tab::before {
+    display:none;
+  }
+  .tab .twisty {
+      margin-right: -35px;
+  }
+}
+@media (max-width : 50px) {
+  .tab .twisty {
+    display : none;
+  }
+}
+@media (min-width: 150px) {
+  #tabbar {
+    border: 0;
+    overflow-y: scroll !important;
+    //margin-left: -5px !important;
+  }
+  .twisty {
+    //margin-left: -6px;
+  }
+  .counter {
+    margin-right: 2em;  
+  }
+}
+
+/* Better alignment of Favicons when collapsed */
+.tab[data-level][data-level="0"] {
+  margin-left: 0% !important;
+}
+.tab[data-level][data-level="1"] {
+  margin-left: 6% !important;
+}
+.tab[data-level][data-level="2"] {
+  margin-left: 12% !important;
+}
+.tab[data-level][data-level="3"] {
+  margin-left: 18% !important;
+}
+.tab[data-level][data-level="4"] {
+  margin-left: 20% !important;
+}
+.tab[data-level][data-level="5"] {
+  margin-left: 22% !important;
+}
+.tab[data-level][data-level="6"] {
+  margin-left: 24% !important;
+}
+
+
+/* ################################################ */
+/* ##### COLOR THEME ############################## */
+/* ################################################ */
+
+#tabbar {
+    background-color: black;
+}
+.tab {
+  background-color: #31363b;
+  border: none;
+}
+.tab .label, .counter {
+  color: white;
+}
+.sound-button, .discarded .twisty {
+  filter: invert(1);
+}
+.sound-button {
+  margin-right: 30px;
+}
+.tab.active {
+  background-color: #377;
+}
+
+#tabbar-container {
+  background-color: #31363b;
+}
