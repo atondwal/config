@@ -21,6 +21,7 @@ import XMonad.Prompt
 import XMonad.Util.NamedScratchpad
 import XMonad.StackSet (RationalRect(..), view, shift)
 
+import Graphics.X11.ExtraTypes.XF86
 import Opacity (updateOpacity)
 import ResizeableBorders
 import MyAccordion
@@ -58,7 +59,7 @@ main = do
                        ||| Grid
                      )
                      ||| borderWithWidth 0 MyAccordion
-    , keys       = \cfg -> -- myKeys cfg `union`
+    , keys       = \cfg -> myKeys cfg `union`
                            keys def cfg `union`
                            keys mateConfig cfg
     , mouseBindings = \cfg -> myMouse cfg `union` mouseBindings mateConfig cfg
@@ -110,8 +111,8 @@ myKeys XConfig{modMask = m, terminal = term, workspaces = sps} = fromList $ [
   , ((m .|. shiftMask, xK_o), spawn "thunar")
   , ((m              , xK_p), shellPrompt greenXPConfig)
 
-  , ((m, xK_F8),              spawn "ibacklight -dec 10")
-  , ((m, xK_F9),              spawn "ibacklight -inc 10")
+  , ((0, xF86XK_MonBrightnessUp),              spawn "ibacklight -dec 10")
+  , ((0, xF86XK_MonBrightnessDown),            spawn "ibacklight -inc 10")
   , ((m, xK_m),               spawn "mpv `xclip -o`")
   , ((m .|. mod1Mask, xK_w),  spawn "sh ~/bin/wall.sh")
   , ((m .|. mod1Mask, xK_d),  spawn "sh ~/bin/floor.sh" >> spawn "sh ~/bin/wall.sh")
