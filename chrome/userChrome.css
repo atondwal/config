@@ -41,9 +41,10 @@
 
 /* Buttons */
 
-.scrollbutton-up,
-.scrollbutton-down,
+#scrollbutton-up,
+#scrollbutton-down,
 #new-tab-button,
+#tabs-newtab-button,
 #alltabs-button {
   display: none;
 }
@@ -54,17 +55,17 @@
 
 #PanelUI-button {
   /*   transform: scale(1.12, 1.12) !important; */
-  position: absolute;
-  right: -60vw;
-  top: 3px;
-  background: #444;
-  max-height: 23px;
+/*   position: absolute; */
+/*   right: -60vw; */
+/*   top: 3px; */
+/*   background: #444; */
+/*   max-height: 23px; */
 }
 
 #nav-bar toolbarbutton {
-  margin-top: 5px !important;
-  margin-bottom: 0px !important;
-  margin-right: 0px !important;
+/*   margin-top: 5px !important; */
+/*   margin-bottom: 0px !important; */
+  margin-right: -2px !important;
   margin-left: -3px !important;
 }
 
@@ -77,13 +78,14 @@
 
 toolbar#PersonalToolbar {
   font-size: 8pt !important;
+  height: 20px !important;
 }
 
 #PersonalToolbar toolbarbutton {
-  margin-top: 1px !important;
-  margin-bottom: -3px !important;
+/*   margin-top: 1px !important; */
+/*   margin-bottom: -3px !important; */
   margin-right: -2px !important;
-  margin-left: -3px !important;
+/*   margin-left: -3px !important; */
 }
 
 /* Contextual toolbar buttons, only show on hover,
@@ -92,7 +94,7 @@ https://github.com/moamenk/Firefox-Minimal-Responsive-Theme/blob/master/userChro
 
 :root:not([customizing]) #nav-bar toolbarbutton .toolbarbutton-icon {
   opacity: 0;
-  right: 0px;
+/*   right: 0px; */
   /*     transform: scale(.7, .7) !important; */
   pointer-events: none !important;
   transition: all 100ms var(--animation-easing-function) !important;
@@ -102,14 +104,14 @@ https://github.com/moamenk/Firefox-Minimal-Responsive-Theme/blob/master/userChro
   margin-top: -1px !important;
   font-weight: bold;
   /*   opacity: .6; */
-  font-size: 7pt !important;
+/*   font-size: 7pt !important; */
 }
 
-:root:not([customizing]) :not(:hover) > #nav-bar toolbarbutton[id="back-button"],
+/* :root:not([customizing]) :not(:hover) > #nav-bar toolbarbutton[id="back-button"], */
 :root:not([customizing]) :not(:hover) > #nav-bar toolbarbutton[id="weautopagerize_wantora_github_io-browser-action"],
 :root:not([customizing]) :not(:hover) > #nav-bar toolbarbutton[id="zotero_chnm_gmu_edu-browser-action"],
 :root:not([customizing]) :not(:hover) > #nav-bar #pageActionButton,
-:root:not([customizing]) :not(:hover) > #nav-bar toolbarbutton[id="forward-button"]
+/* :root:not([customizing]) :not(:hover) > #nav-bar toolbarbutton[id="forward-button"] */
 {
   display: none;
 }
@@ -216,7 +218,7 @@ Original layout by /u/Herkt https://www.reddit.com/r/FirefoxCSS/comments/7eazix/
 :root[uidensity=compact] #tabbrowser-tabs,
 :root[uidensity=compact] #tabbrowser-tabs > .tabbrowser-arrowscrollbox,
 :root[uidensity=compact] #tabbrowser-tabs[positionpinnedtabs] > .tabbrowser-tab[pinned] {
-  min-height: initial !important;
+  min-height: 20px !important;
 }
 
 :root[uidensity=compact] #tabbrowser-tabs {
@@ -231,10 +233,15 @@ Original layout by /u/Herkt https://www.reddit.com/r/FirefoxCSS/comments/7eazix/
 
 :root[uidensity=compact] tab {
   font-size: 8pt;
+  max-height: 20px;
 }
 
 :root[uidensity=compact] .tab-content[pinned] {
   display: none;
+}
+
+:root[uidensity=compact] .tab-background {
+  height: 20px;
 }
 
 /* Remove border between tabs*/
@@ -247,6 +254,11 @@ Original layout by /u/Herkt https://www.reddit.com/r/FirefoxCSS/comments/7eazix/
 :root[uidensity=compact] .tab-line {
   height: 0px !important;
 }
+
+/* :root[uidensity=compact] .tab-icon-image {
+  height: 12px !important;
+  width: 12px !important;
+} */
 
 /* URL bar */
 
@@ -278,14 +290,19 @@ Original layout by /u/Herkt https://www.reddit.com/r/FirefoxCSS/comments/7eazix/
 
 #urlbar,
 .searchbar-textbox {
-  font-size: unset !important;
-  min-height: 20px !important;
-  max-height: 20px !important;
-  border: none !important;
+/*   font-size: unset !important; */
+/*   min-height: 20px !important; */
+/*   max-height: 20px !important; */
+/*   border: none !important; */
   margin-top: 4px !important;
   margin-left: -5px !important;
   margin-right: -1px !important;
   border-radius: 0 !important;
+}
+
+#urlbar-background {
+  border-left: none;
+  border-radius: 0px;
 }
 
 /* 
@@ -343,8 +360,15 @@ Original layout by /u/Herkt https://www.reddit.com/r/FirefoxCSS/comments/7eazix/
 
 #urlbar {
   position: relative;
-/*   z-index: 101; */
+  z-index: 101;
   background: none !important;
+  border-radius: 0;
+  margin-top: 6px !important;
+  margin-left: -6px !important;
+}
+#urlbar-background {
+  z-index: -2;
+  border: none !important;
 }
 
 #navigator-toolbox {
