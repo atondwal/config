@@ -44,6 +44,10 @@ Plug 'vim-scripts/loremipsum', { 'on' : 'Loremipsum' }
 Plug 'junegunn/fzf'          , { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'metakirby5/codi.vim'   , { 'on' : 'Codi' }
+Plug 'francoiscabrol/ranger.vim'
+let g:ranger_map_keys = 0
+let g:ranger_replace_netrw = 1
+    Plug 'rbgrouleff/bclose.vim' " for nvim
 " }}}
 " {{{ Completion, Snippets (broken?)
 Plug 'Shougo/vimproc.vim'   , { 'do': 'make' }
@@ -344,6 +348,8 @@ Arpeggio map hu gT
 Arpeggio imap ag <Esc>:Ag<CR>
 
 inoremap <C-l> <Esc>:call unicoder#start(1)<CR>\
+inore  :wqa
+nore  :wqa
 
 map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 " }}}
