@@ -237,11 +237,13 @@ endif
 
 nnoremap <A-S-h> :tabprev<CR>
 nnoremap <A-S-l> :tabnext<CR>
-nnoremap <A-S-n> :tabnew term://zsh<CR>
+nnoremap <A-S-n> :tabe<CR>
+nnoremap <A-n>   :tabnew term://zsh<CR>
 
 inoremap <A-S-h> :tabprev<CR>
 inoremap <A-S-l> :tabnext<CR>
-inoremap <A-S-n> :tabnew term://zsh<CR>
+nnoremap <A-S-n> :tabe<CR>
+inoremap <A-n> :tabnew term://zsh<CR>
 " }}}
 
 " orgmode {{{
@@ -338,7 +340,7 @@ Arpeggio map ui k
 Arpeggio map nm j
 Arpeggio map il gt
 Arpeggio map hu gT
-Arpeggio map ag :Ag<CR>
+"Arpeggio map ag :Ag<CR>
 Arpeggio imap ag <Esc>:Ag<CR>
 
 inoremap <C-l> <Esc>:call unicoder#start(1)<CR>\
