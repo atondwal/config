@@ -34,6 +34,7 @@ Plug 'michaeljsmith/vim-indent-object'
 " {{{ Features
 "Plug 'theprimeagen/Vim-Be-Good', { 'do' : './install.sh' }
 Plug 'dyng/ctrlsf.vim'
+Plug 'vimwiki/vimwiki'
 Plug 'simnalamburt/vim-mundo'
 Plug 'kshenoy/vim-signature'
 Plug 'godlygeek/tabular'
@@ -358,7 +359,6 @@ map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 autocmd! bufwritepost $MYVIMRC source $MYVIMRC
 
 " Graveyard
-"Plug 'vimwiki/vimwiki'
 "Plug 'FredKSchott/CoVim'
 "Plug 'the-lambda-church/coquille' |  Plug 'def-lkb/vimbufsync'
 "Plug 'jasonlong/lavalamp'
@@ -394,3 +394,24 @@ if executable('ocp-indent') " && has('python3')
   autocmd FileType ocaml execute "set rtp+=" . substitute(system('opam config var share'), '\n$', '', '''') . "/ocp-indent/vim/indent/ocaml.vim"
 endif
 " }}}
+
+function! s:Transclude()
+  let l:z = @z
+  silent! g/@transclude{\zs.*\ze}/norm!gn"zyo@transcluded{o}k:r z
+  let @z = l:z
+endfunction
+
+function! s:LOpen()
+  let l:winnr = winnr()
+  lopen
+  execute "norm!" . l:winnr . ""
+endfunction
+
+augroup transcl
+  autocmd!
+  autocmd BufEnter *.wiki norm!:silent! lgrep! '\[\[=expand('%:t:r')\]\]' *.wiki
+  autocmd BufEnter *.wiki norm!:silent! lgrep! '=expand('%:t:r')' *.wiki
+  autocmd BufEnter *.wiki call s:LOpen()
+  autocmd BufWritePre *.wiki silent! g/@transcluded/norm!dV%
+  autocmd BufWritePost *.wiki call s:Transclude()
+augroup END
