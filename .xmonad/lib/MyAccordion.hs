@@ -5,6 +5,8 @@ module MyAccordion (
 import XMonad
 import qualified XMonad.StackSet as W
 
+import GHC.Word (Word32)
+
 data MyAccordion a = MyAccordion deriving ( Read, Show )
 
 instance LayoutClass MyAccordion Window where
@@ -16,11 +18,13 @@ instance LayoutClass MyAccordion Window where
        (center, bottoms) = splitVerticallyWD 20 (length dns) allButTop
        mainPane = center
 
-splitVerticallyWU w n r | n < 1 = ([],r)
+splitVerticallyWU :: (Ord a, Num a) => Dimension -> a -> Rectangle -> ([Rectangle], Rectangle)
+splitVerticallyWU _ n r | n < 1 = ([],r)
 splitVerticallyWU w n (Rectangle sx sy sw sh) = (Rectangle sx sy sw w : rs, sc)
   where (rs, sc) = splitVerticallyWU w (n-1) (Rectangle sx (sy+fromIntegral w) sw (sh-w))
 
-splitVerticallyWD w n r | n < 1 = (r,[])
+splitVerticallyWD :: (Ord a, Num a) => Word32 -> a -> Rectangle -> (Rectangle, [Rectangle])
+splitVerticallyWD _ n r | n < 1 = (r,[])
 splitVerticallyWD w n (Rectangle sx sy sw sh) = (sc, rs ++ [bot])
   where main = Rectangle sx sy sw (sh-w)
         bot = Rectangle sx (sy + (fromIntegral $ sh-w)) sw w
