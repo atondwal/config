@@ -13,35 +13,37 @@ endif
 call plug#begin('~/.config/nvim/autoload/plugged')
 Plug 'morhetz/gruvbox'
 " {{{ Tweaks
-"Plug 'andrep/vimacs'
 Plug 'kana/vim-arpeggio'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-repeat'
-Plug 'tmhedberg/matchit'
 Plug 'vim-scripts/argtextobj.vim'
 Plug 'kana/vim-niceblock'
 Plug 'zirrostig/vim-schlepp'
-Plug 'kopischke/vim-fetch'
 Plug 'machakann/vim-swap'
-Plug 'vim-scripts/AnsiEsc.vim'
-Plug 'kana/vim-textobj-user'
-Plug 'kana/vim-textobj-entire'
+"Plug 'powerman/AnsiEsc.vim'
+Plug 'kana/vim-textobj-user' "something depends on this, but I don't remember what. either way, probably useful
+"Plug 'kana/vim-textobj-entire'
 Plug 'vim-scripts/camelcasemotion'
 Plug 'michaeljsmith/vim-indent-object'
-Plug 'tpope/vim-speeddating'
+"Plug 'tpope/vim-speeddating'
+"Plug 'tmhedberg/matchit' "Apparently ships with vim now?
+"Plug 'kopischke/vim-fetch'
+"Plug 'andrep/vimacs'
 " }}}
 " {{{ Features
-"Plug 'dyng/ctrlsf.vim'
+"Plug 'theprimeagen/Vim-Be-Good', { 'do' : './install.sh' }
+Plug 'dyng/ctrlsf.vim'
 Plug 'simnalamburt/vim-mundo'
 Plug 'kshenoy/vim-signature'
 Plug 'godlygeek/tabular'
 Plug 'majutsushi/tagbar'
+let g:unicoder_cancel_normal = 1
 Plug 'joom/latex-unicoder.vim'
 Plug 'vim-scripts/loremipsum', { 'on' : 'Loremipsum' }
-Plug 'metakirby5/codi.vim'   , { 'on' : 'Codi' }
-Plug 'junegunn/fzf'          , { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf'          , { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+Plug 'metakirby5/codi.vim'   , { 'on' : 'Codi' }
 " }}}
 " {{{ Completion, Snippets (broken?)
 Plug 'Shougo/vimproc.vim'   , { 'do': 'make' }
@@ -58,7 +60,7 @@ Plug 'ervandew/supertab'
 Plug 'neomake/neomake'
 " }}}
 " {{{ Languages
-Plug 'autozimu/LanguageClient-neovim', { 'do': './install.sh', 'branch' : 'next'}
+"Plug 'autozimu/LanguageClient-neovim', { 'do': './install.sh', 'branch' : 'next'}
 Plug 'rust-lang/rust.vim'  , { 'for' : 'rust' }
 " {{{ Haskell
 " TODO some sort of folding help
@@ -117,9 +119,10 @@ Plug 'vim-scripts/SyntaxRange'
 " }}}
 " {{{ git
 Plug 'jreybert/vimagit', {'on': 'Magit'}
-Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive' "for fzf
-Plug 'tweekmonster/gitbusy.vim'
+""bug that hides first line using either of these?!
+"Plug 'airblade/vim-gitgutter'
+"Plug 'tweekmonster/gitbusy.vim'
 " }}}
 "Plug 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX', { 'for': 'tex' }
 Plug 'lervag/vimtex'
@@ -199,11 +202,23 @@ nnor <A-k> <C-w>k
 nnor <A-l> <C-w>l
 nnor <A-c> <C-w>c
 
+nnor è <C-w>h
+nnor ê <C-w>j
+nnor ë <C-w>k
+nnor ì <C-w>l
+nnor ã <C-w>c
+
 inor <A-h> <Esc><C-w>h
 inor <A-j> <Esc><C-w>j
 inor <A-k> <Esc><C-w>k
 inor <A-l> <Esc><C-w>l
 nnor <A-c> <C-w>c
+
+inor è <Esc><C-w>h
+inor ê <Esc><C-w>j
+inor ë <Esc><C-w>k
+inor ì <Esc><C-w>l
+inor ã <Esc><C-w>c
 
 if has("nvim")
   tnoremap <A-h> <C-\><C-n><C-w>h
@@ -302,6 +317,7 @@ nmap <leader><leader>t :Windows<CR>
 nnoremap <Leader><Leader>s :set spell<CR>
 nnoremap <Leader>z 1z=
 
+nnoremap <CR> :
 nnoremap <Leader>w :w<CR>
 nnoremap <Leader>v :w<CR>
 nnoremap <Leader>r :w<CR>:make<CR>
@@ -325,6 +341,7 @@ Arpeggio map hu gT
 Arpeggio map ag :Ag<CR>
 Arpeggio imap ag <Esc>:Ag<CR>
 
+inoremap <C-l> <Esc>:call unicoder#start(1)<CR>\
 
 map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 " }}}
@@ -349,6 +366,9 @@ autocmd! bufwritepost $MYVIMRC source $MYVIMRC
 "endif
 "autocmd WinEnter term://* startinsert
 "Plug 'RelOps'
+
+let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8 } }
+let $FZF_DEFAULT_OPTS='--reverse'
 
 " {{{ Merlin -- OCaml
 " Vim needs to be built with Python scripting support, and must be
