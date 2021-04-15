@@ -1,0 +1,4 @@
+#!/bin/sh -eu
+EXE_NAME=xmonad-x86_64-linux
+stack build
+cp -uf $(stack exec which $EXE_NAME) $EXE_NAME

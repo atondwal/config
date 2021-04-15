@@ -1,0 +1,7 @@
+resolver: lts-14.27
+
+packages:
+- .
+
+extra-deps:
+- xmonad-extras-0.15.2
