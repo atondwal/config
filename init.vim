@@ -84,7 +84,7 @@ call plug#end() | if exists("doinstall") | PlugInstall | endif
 
 " {{{ Options
 if !exists(g:syntax_on) | syntax enable | endif
-set synmaxcol=80
+set synmaxcol=800
 set hidden
 set showcmd
 set mouse=a

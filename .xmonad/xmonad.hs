@@ -142,7 +142,8 @@ myKeys XConfig{modMask = m, terminal = term, workspaces = sps} = fromList $ [
 
   , ((m, xK_z), spawn "xcalib -i -a")
   , ((m .|. shiftMask, xK_o), spawn "thunar")
-  , ((m              , xK_p), shellPrompt (greenXPConfig {historyFilter = nub}))
+  , ((m              , xK_p), shellPrompt
+        (greenXPConfig {historyFilter = nub, font = "xft:terminus"}))
   , ((m, xK_m), inputPrompt defaultXPConfig "Eval" >>= flip whenJust (evalExpression defaultEvalConfig))
   , ((m              , xK_r), spawn  dmenu)
 
