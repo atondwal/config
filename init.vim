@@ -27,6 +27,8 @@ Plug 'vim-scripts/camelcasemotion'
 Plug 'michaeljsmith/vim-indent-object'
 "Plug 'vim-scripts/RelOps'
 "Plug 'andrep/vimacs'
+Plug 'junegunn/vim-peekaboo'
+Plug 'Yilin-Yang/vim-markbar'
 " }}}
 " {{{ Features
 "Plug 'theprimeagen/Vim-Be-Good', { 'do' : './install.sh' }
@@ -313,7 +315,8 @@ nnoremap <leader><cr> :noh<cr>
 " }}}
 " }}}
 
-" Automatically source vimrc on save.
+" Source and quit
+autocmd! bufread $MYVIMRC map <buffer> <leader>e :so %\|wq<CR>
 "autocmd! bufwritepost $MYVIMRC source $MYVIMRC
 
 " {{{ Experimental
