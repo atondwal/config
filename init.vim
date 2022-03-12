@@ -13,28 +13,28 @@ endif
 call plug#begin('~/.config/nvim/autoload/plugged')
 Plug 'morhetz/gruvbox'
 " {{{ Tweaks
-Plug 'kana/vim-arpeggio'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-repeat'
-Plug 'vim-scripts/argtextobj.vim'
-Plug 'kana/vim-niceblock'
-Plug 'zirrostig/vim-schlepp'
-Plug 'machakann/vim-swap'
 "Plug 'powerman/AnsiEsc.vim'
-Plug 'kana/vim-textobj-user' "something depends on this, but I don't remember what. either way, probably useful
+Plug 'kana/vim-arpeggio'                " mappings {{{
+Plug 'tpope/vim-unimpaired'
+"Plug 'andrep/vimacs'                   " }}}
+Plug 'kana/vim-niceblock'               " visual mode tweaks {{{
+Plug 'zirrostig/vim-schlepp'            " }}}
+Plug 'vim-scripts/argtextobj.vim'       " text objects {{{
+Plug 'machakann/vim-swap'
+Plug 'tpope/vim-surround'
+Plug 'kana/vim-textobj-user'                " something depends on this, but I don't remember what. either way, probably useful
 Plug 'vim-scripts/camelcasemotion'
-Plug 'michaeljsmith/vim-indent-object'
-"Plug 'vim-scripts/RelOps'
-"Plug 'andrep/vimacs'
-Plug 'junegunn/vim-peekaboo'
-Plug 'Yilin-Yang/vim-markbar'
+Plug 'michaeljsmith/vim-indent-object'  " }}}
+Plug 'junegunn/vim-peekaboo'            " surfacing info {{{
+"Plug 'Yilin-Yang/vim-markbar'
+Plug 'kshenoy/vim-signature'
+"Plug 'vim-scripts/RelOps'              " }}}
 " }}}
 " {{{ Features
 "Plug 'theprimeagen/Vim-Be-Good', { 'do' : './install.sh' }
 Plug 'dyng/ctrlsf.vim'
 Plug 'simnalamburt/vim-mundo'
-Plug 'kshenoy/vim-signature'
 Plug 'godlygeek/tabular' " replace with easy-align?
 Plug 'majutsushi/tagbar'
 let g:unicoder_cancel_normal = 1
@@ -74,8 +74,8 @@ Plug 'vim-scripts/SyntaxRange'
 Plug 'jreybert/vimagit', {'on': 'Magit'}
 Plug 'tpope/vim-fugitive' "for fzf
 ""bug that hides first line using either of these?!
-"Plug 'airblade/vim-gitgutter'
-"Plug 'tweekmonster/gitbusy.vim'
+Plug 'airblade/vim-gitgutter'
+Plug 'tweekmonster/gitbusy.vim'
 " }}}
 "Plug 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX', { 'for': 'tex' }
 Plug 'lervag/vimtex'
@@ -99,20 +99,28 @@ set path=**,.,,
 set foldlevelstart=99
 set ve=all
 
-if &term=~'st-256colors' || &term=~'nvim'
+if &term=~'st' || &term=~'nvim' || &term=~'mlterm'
     set termguicolors
 endif
 set bg=dark
 let g:gruvbox_contrast_dark="hard"
 colors gruvbox
+if has("nvim")
+  hi ActiveWindow ctermbg=None ctermfg=None guibg=black
+  hi InactiveWindow ctermbg=darkgray ctermfg=gray guibg=#282828
+  set winhighlight=Normal:ActiveWindow,NormalNC:InactiveWindow
+endif
 
 set list listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
 set fillchars+=vert:│
 set dictionary+=/usr/share/dict/words
 set smarttab expandtab shiftwidth=2 tabstop=2
-set undofile undodir=~/.nvim/undo undolevels=10000 undoreload=100000
+set undolevels=10000 undoreload=100000
+if has("nvim")
+  set undofile undodir=~/.nvim/undo
+endif
 " }}}
-
+" {{{ Languages
 " orgmode {{{
 nmap  <localleader>cc
 let g:org_agenda_files = ['~/org/asdf.org']
@@ -181,7 +189,7 @@ let g:tagbar_type_haskell = {
     \ }
 \ }
 "}}}
-
+" }}}
 " {{{ Mappings
 nnoremap <CR> :
 autocmd BufReadPost quickfix nnoremap <buffer> <CR> <CR>
@@ -206,6 +214,8 @@ inore  :wqa
 nore  :wqa
 
 map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+
+command! R :Ranger
 
 " {{{ Windows and Tabs
 " let terminal resize scale the internal windows
@@ -236,12 +246,11 @@ inor ë <Esc><C-w>k
 inor ì <Esc><C-w>l
 inor ã <Esc><C-w>c
 
-if has("nvim")
-  tnoremap <A-h> <C-\><C-n><C-w>h
-  tnoremap <A-j> <C-\><C-n><C-w>j
-  tnoremap <A-k> <C-\><C-n><C-w>k
-  tnoremap <A-l> <C-\><C-n><C-w>l
-endif
+tnoremap <A-h> <C-\><C-n><C-w>h
+tnoremap <A-j> <C-\><C-n><C-w>j
+tnoremap <A-k> <C-\><C-n><C-w>k
+tnoremap <A-l> <C-\><C-n><C-w>l
+tnoremap <A-c> <C-\><C-n><C-w>c
 
 " Tab navigation with Ctrl-Shift
 if has("nvim")
@@ -254,22 +263,35 @@ endif
 nnoremap <A-S-h> :tabprev<CR>
 nnoremap <A-S-l> :tabnext<CR>
 nnoremap <A-S-n> :tabe<CR>
-nnoremap <A-n>   :tabnew term://zsh<CR>
 
 nnoremap È :tabprev<CR>
 nnoremap Ì :tabnext<CR>
 nnoremap Î :tabe<CR>
-nnoremap î :tabnew term://zsh<CR>
 
 inoremap <A-S-h> :tabprev<CR>
 inoremap <A-S-l> :tabnext<CR>
 inoremap <A-S-n> :tabe<CR>
-inoremap <A-n> :tabnew term://zsh<CR>
 
 inoremap È :tabprev<CR>
 inoremap Ì :tabnext<CR>
 inoremap Î :tabe<CR>
-inoremap î :tabnew term://zsh<CR>
+
+if has("nvim")
+  nnoremap <A-n>   :tabnew term://zsh<CR>
+  nnoremap î :tabnew term://zsh<CR>
+  inoremap <A-n> :tabnew term://zsh<CR>
+  inoremap î :tabnew term://zsh<CR>
+  tnoremap <A-n> :tabnew term://zsh<CR>
+  tnoremap î :tabnew term://zsh<CR>
+else
+  nnoremap <A-n>   :tab terminal <CR>
+  nnoremap î :tab terminal <CR>
+  inoremap <A-n> :tab terminal <CR>
+  inoremap î :tab terminal <CR>
+  tnoremap <A-n> :tab terminal <CR>
+  tnoremap î :tab terminal <CR>
+endif
+
 " }}}
 call arpeggio#load() "{{{
 Arpeggio imap jk <Esc>
@@ -296,7 +318,7 @@ nmap <leader><tab> <plug>(fzf-maps-n)
 xmap <leader><tab> <plug>(fzf-maps-x)
 omap <leader><tab> <plug>(fzf-maps-o)
 nmap <silent> <leader>u :MundoToggle<CR>
-nmap <leader>e :vsp ~/.config/nvim/init.vim<CR>
+nmap <leader>e :vsp $MYVIMRC<CR>
 nmap <leader>f :Files<CR>
 nmap <leader>b :Buffers<CR>
 nmap <leader>t :Tags<CR>
@@ -317,7 +339,7 @@ nnoremap <leader><cr> :noh<cr>
 
 " Source and quit
 autocmd! bufread $MYVIMRC map <buffer> <leader>e :so %\|wq<CR>
-"autocmd! bufwritepost $MYVIMRC source $MYVIMRC
+autocmd! bufwritepost $MYVIMRC source $MYVIMRC
 
 " {{{ Experimental
 " {{{ Merlin -- OCaml
@@ -371,4 +393,12 @@ endfunction
 " else             | call neomake#configure#automake('nw', 700)
 " endif
 
+"function! GitStatus()
+"  let [a,m,r] = GitGutterGetHunkSummary()
+"  if a > 0 || m > 0 || r > 0
+"    return printf('+%d ~%d -%d', a, m, r)
+"  endif
+"  return ''
+"endfunction
+"set statusline+=%{GitStatus()}
 " }}}
