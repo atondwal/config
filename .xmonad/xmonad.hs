@@ -53,15 +53,16 @@ myStartupHook = do
   -- getEnv "PATH" >>= safeSpawn "/usr/bin/xmessage" . pure . show
   -- runAOrWriteError
   -- spawn "conky"
+  -- preload st into RAM :)
+  spawn "mlterm -N term2"
+  spawn "pgrep chromium || chromium"
+  spawn "setxkbmap -option caps:escape"
   spawn "compton"
   spawn "sh ~/.fehbg"
-  spawn "setxkbmap -option caps:escape"
   -- spawn "synclient MaxTapTime=0"
   spawn "/usr/lib/kdeconnectd"
   spawn "/usr/lib/notify-osd/notify-osd"
   -- spawn "redshift"
-  -- preload st into RAM :)
-  spawn "st -n term2 "
   io. print =<< mapM (runQuery className) =<< gets (W.allWindows . windowset)
 
 main :: IO ()
@@ -103,7 +104,9 @@ scratchpads =
   , NS "term2" "mlterm -N term2" (className =? "term2") (geo (1/3) (2/3) (1/3) (1/3))
   , NS "term3" "mlterm -N term3" (className  =? "term3") (geo (2/3) (2/3) (1/3) (1/3))
   , NS "term4" "mlterm -N term4" (className  =? "term4") (geo (7/9) (1/10) (3/18) (1/10))
-  , NS "ranger" "urxvtcd -name ranger -e ranger" (resource =? "ranger") (geo (1/5) (1/5) (7/10) (7/10))
+  , NS "ranger" "mlterm -N ranger -e ranger" (className =? "ranger") (geo (1/5) (1/5) (7/10) (7/10))
+  , NS "pulsemixer" "mlterm -N pulsemixer -e pulsemixer" (className  =? "pulsemixer")  (geo 0 (2/3) (1/3) (1/3))
+  , NS "htop" "mlterm -N htop -e htop" (className  =? "htop")  (geo (1/3) (2/3) (1/3) (1/3))
   ]
  where
   geo a b c d = customFloating (RationalRect a b c d)
@@ -112,8 +115,8 @@ myMouse :: XConfig y -> Map (ButtonMask, Button) (Window -> X ())
 myMouse XConfig{modMask = m, terminal = term} = fromList [
     ((m               , button4)         , updateOpacity (+ 0.1))
   , ((m               , button5)         , updateOpacity (subtract 0.1))
-  , ((m .|. shiftMask , button5)         , \ _ -> spawn "xbacklight -dec 3")
-  , ((m .|. shiftMask , button4)         , \ _ -> spawn "xbacklight -inc 3")
+  , ((m .|. shiftMask , button5)         , \ _ -> spawn "lux -s 3%")
+  , ((m .|. shiftMask , button4)         , \ _ -> spawn "lux -a 3%")
   ]
 
 myKeys :: XConfig y -> Map (KeyMask, KeySym) (X ())
@@ -136,7 +139,9 @@ myKeys XConfig{modMask = m, terminal = term, workspaces = sps} = fromList $ [
 
   -- Scratchpads
   , ((m, xK_a), S.namedScratchpadAction scratchpads "term")
+  , ((m .|. shiftMask, xK_a), S.namedScratchpadAction scratchpads "pulsemixer")
   , ((m, xK_s), S.namedScratchpadAction scratchpads "term2")
+  , ((m .|. shiftMask, xK_s), S.namedScratchpadAction scratchpads "htop")
   , ((m, xK_d), S.namedScratchpadAction scratchpads "term3")
   , ((m, xK_o), S.namedScratchpadAction scratchpads "ranger")
 
