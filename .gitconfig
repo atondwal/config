@@ -16,3 +16,5 @@
 	process = git-lfs filter-process
 [github]
 	user = atondwal
+[hub]
+	protocol = ssh
