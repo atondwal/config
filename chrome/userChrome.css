@@ -244,6 +244,11 @@ Original layout by /u/Herkt https://www.reddit.com/r/FirefoxCSS/comments/7eazix/
   height: 20px;
 }
 
+:root[uidensity=compact] .tabbrowser-tab {
+  min-height: 0px !important;
+  padding: 0px !important;
+  margin-top : -2px !important;
+}
 /* Remove border between tabs*/
 
 :root[uidensity=compact] .tabbrowser-tab::after,
@@ -388,7 +393,7 @@ Original layout by /u/Herkt https://www.reddit.com/r/FirefoxCSS/comments/7eazix/
   content: '';
   position: absolute;
   height: 100%;
-  width: 60%;
+  width: 100%;
   top: 0;
   left: 0;
   pointer-events: none;

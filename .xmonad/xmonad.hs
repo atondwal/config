@@ -55,7 +55,7 @@ myStartupHook = do
   -- spawn "conky"
   -- preload st into RAM :)
   spawn "mlterm -N term2"
-  spawn "pgrep chromium || chromium"
+  spawn "pgrep firefox || firefox"
   spawn "setxkbmap -option caps:escape"
   spawn "compton"
   spawn "sh ~/.fehbg"
