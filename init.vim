@@ -1,4 +1,5 @@
 " vim: foldmethod=marker foldlevel=0 foldlevelstart=0
+" TODO: checkbox handling
 " {{{ Plugins
 if has("nvim") | let path=$HOME."/.config/nvim/autoload/plug.vim"
 else           | let path=$HOME."/.vim/autoload/plug.vim"
@@ -13,13 +14,16 @@ endif
 call plug#begin('~/.config/nvim/autoload/plugged')
 Plug 'morhetz/gruvbox'
 " {{{ Tweaks
+" Plugins that improve core vim features
 Plug 'tpope/vim-repeat'
 "Plug 'powerman/AnsiEsc.vim'
 Plug 'kana/vim-arpeggio'                " mappings {{{
 Plug 'tpope/vim-unimpaired'
 "Plug 'andrep/vimacs'                   " }}}
 Plug 'kana/vim-niceblock'               " visual mode tweaks {{{
-Plug 'zirrostig/vim-schlepp'            " }}}
+Plug 'zirrostig/vim-schlepp'
+let g:Schlepp#allowSquishingLines = 1
+let g:Schlepp#allowSquishingBlock = 1   " }}}
 Plug 'vim-scripts/argtextobj.vim'       " text objects {{{
 Plug 'machakann/vim-swap'
 Plug 'tpope/vim-surround'
@@ -32,6 +36,8 @@ Plug 'kshenoy/vim-signature'
 "Plug 'vim-scripts/RelOps'              " }}}
 " }}}
 " {{{ Features
+" IDE-like nonsense. Honestly, you probably shouldn't use any of these, except
+" maybe fzf, mundo, and abolish
 "Plug 'theprimeagen/Vim-Be-Good', { 'do' : './install.sh' }
 Plug 'dyng/ctrlsf.vim'
 Plug 'simnalamburt/vim-mundo'
@@ -246,11 +252,18 @@ inor ë <Esc><C-w>k
 inor ì <Esc><C-w>l
 inor ã <Esc><C-w>c
 
-tnoremap <A-h> <C-\><C-n><C-w>h
-tnoremap <A-j> <C-\><C-n><C-w>j
-tnoremap <A-k> <C-\><C-n><C-w>k
-tnoremap <A-l> <C-\><C-n><C-w>l
-tnoremap <A-c> <C-\><C-n><C-w>c
+if has("nvim")
+  tnoremap <A-h> <C-\><C-n><C-w>h
+  tnoremap <A-j> <C-\><C-n><C-w>j
+  tnoremap <A-k> <C-\><C-n><C-w>k
+  tnoremap <A-l> <C-\><C-n><C-w>l
+  tnoremap <A-c> <C-\><C-n><C-w>c
+  tnoremap è <C-\><C-n><C-w>h
+  tnoremap ê <C-\><C-n><C-w>j
+  tnoremap ë <C-\><C-n><C-w>k
+  tnoremap ì <C-\><C-n><C-w>l
+  tnoremap ã <C-\><C-n><C-w>c
+endif
 
 " Tab navigation with Ctrl-Shift
 if has("nvim")
@@ -258,19 +271,24 @@ if has("nvim")
   tnoremap <A-S-l> <C-\><C-n>:tabnext<CR>
   tnoremap <A-S-n> <C-\><C-n>:tabnew term://zsh<CR>
   tnoremap  
+  tnoremap È <C-\><C-n>:tabprev<CR>
+  tnoremap Ì <C-\><C-n>:tabnext<CR>
 endif
 
 nnoremap <A-S-h> :tabprev<CR>
 nnoremap <A-S-l> :tabnext<CR>
 nnoremap <A-S-n> :tabe<CR>
+nnoremap <A-n>   :tabnew term://zsh<CR>
 
 nnoremap È :tabprev<CR>
 nnoremap Ì :tabnext<CR>
 nnoremap Î :tabe<CR>
+nnoremap î :tabnew term://zsh<CR>
 
 inoremap <A-S-h> :tabprev<CR>
 inoremap <A-S-l> :tabnext<CR>
 inoremap <A-S-n> :tabe<CR>
+inoremap <A-n> :tabnew term://zsh<CR>
 
 inoremap È :tabprev<CR>
 inoremap Ì :tabnext<CR>
@@ -325,7 +343,7 @@ nmap <leader>t :Tags<CR>
 nmap <leader>a :Windows<CR>
 nnoremap <Leader>z 1z=
 
-autocmd! bufwritepost * if getfperm(expand("%:p")) =~ "x" | setl mp=% | endif
+autocmd bufwritepost * if getfperm(expand("%:p")) =~ "x" | setl mp=% | endif
 nnoremap <Leader>w :w<CR>
 nnoremap <Leader>v :w<CR>
 nnoremap <Leader>r :w<CR>:make<CR>
@@ -333,13 +351,87 @@ imap <F9> <Esc>:w<CR>:make<CR>
 
 nnoremap <Leader>c :set cursorline! cursorcolumn!<CR>
 nnoremap <leader><cr> :noh<cr>
+nnoremap <leader>sp :set spell!<cr>
 
 " }}}
 " }}}
 
 " Source and quit
-autocmd! bufread $MYVIMRC map <buffer> <leader>e :so %\|wq<CR>
-autocmd! bufwritepost $MYVIMRC source $MYVIMRC
+autocmd bufread $MYVIMRC map <buffer> <leader>e :so %\|wq<CR>
+autocmd bufwritepost $MYVIMRC source $MYVIMRC
+" Folds https://essais.co/better-folding-in-neovim/ {{{
+set fillchars=fold:\
+autocmd bufreadpre TODOs setlocal foldtext=CustomFoldText()
+autocmd bufreadpre TODOs setlocal foldmethod=expr
+autocmd bufreadpre TODOs setlocal foldexpr=GetPotionFold(v:lnum)
+autocmd bufreadpre TODOs setlocal foldlevel=0
+
+function! GetPotionFold(lnum)
+  if getline(a:lnum) =~? '\v^\s*$'
+      return '-1'
+  endif
+
+  if getline(a:lnum) =~ '^vim:'
+    return '0'
+  endif
+
+  if getline(a:lnum) =~? '.*M PDT *\d*$'
+      return '>1'
+  endif
+  if getline(a:lnum) =~? '.*M PST *\d*$'
+      return '>1'
+  endif
+
+  let this_indent = IndentLevel(a:lnum)
+  let next_indent = IndentLevel(NextNonBlankLine(a:lnum))
+
+  if next_indent <= this_indent
+    return this_indent
+  elseif next_indent > this_indent
+    return '>' . next_indent
+  endif
+endfunction
+
+function! IndentLevel(lnum)
+    return 1 + (indent(a:lnum) / &shiftwidth)
+endfunction
+
+function! NextNonBlankLine(lnum)
+  let numlines = line('$')
+  let current = a:lnum + 1
+
+  while current <= numlines
+      if getline(current) =~? '\v\S'
+          return current
+      endif
+
+      let current += 1
+  endwhile
+
+  return -2
+endfunction
+
+function! CustomFoldText()
+  " get first non-blank line
+  let fs = v:foldstart
+
+  while getline(fs) =~ '^\s*$' | let fs = nextnonblank(fs + 1)
+  endwhile
+
+  if fs > v:foldend
+      let line = getline(v:foldstart)
+  else
+      let line = substitute(getline(fs), '\t', repeat(' ', &tabstop), 'g')
+  endif
+
+  let w = winwidth(0) - &foldcolumn - (&number ? 8 : 0)
+  let foldSize = 1 + v:foldend - v:foldstart
+  let foldSizeStr = " " . foldSize . " lines "
+  let foldLevelStr = repeat("+--", v:foldlevel)
+  let expansionString = repeat(" ", w - strwidth(foldSizeStr.line.foldLevelStr))
+  return line . expansionString . foldSizeStr . foldLevelStr
+endfunction
+" }}}
 
 " {{{ Experimental
 " {{{ Merlin -- OCaml
