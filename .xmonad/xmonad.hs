@@ -1,6 +1,5 @@
 import XMonad.Util.Run
 import XMonad.Util.Replace
-import Language.Haskell.Interpreter
 
 import Data.Map (Map, union, fromList)
 import Data.List (nub)
@@ -22,8 +21,6 @@ import XMonad.Actions.CopyWindow (copy)
 
 import XMonad.Prompt.Shell
 import XMonad.Prompt hiding (pasteString)
-import XMonad.Prompt.Eval
-import XMonad.Actions.Eval
 import XMonad.Prompt.Input
 
 import XMonad.StackSet (RationalRect(..), view, shift)
@@ -42,11 +39,6 @@ import XMonad.Util.XSelection
 import XMonad.Util.Paste
 import Data.Char
 
-a :: IO (Either InterpreterError (IO ()))
-a = runInterpreter $ setImports ["Prelude"] >> interpret  "print \"hello\"" (pure ())
-
-runAOrWriteError :: IO ()
-runAOrWriteError = a >>= either ((print "FAILED" >>) . safeSpawn "/usr/bin/xmessage" . pure . show) id
 
 myStartupHook = do
   --dynFlags <- runGhc GHC.getSessionDynFlags
@@ -58,16 +50,20 @@ myStartupHook = do
   spawn "pgrep firefox || firefox"
   spawn "setxkbmap -option caps:escape"
   spawn "compton"
+  spawn "fbautostart"
   spawn "sh ~/.fehbg"
   -- spawn "synclient MaxTapTime=0"
   spawn "/usr/lib/kdeconnectd"
   spawn "/usr/lib/notify-osd/notify-osd"
   -- spawn "redshift"
+  spawn "pgrep chrome || google-chrome"
+  spawn "pgrep firefox || firefox"
   io. print =<< mapM (runQuery className) =<< gets (W.allWindows . windowset)
 
 main :: IO ()
 main = do
   replace
+  spawn "gcertstatus || mlterm -N term2 -e mcert"
   xmonad $ mateConfig {
       terminal   = "mlterm"
     , modMask    = mod4Mask -- Super
@@ -76,7 +72,6 @@ main = do
                       manageHook mateConfig
                     , namedScratchpadManageHook scratchpads
                     , className =? "mpv"    --> doFloat
-                    , className =? "Gvim"   --> doFloat
                     ]
     , layoutHook = desktopLayoutModifiers   .
                    -- hide borders if only one window is visible
@@ -102,7 +97,7 @@ scratchpads :: [NamedScratchpad]
 scratchpads =
   [ NS "term"  "mlterm -N term"  (className  =? "term")  (geo 0 (2/3) (1/3) (1/3))
   , NS "term2" "mlterm -N term2" (className =? "term2") (geo (1/3) (2/3) (1/3) (1/3))
-  , NS "term3" "mlterm -N term3" (className  =? "term3") (geo (2/3) (2/3) (1/3) (1/3))
+  , NS "term3" "mlterm -N term3 -w 26" (className  =? "term3") (geo (2/3) (2/3) (1/3) (1/3))
   , NS "term4" "mlterm -N term4" (className  =? "term4") (geo (7/9) (1/10) (3/18) (1/10))
   , NS "ranger" "mlterm -N ranger -e ranger" (className =? "ranger") (geo (1/5) (1/5) (7/10) (7/10))
   , NS "pulsemixer" "mlterm -N pulsemixer -e pulsemixer" (className  =? "pulsemixer")  (geo 0 (2/3) (1/3) (1/3))
@@ -135,7 +130,14 @@ myKeys XConfig{modMask = m, terminal = term, workspaces = sps} = fromList $ [
   , ((m               , xK_Up)           , withFocused $ keysMoveWindow ( 0,-5))
   , ((m               , xK_Right)        , withFocused $ keysMoveWindow ( 5, 0))
   , ((m               , xK_Left)         , withFocused $ keysMoveWindow (-5, 0))
-  , ((m .|. controlMask, xK_x), evalPrompt defaultEvalConfig defaultXPConfig)
+  -- , ((m .|. controlMask, xK_x), evalPrompt defaultEvalConfig defaultXPConfig)
+  , ((m, xK_F6), spawn "lux -a 1%")
+  , ((m, xK_F5), spawn "lux -s 1%")
+  , ((0, xF86XK_MonBrightnessUp),   spawn "lux -a 2%")
+  , ((0, xF86XK_MonBrightnessDown), spawn "lux -s 2%")
+
+  , ((m .|. shiftMask, xK_a), spawn "xrandr --auto")
+  , ((m , xK_F7), spawn "configuredock")
 
   -- Scratchpads
   , ((m, xK_a), S.namedScratchpadAction scratchpads "term")
@@ -147,10 +149,7 @@ myKeys XConfig{modMask = m, terminal = term, workspaces = sps} = fromList $ [
 
   , ((m, xK_z), spawn "xcalib -i -a")
   , ((m .|. shiftMask, xK_o), spawn "thunar")
-  , ((m              , xK_p), shellPrompt
-        (greenXPConfig {historyFilter = nub, font = "xft:terminus"}))
-  , ((m, xK_m), inputPrompt defaultXPConfig "Eval" >>= flip whenJust (evalExpression defaultEvalConfig))
-  , ((m              , xK_r), spawn  dmenu)
+  , ((m              , xK_p), shellPrompt (greenXPConfig {historyFilter = nub}))
 
   , ((0, xF86XK_MonBrightnessUp),              spawn "ibacklight -dec 10")
   , ((0, xF86XK_MonBrightnessDown),            spawn "ibacklight -inc 10")
