@@ -81,7 +81,8 @@ Plug 'jreybert/vimagit', {'on': 'Magit'}
 Plug 'tpope/vim-fugitive' "for fzf
 ""bug that hides first line using either of these?!
 Plug 'airblade/vim-gitgutter'
-Plug 'tweekmonster/gitbusy.vim'
+" Gets confused with the various undos
+"Plug 'tweekmonster/gitbusy.vim'
 " }}}
 "Plug 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX', { 'for': 'tex' }
 Plug 'lervag/vimtex'
@@ -121,9 +122,9 @@ set list listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
 set fillchars+=vert:│
 set dictionary+=/usr/share/dict/words
 set smarttab expandtab shiftwidth=2 tabstop=2
-set undolevels=10000 undoreload=100000
+set undolevels=10000 undoreload=100000 undofile
 if has("nvim")
-  set undofile undodir=~/.nvim/undo
+  set undodir=~/.nvim/undo
 endif
 " }}}
 " {{{ Languages
