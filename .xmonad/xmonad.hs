@@ -12,7 +12,7 @@ import XMonad.Layout.Grid                  (Grid(..))
 
 import XMonad.Layout.MultiToggle           (mkToggle, single, Toggle(..))
 import XMonad.Layout.MultiToggle.Instances (StdTransformers(..))
-import XMonad.Layout.Spacing               (spacingWithEdge, incSpacing)
+import XMonad.Layout.Spacing               (spacingWithEdge, incScreenWindowSpacing)
 import XMonad.Layout.NoBorders             (smartBorders)
 import XMonad.Layout.MouseResizableTile
 
@@ -118,8 +118,8 @@ myKeys :: XConfig y -> Map (KeyMask, KeySym) (X ())
 myKeys XConfig{modMask = m, terminal = term, workspaces = sps} = fromList $ [
   -- Layout
     ((m               , xK_x)            , sendMessage $ Toggle NBFULL)
-  , ((m               , xK_bracketright) , incSpacing (-5))
-  , ((m               , xK_bracketleft)  , incSpacing   5)
+  , ((m               , xK_bracketright) , incScreenWindowSpacing (-5))
+  , ((m               , xK_bracketleft)  , incScreenWindowSpacing   5)
   , ((m .|. shiftMask , xK_bracketright) , sendMessage IncBorder)
   , ((m .|. shiftMask , xK_bracketleft)  , sendMessage DecBorder)
   , ((m .|. shiftMask , xK_Down)         , withFocused $ keysResizeWindow ( 0, 5) (0,0))

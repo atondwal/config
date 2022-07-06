@@ -1,7 +1,9 @@
-resolver: lts-14.27
+resolver: lts-19.14
 
 packages:
 - .
 
 extra-deps:
-- xmonad-extras-0.15.2
+- xmonad-extras-0.17.0
+
+allow-newer: true

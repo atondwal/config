@@ -62,9 +62,4 @@ someNamedScratchpadAction f confs n
                              else return ()
                          f (windows . W.shiftWin scratchpadWorkspaceTag) filterAll
     | otherwise = return ()
-
-
--- tag of the scratchpad workspace
-scratchpadWorkspaceTag :: String
-scratchpadWorkspaceTag = "NSP"
 -- vim:ts=4:shiftwidth=4:softtabstop=4:expandtab:foldlevel=20:
