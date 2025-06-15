@@ -40,6 +40,7 @@ import XMonad.Util.XSelection
 import XMonad.Util.Paste
 import Data.Char
 
+import XMonad.Hooks.Rescreen
 
 import Data.IORef
 
@@ -63,11 +64,14 @@ myStartupHook = do
   -- spawn "pgrep chrome || google-chrome"
   io. print =<< mapM (runQuery className) =<< gets (W.allWindows . windowset)
 
+myRandrChangeHook :: X ()
+myRandrChangeHook = spawn "autorandr --change"
+
 main :: IO ()
 main = do
   ref <- newIORef 6500
   let ?temp = ref
-  xmonad $ mateConfig {
+  xmonad $ addRandrChangeHook myRandrChangeHook $ mateConfig {
       terminal   = "mlterm"
     , modMask    = mod4Mask -- Super
     , startupHook = myStartupHook
@@ -94,6 +98,7 @@ main = do
     , mouseBindings = \cfg -> myMouse cfg `union` mouseBindings mateConfig cfg
     , normalBorderColor = "#222222"
     , focusedBorderColor = "#666666"
+    , workspaces = map show [1..21]
     }
 
 scratchpads :: [NamedScratchpad]
@@ -141,13 +146,13 @@ myKeys XConfig{modMask = m, terminal = term, workspaces = sps} = fromList $ [
   , ((m               , xK_Right)        , withFocused $ keysMoveWindow ( 5, 0))
   , ((m               , xK_Left)         , withFocused $ keysMoveWindow (-5, 0))
   -- , ((m .|. controlMask, xK_x), evalPrompt defaultEvalConfig defaultXPConfig)
-  , ((m, xK_F6), spawn "lux -a 1%")
-  , ((m, xK_F5), spawn "lux -s 1%")
+  -- , ((m, xK_F6), spawn "lux -a 1%")
+  -- , ((m, xK_F5), spawn "lux -s 1%")
   , ((0, xF86XK_MonBrightnessUp),   spawn "lux -a 2%")
   , ((0, xF86XK_MonBrightnessDown), spawn "lux -s 2%")
 
   , ((m .|. shiftMask, xK_a), spawn "xrandr --auto")
-  , ((m , xK_F7), spawn "configuredock")
+  -- , ((m , xK_F7), spawn "configuredock")
 
   -- Scratchpads
   , ((m, xK_a), S.namedScratchpadAction scratchpads "term")
@@ -172,8 +177,8 @@ myKeys XConfig{modMask = m, terminal = term, workspaces = sps} = fromList $ [
   , ((m .|. mod1Mask, xK_w),  spawn "sh ~/bin/wall.sh")
   , ((m .|. mod1Mask, xK_d),  spawn "sh ~/bin/floor.sh" >> spawn "sh ~/bin/wall.sh")
   ] ++ do
-    (sp, k) <- zip sps [xK_1 ..]
-    (act, mod) <- [(shift, shiftMask), (copy, shiftMask .|. controlMask)]
+    (sp, k) <- zip sps ([xK_1 .. xK_9] ++ [xK_F1 ..])
+    (act, mod) <- [(shift, shiftMask), (copy, shiftMask .|. controlMask), (view, 0)]
     [((m .|. mod, k), windows $ act sp)]
  where
   -- dmenu = "exe=`dmenu_path | yeganesh -- -i -b -sb \"#689d6a\" -sf \"#2d2d2d\" -nb \"#2d2d2d\" -nf grey -fn 'Source Code Pro-16'` && eval \"$exe\""
