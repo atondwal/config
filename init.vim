@@ -39,6 +39,7 @@ Plug 'kshenoy/vim-signature'
 " IDE-like nonsense. Honestly, you probably shouldn't use any of these, except
 " maybe fzf, mundo, and abolish
 "Plug 'theprimeagen/Vim-Be-Good', { 'do' : './install.sh' }
+Plug 'tpope/vim-commentary'
 Plug 'dyng/ctrlsf.vim'
 Plug 'simnalamburt/vim-mundo'
 Plug 'godlygeek/tabular' " replace with easy-align?
