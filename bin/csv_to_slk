@@ -1,0 +1,24 @@
+#!/bin/python3
+import sys
+import csv
+
+def csv_to_slk():
+    # Read from stdin
+    reader = csv.reader(sys.stdin)
+    
+    # Write to stdout
+    sys.stdout.write("ID;P\n")  # Start of the SLK file
+    row_count = 1
+    
+    for row in reader:
+        col_count = 1
+        for cell in row:
+            # Write each cell to stdout
+            sys.stdout.write(f"C;Y{row_count};X{col_count};K\"{cell}\"\n")
+            col_count += 1
+        row_count += 1
+    sys.stdout.write("E\n")  # End of the SLK file
+
+# When script is executed, run this function
+if __name__ == "__main__":
+    csv_to_slk()

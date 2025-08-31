@@ -1,0 +1,11 @@
+#!/bin/bash
+
+import /tmp/asdf.png
+OCR_TEXT=$(tesseract /tmp/asdf.png -)
+
+# Print the OCR result
+echo "Extracted Text:"
+echo "$OCR_TEXT"
+
+# Copy the OCR result to the clipboard
+echo "$OCR_TEXT" | xclip -selection clipboard

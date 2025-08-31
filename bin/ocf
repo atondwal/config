@@ -1,0 +1,10 @@
+#!/bin/bash
+
+import /tmp/asdf.png
+OCR_TEXT=$(tesseract /tmp/asdf.png -)
+
+# Print the OCR result
+echo "Extracted Text:"
+echo "$OCR_TEXT"
+
+f "$OCR_TEXT"

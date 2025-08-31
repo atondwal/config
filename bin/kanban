@@ -1,0 +1,13 @@
+#!/bin/bash
+set -euf -o pipefail
+set -x
+export OUTPUT_CSV=$(mktemp).csv
+export INPUT_CSV=$(mktemp).csv
+export SLK=$(mktemp).ods
+kanban_csv.sh
+unoconv --output="$SLK" "$OUTPUT_CSV"
+soffice --calc "$SLK"
+unoconv --output="$INPUT_CSV" "$SLK"
+update_kanban.sh
+rm "$OUTPUT_CSV" "$INPUT_CSV" "$SLK"
+

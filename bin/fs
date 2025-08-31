@@ -1,0 +1,2 @@
+#!/bin/bash
+firefox "http://chat.openai.com/?model=gpt-4o&m=$(xclip -o -selection clipboard)"

@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# Default values
+model="gpt-4.5"
+selection="primary" # Default to primary
+
+# Function to show usage
+usage() {
+    echo "Usage: f [-c] [query]"
+    echo "  -c                Use clipboard content. Defaults to primary selection."
+    echo "  query             Specify a query string directly. If absent, uses selection content."
+    exit 1
+}
+
+# Check for flags
+while getopts ":c" opt; do
+    case "${opt}" in
+        c)
+            selection="clipboard"
+            ;;
+        *)
+            usage
+            ;;
+    esac
+done
+shift $((OPTIND-1))
+
+# Check for a direct query argument
+if [ $# -ne 0 ]; then
+    query=$1
+else
+    query=$(xclip -o -selection $selection)
+fi
+
+# Open Firefox with the given parameters
+firefox "http://chat.openai.com/?model=${model}&m=Solve the following problem in python, using code interpreter to test your solution and make sure it works: ${query}"

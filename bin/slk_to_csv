@@ -1,0 +1,41 @@
+#!/bin/python3
+import sys
+import csv
+import re
+
+def slk_to_csv():
+    # Create a CSV writer that writes to stdout
+    writer = csv.writer(sys.stdout)
+    data = {}
+    max_row = 0
+    max_col = 0
+
+    # Read from stdin line by line
+    for line in sys.stdin:
+        line = line.strip()
+        if line.startswith('C;'):
+            # Parse the cell data
+            match = re.match(r'C;Y(\d+);X(\d+);K"(.+)"', line)
+            if match:
+                row = int(match.group(1))
+                col = int(match.group(2))
+                value = match.group(3)
+                # Update the max row and column seen so far
+                max_row = max(max_row, row)
+                max_col = max(max_col, col)
+                # Store the data in a dictionary
+                if row not in data:
+                    data[row] = {}
+                data[row][col] = value
+
+    # Output the data as CSV
+    for row in range(1, max_row + 1):
+        row_data = []
+        for col in range(1, max_col + 1):
+            cell_value = data.get(row, {}).get(col, "")
+            row_data.append(cell_value)
+        writer.writerow(row_data)
+
+# When script is executed, run this function
+if __name__ == "__main__":
+    slk_to_csv()

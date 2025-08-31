@@ -1,0 +1,13 @@
+#!/bin/bash
+set -euf -o pipefail
+set -x
+export OUTPUT_CSV=$(mktemp).csv
+export INPUT_CSV=$(mktemp).csv
+export SLK=$(mktemp).ods
+fetch_xattrs.sh >"$OUTPUT_CSV"
+unoconv --output="$SLK" "$OUTPUT_CSV"
+soffice --calc "$SLK"
+unoconv --output="$INPUT_CSV" "$SLK"
+set_xattrs.sh "$INPUT_CSV"
+rm "$OUTPUT_CSV" "$INPUT_CSV" "$SLK"
+

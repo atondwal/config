@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Default file path in /tmp with a timestamp
+TMP_FILE="/tmp/import_$(date +%s).png"
+
+if [ "$#" -eq 0 ]; then
+    # No arguments, use a temporary file and copy to clipboard
+    /bin/import $TMP_FILE
+    xclip -selection clipboard -t image/png -i $TMP_FILE
+    echo "Screenshot saved to clipboard"
+else
+    # Arguments exist, pass them to import directly
+    /bin/import "$@"
+fi
+

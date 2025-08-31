@@ -1,0 +1,96 @@
+#!/usr/bin/python3
+import sys
+import subprocess
+import re
+import pyperclip  # Install this with `pip install pyperclip`
+
+def get_prefix():
+    """
+    Get the prefix for brotab using the `bt windows` command.
+    """
+    command = "bt windows | cut -f1"
+    prefix = subprocess.check_output(command, shell=True, text=True).strip()
+    return prefix
+
+def parse_rich_markdown(markdown):
+    """
+    Parse a rich Markdown list into a hierarchical structure.
+    """
+    lines = markdown.strip().split("\n")
+    stack = []
+    hierarchy = []
+
+    for line in lines:
+        match = re.match(r"( *)(\*|-)\s+\[([^\]]+)\]\(([^ ]+) \"([^\"]+)\"\)", line)
+        if not match:
+            continue
+
+        indent, _, text, url, title = match.groups()
+        level = len(indent) // 2
+
+        # Create a new node
+        node = {"text": text.strip(), "url": url.strip(), "title": title.strip(), "children": [], "tab_id": None}
+
+        # Adjust stack to the correct level
+        while len(stack) > level:
+            stack.pop()
+
+        # Add the node to the hierarchy
+        if stack:
+            stack[-1]["children"].append(node)
+        else:
+            hierarchy.append(node)
+
+        stack.append(node)
+
+    return hierarchy
+
+def open_tabs_and_set_hierarchy(hierarchy, parent_tab_id=None, prefix="b.1"):
+    """
+    Open tabs and set hierarchy using brotab.
+    """
+    for node in hierarchy:
+        # Step 1: Open the tab
+        command = f"echo {node['url']} | bt open {prefix}"
+        result = subprocess.check_output(command, shell=True, text=True).strip()
+
+        # Extract the tab ID from the result
+        new_tab_id = result.split("\t")[0]
+        node["tab_id"] = new_tab_id
+
+        # Step 2: Set the parent-child relationship (if parent_tab_id exists)
+        if parent_tab_id:
+            update_command = f"bt update -tabId {new_tab_id} -openerTabId {parent_tab_id}"
+            subprocess.run(update_command, shell=True)
+
+        # Recurse for children
+        open_tabs_and_set_hierarchy(node["children"], parent_tab_id=new_tab_id, prefix=prefix)
+
+def read_markdown():
+    """
+    Read Markdown content from stdin if available, otherwise from the clipboard.
+    """
+    if not sys.stdin.isatty():  # Check if there's stdin
+        if md_list := sys.stdin.read():
+            return md_list
+    return pyperclip.paste()
+
+# Main function
+def main():
+    # Step 1: Get the Markdown from stdin or clipboard
+    markdown_list = read_markdown()
+    if not markdown_list.strip():
+        print("Error: No Markdown input provided via stdin or clipboard.")
+        return
+
+    # Step 2: Parse the Markdown
+    hierarchy = parse_rich_markdown(markdown_list)
+
+    # Step 3: Get the prefix and window ID
+    prefix = get_prefix()
+
+    # Step 4: Open tabs and set hierarchy
+    open_tabs_and_set_hierarchy(hierarchy, prefix=prefix)
+
+if __name__ == "__main__":
+    main()
