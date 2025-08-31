@@ -38,11 +38,13 @@ Plug 'kshenoy/vim-signature'
 " {{{ Features
 " IDE-like nonsense. Honestly, you probably shouldn't use any of these, except
 " maybe fzf, mundo, and abolish
-"Plug 'theprimeagen/Vim-Be-Good', { 'do' : './install.sh' }
 Plug 'tpope/vim-commentary'
+Plug 'lpinilla/vim-codepainter'
 Plug 'dyng/ctrlsf.vim'
 Plug 'simnalamburt/vim-mundo'
-Plug 'godlygeek/tabular' " replace with easy-align?
+Plug 'godlygeek/tabular'
+" replace with vim-easy-align?
+" https://www.reddit.com/r/vim/comments/2lsr8d/vimeasyalign_the_most_ingenious_plugin_ive/
 Plug 'majutsushi/tagbar'
 let g:unicoder_cancel_normal = 1
 Plug 'joom/latex-unicoder.vim'
@@ -57,6 +59,7 @@ let g:ranger_replace_netrw = 1
 " }}}
 " {{{ Languages
 "Plug 'autozimu/LanguageClient-neovim', { 'do': './install.sh', 'branch' : 'next'}
+"Plug 'chrisbra/csv.vim'
 Plug 'rust-lang/rust.vim', { 'for' : 'rust' }
 " {{{ Haskell
 " TODO some sort of folding help
@@ -64,11 +67,13 @@ Plug 'dag/vim2hs' "Makes gf work on module names (broken?)
 "Plug 'bitc/lushtags'       , { 'for' : 'haskell' }
 "Plug 'eagletmt/ghcmod-vim' , { 'for' : 'haskell' }
 " Plug 'bitc/vim-hdevtools' " Used with syntastic
+"Plug 'davidhalter/jedi-vim'
 "Plug 'parsonsmatt/intero-neovim'
 " https://github.com/ucsd-progsys/liquid-types.vim
 "Plug 'ndmitchell/ghcid'   , { 'rtp': 'plugins/nvim', 'on' : 'Ghcid' }
 " }}}
 "Plug 'idris-hackers/idris-vim'
+Plug 'dense-analysis/ale'
 Plug 'mattn/emmet-vim', { 'for' : 'html' } | let g:user_zen_mode='a'
 " {{{ orgmode
 Plug 'Detegr/vim-orgmode'
@@ -107,8 +112,12 @@ set path=**,.,,
 set foldlevelstart=99
 set ve=all
 
-if &term=~'st' || &term=~'nvim' || &term=~'mlterm'
+set bg=dark
+if &term=~'st' || &term=~'nvim' || &term=~'mlterm' || &term=~'tmux'
     set termguicolors
+    set bg=dark
+    let g:gruvbox_contrast_dark="hard"
+    colors gruvbox
 endif
 set bg=dark
 let g:gruvbox_contrast_dark="hard"
@@ -199,6 +208,7 @@ let g:tagbar_type_haskell = {
 "}}}
 " }}}
 " {{{ Mappings
+tnore <S-Space> <Space>
 nnoremap <CR> :
 autocmd BufReadPost quickfix nnoremap <buffer> <CR> <CR>
 autocmd CmdwinEnter * nnoremap <buffer> <CR> <CR>
@@ -343,7 +353,11 @@ nmap <leader>f :Files<CR>
 nmap <leader>b :Buffers<CR>
 nmap <leader>t :Tags<CR>
 nmap <leader>a :Windows<CR>
+nmap <leader>: :History:<CR>
+nmap <leader>/ :History/<CR>
+nmap <leader>h :History<CR>
 nnoremap <Leader>z 1z=
+inoremap <C-s> <C-g>u<Esc>[s1z=`]a
 
 autocmd bufwritepost * if getfperm(expand("%:p")) =~ "x" | setl mp=% | endif
 nnoremap <Leader>w :w<CR>
@@ -354,6 +368,7 @@ imap <F9> <Esc>:w<CR>:make<CR>
 nnoremap <Leader>c :set cursorline! cursorcolumn!<CR>
 nnoremap <leader><cr> :noh<cr>
 nnoremap <leader>sp :set spell!<cr>
+nnore <leader>x :!chmod +x %<cr>
 
 " }}}
 " }}}
@@ -461,20 +476,100 @@ function! s:Transclude()
   let @z = l:z
 endfunction
 
+" augroup transcl
+"   autocmd!
+"   autocmd BufEnter *.wiki norm!:silent! lgrep! '\[\[=expand('%:t:r')\]\]' *.wiki
+"   autocmd BufEnter *.wiki norm!:silent! lgrep! '=expand('%:t:r')' *.wiki
+"   autocmd BufEnter *.wiki call s:LOpen()
+"   autocmd BufWritePre *.wiki silent! g/@transcluded/norm!dV%
+"   autocmd BufWritePost *.wiki call s:Transclude()
+" augroup END
+" 
+" function! s:LTransclude()
+"   let l:z = @z
+"   silent! g/{{embed\s\+\[\[\zs.*\ze\]\]}}/norm!gn"zyo<!-- transcluded: start -->o<!-- transcluded: end -->k:r z.md
+"   let @z = l:z
+" endfunction
+" 
+" function! s:LOpen()
+"   let l:winnr = winnr()
+"   lopen
+"   execute "norm!" . l:winnr . ""
+" endfunction
+" 
+" function! s:ClosePrevLocationList()
+"     if !exists('g:prev_win_id') || g:prev_win_id == 0
+"         return
+"     endif
+" 
+"     " Check if the previous window still exists
+"     let prev_win_num = win_id2win(g:prev_win_id)
+"     if prev_win_num == 0
+"         return
+"     endif
+" 
+"     " Get buffer info from previous window
+"     let prev_buf = winbufnr(prev_win_num)
+"     if prev_buf == -1
+"         return
+"     endif
+" 
+"     " Only proceed if previous buffer was markdown and current isn't quickfix
+"     if &buftype !=# 'quickfix'
+"         " Save current window ID
+"         let current_win_id = win_getid()
+"         
+"         " Switch to previous window to close its location list
+"         noautocmd call win_gotoid(g:prev_win_id)
+"         silent! lclose
+"         
+"         " Return to original window
+"         noautocmd call win_gotoid(current_win_id)
+"     endif
+" endfunction
+
 function! s:LOpen()
   let l:winnr = winnr()
   lopen
   execute "norm!" . l:winnr . ""
 endfunction
 
-augroup transcl
+function! s:UpdateLocationList()
+  " Only update if we're in a markdown buffer and not in quickfix
+  if &buftype !=# 'quickfix'
+    " Clear previous list first
+    lexpr []
+    " Search for both [[target]] and target references
+    silent! lgrep! '\[\[%:t:r\]\]' *.md
+    silent! lgrepadd! '%:t:r' *.md
+    "silent! norm!:lgrepadd! '=expand('%:t:r')' *.md
+  endif
+endfunction
+
+" augroup transcl
+"   autocmd!
+"   " autocmd BufEnter *.md silent! call s:LOpen()
+"   autocmd BufEnter *.md call timer_start(50, { -> s:UpdateLocationList() })
+"   autocmd WinLeave * let g:prev_win_id = win_getid()
+"   autocmd WinEnter * call s:ClosePrevLocationList()
+"   autocmd BufWritePre *.md silent! g/<!-- transcluded: start -->/,/<!-- transcluded: end -->/d
+"   autocmd BufReadPost *.md call s:LTransclude()
+" augroup END
+
+
+augroup notion
   autocmd!
-  autocmd BufEnter *.wiki norm!:silent! lgrep! '\[\[=expand('%:t:r')\]\]' *.wiki
-  autocmd BufEnter *.wiki norm!:silent! lgrep! '=expand('%:t:r')' *.wiki
-  autocmd BufEnter *.wiki call s:LOpen()
-  autocmd BufWritePre *.wiki silent! g/@transcluded/norm!dV%
-  autocmd BufWritePost *.wiki call s:Transclude()
+  autocmd BufNewFile *.n cd %:h
+  autocmd BufNewFile *.n silent! r!fetch_xattrs.sh
+  autocmd BufNewFile *.n silent! norm ggdd
+  autocmd BufNewFile *.n set ft=csv
+  autocmd BufNewFile *.n set ve=
+  autocmd BufWritePre *.n set buftype=acwrite
+  autocmd BufWriteCmd *.n silent! w !set_xattrs.sh /dev/stdin
+  autocmd BufWriteCmd *.n silent! set nomod
+  autocmd BufWritePost *.n set buftype=
 augroup END
+
 
 function! MyOnBattery()
   if filereadable("/sys/class/power_supply/ADP0/online")
@@ -496,3 +591,100 @@ endfunction
 "endfunction
 "set statusline+=%{GitStatus()}
 " }}}
+"
+"
+" https://chatgpt.com/c/67c89cb3-3d80-8010-87d6-37bc2de9c827
+function! ClauseTextObject(inner) abort
+  let l:punctuation = '[,;:.?!()]'
+
+  " Save original position
+  let l:orig_pos = getpos('.')
+
+  " Find start of clause
+  let l:start_pos = searchpos(l:punctuation, 'bnW')
+  if l:start_pos == [0, 0]
+    " If no punctuation found backward, start from buffer start
+    call cursor(1, 1)
+  else
+    " Move one character after punctuation mark
+    call cursor(l:start_pos[0], l:start_pos[1] + 1)
+  endif
+
+  " Skip whitespace after punctuation/start
+  silent! normal! /\S<CR>
+  let l:clause_start = getpos('.')
+
+  " Restore original cursor
+  call setpos('.', l:orig_pos)
+
+  " Find end of clause
+  let l:end_pos = searchpos(l:punctuation, 'nW')
+  if l:end_pos == [0, 0]
+    " If no punctuation found forward, end at buffer end
+    call cursor(line('$'), col([line('$'), '$']))
+  else
+    " Move to one character before punctuation mark
+    call cursor(l:end_pos[0], l:end_pos[1] - 1)
+  endif
+
+  " Skip whitespace backward from punctuation/end
+  silent! normal! ?\S<CR>
+  let l:clause_end = getpos('.')
+
+  " Adjust positions if inner object selected
+  if a:inner
+    let start = [l:clause_start[1], l:clause_start[2]]
+    let end = [l:clause_end[1], l:clause_end[2]]
+  else
+    " Include punctuation and whitespace around it
+    if l:start_pos != [0,0]
+      let start = [l:start_pos[0], l:start_pos[1]]
+    else
+      let start = [1, 1]
+    endif
+    if l:end_pos != [0,0]
+      let end = [l:end_pos[0], l:end_pos[1]]
+    else
+      let end = [line('$'), col([line('$'), '$'])]
+    endif
+  endif
+
+  " Set visual marks and select
+  call setpos("'<", [0, start[0], start[1], 0])
+  call setpos("'>", [0, end[0], end[1], 0])
+  normal! gv
+endfunction
+
+function! MoveToClause(forward) abort
+  let l:punctuation = '[,;:.?!()]'
+
+  if a:forward
+    " Move forward to punctuation, then forward again to start of next clause
+    if search(l:punctuation, 'W') == 0
+      echo "No next clause found"
+      return
+    endif
+    silent! normal! /\S<CR>
+  else
+    " Move backward to punctuation, then backward again to start of previous clause
+    if search(l:punctuation, 'bW') == 0
+      echo "No previous clause found"
+      return
+    endif
+    silent! normal! ?\S<CR>
+  endif
+endfunction
+
+" Mapping
+xnoremap ix :<C-u>call ClauseTextObject(1)<CR>
+onoremap ix :<C-u>call ClauseTextObject(1)<CR>
+xnoremap ax :<C-u>call ClauseTextObject(0)<CR>
+onoremap ax :<C-u>call ClauseTextObject(0)<CR>
+
+" Map the motions
+nnoremap ]x :call MoveToClause(1)<CR>
+nnoremap [x :call MoveToClause(0)<CR>
+onoremap ]x :call MoveToClause(1)<CR>
+onoremap [x :call MoveToClause(0)<CR>
+xnoremap ]x :call MoveToClause(1)<CR>
+xnoremap [x :call MoveToClause(0)<CR>
