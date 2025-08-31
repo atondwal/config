@@ -175,6 +175,8 @@ myKeys XConfig{modMask = m, terminal = term, workspaces = sps} = fromList $ [
 
   -- , ((m, xK_n),               getSelection >>= spawn . (++"\"") . ("xdotool type --clearmodifiers -- \"" ++) . capsarcasm)
   -- , ((m, xK_m),               spawn "mpv `xclip -o`")
+  , ((m .|. mod1Mask, xK_v),               spawn "~/.local/bin/type.sh")
+  , ((m, xK_v),               spawn "~/.local/bin/type.sh once")
   , ((m .|. mod1Mask, xK_w),  spawn "sh ~/bin/wall.sh")
   , ((m .|. mod1Mask, xK_d),  spawn "sh ~/bin/floor.sh" >> spawn "sh ~/bin/wall.sh")
   ] ++ do
