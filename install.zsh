@@ -17,10 +17,11 @@ ln -s `pwd`/.urxvt-perl ~/.urxvt-perl
 mkdir -p ~/.fonts/
 ln -s `pwd`/input.ttf ~/.fonts/
 
-git clone https://github.com/windelicato/dotfiles windelicato
-ln -s `pwd`/windelicato/.colors ~/.colors
+# Initialize and update git submodules if not already present
+git submodule init
+git submodule update --recursive
 
-git clone --recursive https://github.com/atondwal/prezto.git ".zprezto"
+ln -s `pwd`/windelicato/.colors ~/.colors
 setopt EXTENDED_GLOB
 for rcfile in .zprezto/runcoms/^README.md(.N); do
   ln -s `pwd`/"$rcfile" ~"/.${rcfile:t}"
