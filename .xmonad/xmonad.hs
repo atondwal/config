@@ -41,6 +41,7 @@ import XMonad.Util.Paste
 import Data.Char
 
 import XMonad.Hooks.Rescreen
+import XMonad.Hooks.EwmhDesktops
 
 import Data.IORef
 
@@ -71,7 +72,7 @@ main :: IO ()
 main = do
   ref <- newIORef 6500
   let ?temp = ref
-  xmonad $ addRandrChangeHook myRandrChangeHook $ mateConfig {
+  xmonad $ ewmh $ addRandrChangeHook myRandrChangeHook $ mateConfig {
       terminal   = "mlterm"
     , modMask    = mod4Mask -- Super
     , startupHook = myStartupHook
