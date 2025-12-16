@@ -47,6 +47,23 @@ Uses JSON-RPC 2.0 over stdio for bidirectional communication:
 
 🚧 Early proof-of-concept stage
 
+**Tested on**: Ubuntu 24.04 LTS with Emacs 29.3
+
+✅ **Working**:
+- Emacs bridge loads successfully
+- RPC handlers registered and functional
+- Elisp evaluation via handlers
+- Dired buffer generation (25-line directory listing)
+- All standalone tests passing (8/8)
+
+⚠️ **In Progress**:
+- Full Neovim ↔ Emacs RPC stdio communication
+- Real-time bidirectional messaging
+- Buffer synchronization end-to-end
+- Interactive keybindings
+
+See `TESTING.md` for detailed test results and how to run tests.
+
 ## References
 
 - [EPC (Emacs Procedure Call)](https://github.com/kiwanami/emacs-epc) - RPC stack for Emacs

@@ -208,28 +208,27 @@
   (nvim-bridge--log "Starting Neovim bridge server...")
   (setq nvim-bridge-active t)
 
-  ;; Disable buffering on stdout
+  ;; Disable buffering on stdout/stderr
   (setq buffer-file-coding-system 'utf-8-unix)
 
   ;; Send ready notification
   (nvim-bridge--send-notification "ready" nil)
 
-  ;; Enter message loop
-  (let ((input-buffer ""))
-    (while t
-      ;; Read from stdin
-      (let ((input (condition-case nil
-                       (read-from-minibuffer "")
-                     (error nil))))
-        (when input
-          (setq input-buffer (concat input-buffer input))
-
-          ;; Process complete lines
-          (while (string-match "\n" input-buffer)
-            (let* ((newline-pos (string-match "\n" input-buffer))
-                   (line (substring input-buffer 0 newline-pos)))
-              (setq input-buffer (substring input-buffer (1+ newline-pos)))
-              (nvim-bridge--process-message line))))))))
+  ;; Enter message loop - read from stdin line by line
+  (with-temp-buffer
+    (set-buffer-multibyte nil)
+    (let ((input-buffer "")
+          (char nil))
+      (while (condition-case nil
+                 (setq char (read-char))
+               (end-of-file nil))
+        ;; Accumulate characters
+        (setq input-buffer (concat input-buffer (char-to-string char)))
+        ;; Process complete lines
+        (when (eq char ?\n)
+          (let ((line (substring input-buffer 0 -1))) ; Remove trailing newline
+            (nvim-bridge--process-message line)
+            (setq input-buffer "")))))))
 
 ;;; Dired Integration Example
 
