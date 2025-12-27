@@ -186,19 +186,21 @@ eval "$(direnv hook zsh)"
 eval "$(zoxide init zsh)"
 eval "$(fzf --zsh)"
 
-# Custom Ctrl-R: search extended history (includes Claude commands)
-# Filters out metadata comments, dedupes
-fzf-extended-history-widget() {
+# Custom Ctrl-F: search Claude shell history
+fzf-claude-history-widget() {
   local selected
-  selected=$(grep -v '^#' ~/.zsh_extended_history | awk '!seen[$0]++' | \
-    fzf --height 40% --reverse --tac)
+  setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases noglob nobash_rematch 2> /dev/null
+  selected="$(grep -v '^#' ~/.claude_shell_history 2>/dev/null | tac | awk '!seen[$0]++' |
+    FZF_DEFAULT_OPTS=$(__fzf_defaults "" "--scheme=history --bind=ctrl-r:toggle-sort --wrap-sign '\t↳ ' --highlight-line ${FZF_CTRL_R_OPTS-} --query=${(qqq)LBUFFER} +m") \
+    FZF_DEFAULT_OPTS_FILE='' $(__fzfcmd))"
   if [[ -n "$selected" ]]; then
     LBUFFER="$selected"
   fi
-  zle redisplay
+  zle reset-prompt
 }
-zle -N fzf-extended-history-widget
-bindkey '^R' fzf-extended-history-widget
+
+zle -N fzf-claude-history-widget
+bindkey '^F' fzf-claude-history-widget
 
 # Zoxide with fzf integration
 # Use Ctrl+G to interactively search directories from zoxide database
@@ -269,3 +271,8 @@ alias cc=claude
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+# Clean up mlterm log on exit
+if [[ "$TERM" == "mlterm" ]]; then
+  trap 'pts=$(tty | grep -oE "[0-9]+$"); rm -f ~/.mlterm/pts_${pts}-*.log 2>/dev/null' EXIT
+fi
