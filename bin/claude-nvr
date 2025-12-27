@@ -1,0 +1,114 @@
+#!/bin/bash
+# claude-nvr: Neovim remote wrapper for Claude sessions
+# Automatically manages per-project sockets based on working directory
+
+set -euo pipefail
+
+# Debug logging
+DEBUG_LOG="/tmp/claude-nvr-debug.log"
+echo "[$(date)] claude-nvr called with args: $*" >> "$DEBUG_LOG"
+echo "[$(date)] PWD: $(pwd)" >> "$DEBUG_LOG"
+
+# Get project-specific socket based on current working directory
+get_socket() {
+    echo "/tmp/nvim-claude-$(pwd | md5sum | cut -d' ' -f1)"
+}
+
+SOCKET=$(get_socket)
+echo "[$(date)] Socket: $SOCKET" >> "$DEBUG_LOG"
+
+# Function to start nvim server if not running
+ensure_nvim_running() {
+    echo "[$(date)] Checking if nvim is running..." >> "$DEBUG_LOG"
+    # Use timeout to prevent nvr from blocking if socket doesn't exist
+    if ! timeout 0.5 nvr --servername "$SOCKET" --remote-expr "1" &>/dev/null 2>&1; then
+        echo "[$(date)] Nvim not running, starting new instance..." >> "$DEBUG_LOG"
+        # Start nvim in background
+        nohup mlterm -e nvim --listen "$SOCKET" &>/dev/null 2>&1 &
+        local mlterm_pid=$!
+        echo "[$(date)] Started mlterm with PID: $mlterm_pid" >> "$DEBUG_LOG"
+        
+        # Wait for nvim to be ready (max 3 seconds)
+        echo "[$(date)] Waiting for nvim to be ready..." >> "$DEBUG_LOG"
+        for i in {1..30}; do
+            if nvr --servername "$SOCKET" --remote-expr "1" &>/dev/null 2>&1; then
+                echo "[$(date)] Nvim is ready after $i attempts" >> "$DEBUG_LOG"
+                break
+            fi
+            sleep 0.1
+        done
+        
+        if ! nvr --servername "$SOCKET" --remote-expr "1" &>/dev/null 2>&1; then
+            echo "[$(date)] ERROR: Nvim failed to start after 3 seconds" >> "$DEBUG_LOG"
+        fi
+    else
+        echo "[$(date)] Nvim already running" >> "$DEBUG_LOG"
+    fi
+}
+
+# Main logic
+# If no arguments, default to "start"
+if [ $# -eq 0 ]; then
+    set -- "start"
+fi
+
+case "$1" in
+    start)
+        # Force start a new nvim instance
+        echo "Starting nvim with socket: $SOCKET"
+        nohup mlterm -e nvim --listen "$SOCKET" &>/dev/null 2>&1 &
+        ;;
+    
+    stop)
+        # Stop the nvim instance
+        nvr --servername "$SOCKET" --remote-send ":qa!<CR>" &>/dev/null 2>&1
+        ;;
+    
+    socket)
+        # Just print the socket path
+        echo "$SOCKET"
+        ;;
+    
+    highlight|paint)
+        # Highlight lines with vim-codepainter using F2
+        # Usage: claude-nvr highlight [start_line] [end_line]
+        ensure_nvim_running
+        START_LINE="${2:-1}"
+        END_LINE="${3:-$START_LINE}"
+        
+        echo "[$(date)] Highlighting lines $START_LINE to $END_LINE" >> "$DEBUG_LOG"
+        # Go to start line, visual select to end line, then press F2 to paint
+        nvr --servername "$SOCKET" --remote-send ":${START_LINE}<CR>"
+        if [ "$END_LINE" != "$START_LINE" ]; then
+            nvr --servername "$SOCKET" --remote-send "V:${END_LINE}<CR><F2>"
+        else
+            nvr --servername "$SOCKET" --remote-send "V<F2>"
+        fi
+        ;;
+    
+    clear-highlights|unpaint)
+        # Clear all highlights
+        ensure_nvim_running
+        echo "[$(date)] Clearing all highlights" >> "$DEBUG_LOG"
+        nvr --servername "$SOCKET" --remote-send ":PainterEraseAll<CR>"
+        ;;
+    
+    *)
+        # Default: pass all args to nvr
+        # Only auto-start if not being called from a hook
+        if [[ "${CLAUDE_HOOK:-}" != "1" ]]; then
+            ensure_nvim_running
+        else
+            # If called from hook, just check if running
+            if ! timeout 0.1 nvr --servername "$SOCKET" --remote-expr "1" &>/dev/null 2>&1; then
+                echo "[$(date)] Called from hook but nvim not running, exiting" >> "$DEBUG_LOG"
+                exit 0
+            fi
+        fi
+        echo "[$(date)] Executing: nvr --servername $SOCKET $*" >> "$DEBUG_LOG"
+        nvr --servername "$SOCKET" "$@" || {
+            echo "[$(date)] nvr command failed with exit code $?" >> "$DEBUG_LOG"
+            exit 0  # Don't fail on nvr errors
+        }
+        ;;
+esac
