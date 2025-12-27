@@ -22,7 +22,6 @@ git submodule init
 git submodule update --recursive
 
 ln -s `pwd`/windelicato/.colors ~/.colors
-setopt EXTENDED_GLOB
-for rcfile in .zprezto/runcoms/^README.md(.N); do
-  ln -s `pwd`/"$rcfile" ~"/.${rcfile:t}"
+for rcfile in .zshrc .zprofile .zshenv .zlogin .zlogout; do
+  ln -s `pwd`/"$rcfile" ~/"$rcfile"
 done
