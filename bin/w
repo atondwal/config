@@ -1,0 +1,10 @@
+#!/bin/bash
+# OPENAI_API_KEY should be set in ~/.zshenv.local
+TEXT="..."
+/bin/xdotool type --clearmodifiers -- "$TEXT"
+ANSWER=`/home/atondwal/.local/bin/whisper-stream -q -o -s 0.5`
+#echo "$ANSWER"
+for ((i=0; i<${#TEXT}; i++)); do
+  /bin/xdotool key --clearmodifiers BackSpace
+done
+/bin/xdotool type --clearmodifiers -- "$ANSWER"
