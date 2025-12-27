@@ -51,7 +51,9 @@ myStartupHook = do
   -- getEnv "PATH" >>= safeSpawn "/usr/bin/xmessage" . pure . show
   -- runAOrWriteError
   -- spawn "conky"
-  spawn "pgrep firefox || (firefox -P dmodel & firefox -P default-release)"
+  spawn "pgrep firefox || (firefox -P default-release)"
+  -- spawn "export XDG_CONFIG_HOME=~/.work-disc; export TMPDIR=~/.work-disc; discord 2> /dev/null > /dev/null & disown"
+  spawn "pgrep Discord || discord"
   spawn "pgrep mate-panel || mate-panel"
   spawn "setxkbmap -option caps:escape"
   spawn "pgrep picom || picom"
@@ -164,6 +166,8 @@ myKeys XConfig{modMask = m, terminal = term, workspaces = sps} = fromList $ [
   , ((m, xK_o), S.namedScratchpadAction scratchpads "logseq")
 
   , ((m, xK_z), spawn "xcalib -i -a")
+  , ((m, xK_grave), spawn "emacsclient -c -e '(vterm (generate-new-buffer-name \"vterm\"))'")
+  , ((m .|. shiftMask, xK_grave), spawn "emacsclient -c")  -- just open emacs frame
   , ((m .|. shiftMask, xK_o), spawn "thunar")
   -- , ((m              , xK_p), shellPrompt (greenXPConfig {historyFilter = nub}))
   , ((m              , xK_p), shellPrompt (greenXPConfig {historyFilter = nub}))
@@ -179,6 +183,8 @@ myKeys XConfig{modMask = m, terminal = term, workspaces = sps} = fromList $ [
   , ((m, xK_v),               spawn "~/.local/bin/type.sh once")
   , ((m .|. mod1Mask, xK_w),  spawn "sh ~/bin/wall.sh")
   , ((m .|. mod1Mask, xK_d),  spawn "sh ~/bin/floor.sh" >> spawn "sh ~/bin/wall.sh")
+  , ((m              , xK_n), spawn "nerd-dictation begin")
+  , ((m .|. shiftMask, xK_n), spawn "nerd-dictation end")
   ] ++ do
     (sp, k) <- zip sps ([xK_1 .. xK_9] ++ [xK_F1 ..])
     (act, mod) <- [(shift, shiftMask), (copy, shiftMask .|. controlMask), (view, 0)]
