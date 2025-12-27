@@ -39,7 +39,8 @@ Plug 'kshenoy/vim-signature'
 " IDE-like nonsense. Honestly, you probably shouldn't use any of these, except
 " maybe fzf, mundo, and abolish
 Plug 'tpope/vim-commentary'
-Plug 'lpinilla/vim-codepainter'
+Plug 'tpope/vim-abolish'
+Plug 'atondwal/vim-codepainter'
 Plug 'dyng/ctrlsf.vim'
 Plug 'simnalamburt/vim-mundo'
 Plug 'godlygeek/tabular'
@@ -134,7 +135,7 @@ set dictionary+=/usr/share/dict/words
 set smarttab expandtab shiftwidth=2 tabstop=2
 set undolevels=10000 undoreload=100000 undofile
 if has("nvim")
-  set undodir=~/.nvim/undo
+  set undodir=~/.nvim/undo//
 endif
 " }}}
 " {{{ Languages
@@ -688,3 +689,26 @@ onoremap ]x :call MoveToClause(1)<CR>
 onoremap [x :call MoveToClause(0)<CR>
 xnoremap ]x :call MoveToClause(1)<CR>
 xnoremap [x :call MoveToClause(0)<CR>
+
+
+ " --- ALE Configuration for Python ---
+
+" Set the linters you want to run for Python files.
+" I recommend flake8 for general style/errors and mypy for type checking.
+let g:ale_linters = {
+\   'python': ['flake8', 'mypy'],
+\}
+
+" Set the tools you want to use to fix your code.
+" black formats the code, isort sorts the imports.
+" The order matters! Run black first, then isort.
+let g:ale_fixers = {
+\   'python': ['black', 'isort'],
+\}
+
+" Enable linting on text change and on save.
+let g:ale_lint_on_text_changed = 'normal'
+let g:ale_lint_on_save = 1
+
+" Enable fixing on save. This is a huge time-saver.
+" let g:ale_fix_on_save = 1
