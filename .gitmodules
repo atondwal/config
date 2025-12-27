@@ -1,6 +1,3 @@
 [submodule "windelicato"]
 	path = windelicato
 	url = https://github.com/windelicato/dotfiles
-[submodule ".zprezto"]
-	path = .zprezto
-	url = https://github.com/atondwal/prezto.git
