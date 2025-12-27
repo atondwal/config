@@ -18,3 +18,5 @@
 	user = atondwal
 [hub]
 	protocol = ssh
+[alias]
+	lola = log --graph --decorate --oneline --all
