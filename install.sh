@@ -11,6 +11,7 @@ mkdir -p ~/.config/nvim/
 ln -s "$here/init.vim" ~/.config/nvim/init.vim
 mkdir -p ~/.emacs/
 ln -s "$here/init.el" ~/.emacs/init.el
+ln -s "$here/.spacemacs" ~/.spacemacs
 
 ln -s "$here/.xmonad" ~/.xmonad
 ln -s "$here/.conkyrc" ~/.conkyrc
