@@ -54,8 +54,9 @@ export KEYTIMEOUT=1
 alias open=xdg-open
 #alias nv=nvim
 alias vn=nvim
-d() { command claude --dangerously-skip-permissions "$*"; }
-p() { command claude --dangerously-skip-permissions -p "$*"; }
+alias claude="~/.claude/local/claude"
+d() { claude --dangerously-skip-permissions "$*"; }
+p() { claude --dangerously-skip-permissions -p "$*"; }
 alias ack=ag
 alias vw="nvim +VimwikiIndex"
 # Emacsclient aliases
@@ -202,15 +203,20 @@ fzf-claude-history-widget() {
 zle -N fzf-claude-history-widget
 bindkey '^F' fzf-claude-history-widget
 
+# Edit command line in $EDITOR (vim)
+autoload -U edit-command-line
+zle -N edit-command-line
+bindkey '^G' edit-command-line
+
 # Zoxide with fzf integration
-# Use Ctrl+G to interactively search directories from zoxide database
+# Use Ctrl+S to interactively search directories from zoxide database
 __zoxide_fzf() {
   local dir
   dir=$(zoxide query -l | fzf --height 40% --reverse --preview 'ls -la {}'  --preview-window right:50%) && cd "$dir"
   zle reset-prompt
 }
 zle -N __zoxide_fzf
-bindkey '^G' __zoxide_fzf
+bindkey '^S' __zoxide_fzf
 
 function run-previous-command() {
     zle up-history          # Move to the previous command in history
@@ -276,3 +282,5 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 if [[ "$TERM" == "mlterm" ]]; then
   trap 'pts=$(tty | grep -oE "[0-9]+$"); rm -f ~/.mlterm/pts_${pts}-*.log 2>/dev/null' EXIT
 fi
+
+stty stop ''; stty start ''
