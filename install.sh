@@ -28,3 +28,11 @@ ln -s "$here/windelicato/.colors" ~/.colors
 for rcfile in .zshrc .zprofile .zshenv .zlogin .zlogout; do
   ln -s "$here/$rcfile" ~/"$rcfile"
 done
+
+# Claude Code config
+mkdir -p ~/.claude
+ln -s "$here/.claude/CLAUDE.md" ~/.claude/CLAUDE.md
+ln -s "$here/.claude/settings.json" ~/.claude/settings.json
+ln -s "$here/.claude/commands" ~/.claude/commands
+ln -s "$here/.claude/skills" ~/.claude/skills
+ln -s "$here/.claude/hooks" ~/.claude/hooks

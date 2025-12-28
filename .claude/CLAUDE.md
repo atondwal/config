@@ -1,0 +1,2 @@
+- ALWAYS USE uv over raw venvs
+- Keep in mind that all code must pass readability review from my Russian-speaking L6 TL who does not like to read very much.
