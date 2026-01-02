@@ -19,7 +19,7 @@ if [ -z "$DPI" ] || ! [ "$DPI" -gt 0 ] 2>/dev/null; then
 elif [ "$DPI" -gt 225 ]; then
     FONTSIZE=64  # e-ink
 elif [ "$DPI" -gt 150 ]; then
-    FONTSIZE=32  # HiDPI (eDP-1 laptop)
+    FONTSIZE=22  # Mid-DPI (eDP-1 laptop ~158 DPI)
 else
     FONTSIZE=16  # Standard DPI (external monitors)
 fi
