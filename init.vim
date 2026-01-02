@@ -38,6 +38,11 @@ Plug 'kshenoy/vim-signature'
 " {{{ Features
 " IDE-like nonsense. Honestly, you probably shouldn't use any of these, except
 " maybe fzf, mundo, and abolish
+"Plug 'liuchengxu/vim-which-key'
+Plug 'folke/which-key.nvim'
+  "Plug 'nvim-mini/mini.icons'
+  "Plug 'nvim-tree/nvim-web-devicons'
+
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-abolish'
 Plug 'atondwal/vim-codepainter'
@@ -112,6 +117,7 @@ set wildmenu wildmode=list:longest,full
 set path=**,.,,
 set foldlevelstart=99
 set ve=all
+let maplocalleader = "\\"
 
 set bg=dark
 if &term=~'st' || &term=~'nvim' || &term=~'mlterm' || &term=~'tmux'

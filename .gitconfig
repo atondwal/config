@@ -18,5 +18,7 @@
 	user = atondwal
 [hub]
 	protocol = ssh
+[safe]
+	directory = /home/atondwal/usb/rl-env
 [alias]
-	lola = log --graph --decorate --oneline --all
+	lola = log --oneline --graph --all --decorate

@@ -1,38 +1,38 @@
 #!/bin/sh
 # needs: zsh, xmonad, urxvt, git
-# provides: vim, emacs, color schemes, conky
+# provides: vim, color schemes, conky
 
 here=$(pwd)
 
-ln -s "$here/bin" ~/bin
-ln -s "$here/.gitconfig" ~/.gitconfig
+ln -sfn "$here/bin" ~/bin
+ln -sf "$here/.gitconfig" ~/.gitconfig
 
 mkdir -p ~/.config/nvim/
-ln -s "$here/init.vim" ~/.config/nvim/init.vim
-mkdir -p ~/.emacs/
-ln -s "$here/init.el" ~/.emacs/init.el
-ln -s "$here/.spacemacs" ~/.spacemacs
+ln -sf "$here/init.vim" ~/.config/nvim/init.vim
+ln -sf "$here/.spacemacs" ~/.spacemacs
 
-ln -s "$here/.xmonad" ~/.xmonad
-ln -s "$here/.conkyrc" ~/.conkyrc
-ln -s "$here/.Xdefaults" ~/.Xdefaults
-ln -s "$here/.urxvt-perl" ~/.urxvt-perl
+ln -sfn "$here/.xmonad" ~/.xmonad
+ln -sf "$here/.conkyrc" ~/.conkyrc
+ln -sf "$here/.Xdefaults" ~/.Xdefaults
+ln -sfn "$here/.urxvt-perl" ~/.urxvt-perl
 mkdir -p ~/.fonts/
-ln -s "$here/input.ttf" ~/.fonts/
+ln -sf "$here/input.ttf" ~/.fonts/
 
 # Initialize and update git submodules if not already present
 git submodule init
 git submodule update --recursive
 
-ln -s "$here/windelicato/.colors" ~/.colors
+ln -sfn "$here/windelicato/.colors" ~/.colors
 for rcfile in .zshrc .zprofile .zshenv .zlogin .zlogout; do
-  ln -s "$here/$rcfile" ~/"$rcfile"
+  ln -sf "$here/$rcfile" ~/"$rcfile"
 done
 
 # Claude Code config
 mkdir -p ~/.claude
-ln -s "$here/.claude/CLAUDE.md" ~/.claude/CLAUDE.md
-ln -s "$here/.claude/settings.json" ~/.claude/settings.json
-ln -s "$here/.claude/commands" ~/.claude/commands
-ln -s "$here/.claude/skills" ~/.claude/skills
-ln -s "$here/.claude/hooks" ~/.claude/hooks
+for f in CLAUDE.md settings.json; do
+  [ -f ~/.claude/$f ] && [ ! -L ~/.claude/$f ] && mv ~/.claude/$f ~/.claude/$f.bak
+  ln -sf "$here/.claude/$f" ~/.claude/$f
+done
+ln -sfn "$here/.claude/commands" ~/.claude/commands
+ln -sfn "$here/.claude/skills" ~/.claude/skills
+ln -sfn "$here/.claude/hooks" ~/.claude/hooks
