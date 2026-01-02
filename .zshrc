@@ -1,5 +1,9 @@
-autoload -U compinit
-compinit
+autoload -Uz compinit
+if [[ -n ~/.zcompdump(#qN.mh+24) ]]; then
+  compinit
+else
+  compinit -C
+fi
 
 zstyle ':completion:*:descriptions' format '%U%B%d%b%u'
 zstyle ':completion:*:warnings' format '%BSorry, no matches for: %d%b'
@@ -49,14 +53,15 @@ export KEYTIMEOUT=1
 
 #source /usr/local/bin/virtualenvwrapper.sh
 
+WORDCHARS=${WORDCHARS/\//}
 # alias -s pdf="evince"
 # alias ra=ranger
 alias open=xdg-open
 #alias nv=nvim
 alias vn=nvim
 alias claude="~/.claude/local/claude"
-d() { claude --dangerously-skip-permissions "$*"; }
-p() { claude --dangerously-skip-permissions -p "$*"; }
+d() { claude --allow-dangerously-skip-permissions "$*"; }
+p() { claude --allow-dangerously-skip-permissions -p "$*"; }
 alias ack=ag
 alias vw="nvim +VimwikiIndex"
 # Emacsclient aliases
@@ -93,6 +98,8 @@ mkcd ()
       mkdir -p -- "$1" &&
       cd -P -- "$1"
 }
+
+GR() { git rev-parse --show-toplevel 2>/dev/null; }
 
 # fzf functions "{{{
 # fd - cd to selected directory
@@ -247,11 +254,112 @@ groq() {
 
 alias g=groq
 
+taiga() {
+  source "$(GR)/.env"
+  curl -s -H "Cookie: $TAIGA_API_COOKIE" "https://taiga.ant.dev/api/$1"
+}
+
+# Completion for ~/bin/jobs
+_jobs_complete() {
+  local state
+  local -a commands
+  commands=(
+    'list:List jobs in environment'
+    'cancel:Cancel a job'
+    'resubmit:Resubmit a problem'
+    'resubmit-incomplete:Resubmit all incomplete'
+    '--help:Show help'
+  )
+
+  _arguments -C \
+    '1: :->cmd' \
+    '2: :->arg1' \
+    '3: :->arg2' \
+    '*: :->rest'
+
+  case $state in
+    cmd)
+      _describe -t commands 'command' commands
+      # Also complete job names for direct access
+      local -a jobs
+      if [[ -f ~/.cache/taiga_jobs ]]; then
+        jobs=(${(f)"$(cat ~/.cache/taiga_jobs)"})
+        _describe -t jobs 'job' jobs
+      fi
+      ;;
+    arg1)
+      case $words[2] in
+        list)
+          # Complete environment names
+          if [[ -f ~/.cache/taiga_envs ]]; then
+            local -a envs
+            envs=(${(f)"$(cat ~/.cache/taiga_envs)"})
+            _describe -t envs 'environment' envs
+          fi
+          ;;
+        cancel|resubmit-incomplete)
+          # Complete job names
+          if [[ -f ~/.cache/taiga_jobs ]]; then
+            local -a jobs
+            jobs=(${(f)"$(cat ~/.cache/taiga_jobs)"})
+            _describe -t jobs 'job' jobs
+          fi
+          ;;
+        resubmit)
+          _arguments '-n[Number of times]'
+          # Complete job names or problem names
+          if [[ -f ~/.cache/taiga_jobs ]]; then
+            local -a jobs
+            jobs=(${(f)"$(cat ~/.cache/taiga_jobs)"})
+            _describe -t jobs 'job' jobs
+          fi
+          ;;
+      esac
+      ;;
+    arg2)
+      if [[ $words[2] == "resubmit" ]]; then
+        # Could be -n value, job name, or problem name
+        if [[ $words[3] == "-n" ]]; then
+          _message 'count'
+        fi
+      fi
+      ;;
+  esac
+}
+compdef _jobs_complete jbs
+
+# Refresh taiga completion cache
+taiga-cache() {
+  source "$(git rev-parse --show-toplevel 2>/dev/null)/.env" 2>/dev/null || source ~/.env
+  local base="https://taiga.ant.dev/api"
+  local cookie="Cookie: $TAIGA_API_COOKIE"
+  mkdir -p ~/.cache
+
+  # Cache environments
+  curl -s -H "$cookie" "$base/environments" | jq -r '.data[]?.name // .[]?.name' > ~/.cache/taiga_envs
+
+  # Cache jobs from all environments
+  local env_ids=$(curl -s -H "$cookie" "$base/environments" | jq -r '.data[]?.id // .[]?.id')
+  : > ~/.cache/taiga_jobs
+  for eid in ${(f)env_ids}; do
+    curl -s -H "$cookie" "$base/jobs?environment_id=$eid" | jq -r '.[]?.name' >> ~/.cache/taiga_jobs
+  done
+  echo "Cached $(wc -l < ~/.cache/taiga_envs) envs, $(wc -l < ~/.cache/taiga_jobs) jobs"
+}
+
 ash () { aws ec2 describe-instances | jq -r '.Reservations[].Instances[] | [.InstanceId, ((.Tags[]? | select(.Key == "Name") | .Value) // "No_Name"), .InstanceType, .State.Name, .PublicIpAddress] | @tsv' |  grep "$1" | head -n1 | awk '{print $5}' | xclip -selection primary ; xclip -selection primary -o ; amazon.sh; ssh -t amazon}
 
+# Lazy load NVM - only initialize when first used
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+nvm() {
+  unfunction nvm node npm npx
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+  nvm "$@"
+}
+node() { nvm; node "$@"; }
+npm() { nvm; npm "$@"; }
+npx() { nvm; npx "$@"; }
 # ... existing shell config
 # export TRANSLUCE_HOME=/home/atondwal/src/observatory
 # source $TRANSLUCE_HOME/lib/lucepkg/scripts/shellenv.sh

@@ -10,3 +10,7 @@ export REPLYING_ALL=False
 
 # Source local secrets if present
 [[ -f ~/.zshenv.local ]] && source ~/.zshenv.local
+
+# Begin added by argcomplete
+fpath=( /usr/lib/python3.13/site-packages/argcomplete/bash_completion.d "${fpath[@]}" )
+# End added by argcomplete

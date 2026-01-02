@@ -265,11 +265,28 @@
       "Read(//etc/**)",
       "Bash(ssh-keyscan:*)",
       "Bash(~/.ssh/known_hosts)",
-      "Bash(xclip:*)"
+      "Bash(xclip:*)",
+      "Bash(brotab text:*)",
+      "Bash(brotab index:*)",
+      "Bash(brotab query:*)",
+      "Bash(brotab html:*)",
+      "Bash(claude-nvr:*)",
+      "Bash(/usr/bin/import:*)",
+      "Bash(zcat:*)",
+      "Bash(numfmt:*)",
+      "Bash(mlterm:*)",
+      "Bash(xrandr:*)",
+      "Bash(CLI_JS=\"/home/atondwal/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js\" sed:*)",
+      "Bash(lsusb:*)",
+      "WebFetch(domain:sr.ht)",
+      "WebFetch(domain:git.sr.ht)",
+      "Bash(numen --list-mics:*)",
+      "Bash(zoxide query:*)",
+      "Bash(debugfs:*)"
     ],
     "deny": [],
     "ask": [],
-    "defaultMode": "plan"
+    "defaultMode": "default"
   },
   "model": "opus",
   "hooks": {
