@@ -55,15 +55,21 @@ export KEYTIMEOUT=1
 
 WORDCHARS=${WORDCHARS/\//}
 # alias -s pdf="evince"
-# alias ra=ranger
+alias ra=ranger
 alias open=xdg-open
-#alias nv=nvim
 alias vn=nvim
-export PATH=$PATH:"~/.claude/local/claude"
-d() { claude --allow-dangerously-skip-permissions "$*"; }
+export PATH=~/.npm-global/bin:$PATH
+d() {
+  if [[ $# -eq 1 ]]; then
+    tmux new-session -s "$1" claude --allow-dangerously-skip-permissions "/rename $1"
+  else
+    claude --allow-dangerously-skip-permissions "$*"
+  fi
+}
+resume() {tmux new-session -s "$1" claude --allow-dangerously-skip-permissions "/resume $1"}
 p() { claude --allow-dangerously-skip-permissions -p "$*"; }
 alias ack=ag
-alias vw="nvim +VimwikiIndex"
+#alias vw="nvim +VimwikiIndex"
 # Emacsclient aliases
 alias ec='emacsclient -c'           # new GUI frame
 alias et='emacsclient -t'           # terminal frame
@@ -71,7 +77,7 @@ em() { emacsclient -c -a '' "$@"; } # start daemon if needed + open
 autoload -U zmv
 bindkey '^R' history-incremental-pattern-search-backward
 alias iwsplit="sudo iw dev wlp3s0 interface add wlp3s1 type station"
-                 
+
 bindkey "^?" backward-delete-char
 bindkey "^W" backward-kill-word
 bindkey "^H" backward-delete-char
