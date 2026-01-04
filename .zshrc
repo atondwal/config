@@ -59,7 +59,7 @@ WORDCHARS=${WORDCHARS/\//}
 alias open=xdg-open
 #alias nv=nvim
 alias vn=nvim
-alias claude="~/.claude/local/claude"
+export PATH=$PATH:"~/.claude/local/claude"
 d() { claude --allow-dangerously-skip-permissions "$*"; }
 p() { claude --allow-dangerously-skip-permissions -p "$*"; }
 alias ack=ag
@@ -378,6 +378,8 @@ alias ttp='f() { tb; docker tag "$(basename $(pwd))" "us-east1-docker.pkg.dev/gc
 
 alias oc=opencode
 alias cc=claude
+alias lq=logseq
+alias say=espeak
 
 # bun completions
 [ -s "/home/atondwal/.bun/_bun" ] && source "/home/atondwal/.bun/_bun"
