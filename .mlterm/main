@@ -1,0 +1,13 @@
+bg_color = #1d2021
+fg_color = #ebdbb2
+use_anti_alias = false
+type_engine = xft
+scrollbar_mode = none
+scrollbar_view_name = athena
+regard_uri_as_word = true
+use_variable_column_width = false
+logsize=8092
+termtype=mlterm
+fontsize = 22
+font_name = 'Source Code Pro':size=12,Twemoji:size=12
+charmap = UTF-8

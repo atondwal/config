@@ -1,0 +1,5 @@
+Control+Up="proto:fontsize=larger"
+Control+Down="proto:fontsize=smaller"
+Shift+Control+Insert=INSERT_CLIPBOARD
+Shift+Control+V=INSERT_CLIPBOARD
+Shift+Control+C=COPY_CLIPBOARD
