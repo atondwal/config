@@ -20,5 +20,6 @@
 	protocol = ssh
 [safe]
 	directory = /home/atondwal/usb/rl-env
+	directory = /home/atondwal/playgroundgastown-docker/workspace/rl-env
 [alias]
 	lola = log --oneline --graph --all --decorate
