@@ -1,0 +1,9 @@
+\.git
+\.gitignore
+\.stow-local-ignore
+install\.sh
+install\.zsh
+README.*
+LICENSE
+chrome
+tst\.css
