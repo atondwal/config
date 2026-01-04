@@ -172,8 +172,7 @@ myKeys XConfig{modMask = m, terminal = term, workspaces = sps} = fromList $ [
   , ((m .|. shiftMask, xK_o), spawn "thunar")
   -- , ((m              , xK_p), shellPrompt (greenXPConfig {historyFilter = nub}))
   , ((m              , xK_p), shellPrompt (greenXPConfig {historyFilter = nub}))
-  -- fzf as dmenu replacement: https://gist.github.com/MahouShoujoMivutilde/b1fa83bc234b68dd164cb6e843965d75
-  , ((m .|. shiftMask, xK_p), spawn "mlterm -N fzfmenu -e zsh -c 'eval \"$(cut -d\\; -f2- ~/.zhistory | tac | awk !seen\\[\\$0\\]++ | fzf --print-query --bind tab:replace-query | tail -1)\"'")
+  , ((m .|. shiftMask, xK_p), spawn fzfmenu)
   , ((m              , xK_r), spawn  "rofi -show run")
   , ((m .|. shiftMask, xK_r), spawn  "rofi -show drun")
 
@@ -195,6 +194,9 @@ myKeys XConfig{modMask = m, terminal = term, workspaces = sps} = fromList $ [
  where
   -- dmenu = "exe=`dmenu_path | yeganesh -- -i -b -sb \"#689d6a\" -sf \"#2d2d2d\" -nb \"#2d2d2d\" -nf grey -fn 'Source Code Pro-16'` && eval \"$exe\""
   dmenu = "rofi -combi-modi window,run,drun -show combi"
+  -- https://gist.github.com/MahouShoujoMivutilde/b1fa83bc234b68dd164cb6e843965d75
+  fzfmenu = "mlterm -N fzfmenu -e zsh -c 'eval \"$(" ++ hist ++ " | fzf --print-query --bind tab:replace-query | tail -1)\"'"
+  hist = "cut -d\\; -f2- ~/.zhistory | tac | awk !seen\\[\\$0\\]++"
 
   capsarcasm (x:y:xs) = toUpper x : y : capsarcasm xs
   capsarcasm xs = xs
