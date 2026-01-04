@@ -113,6 +113,7 @@ scratchpads =
   , NS "logseq" "logseq" (className =? "Logseq" <&&> (not . isInfixOf "pdf" <$> stringProperty "WM_NAME")) (geo (1/5) (1/5) (7/10) (7/10))
   , NS "pulsemixer" "mlterm -N pulsemixer -e pulsemixer" (className  =? "pulsemixer")  (geo 0 (2/3) (1/3) (1/3))
   , NS "htop" "mlterm -N htop -e htop" (className  =? "htop")  (geo (1/3) (2/3) (1/3) (1/3))
+  , NS "fzfmenu" "" (className =? "fzfmenu") (geo (1/4) (1/4) (1/2) (1/2))
   ]
  where
   geo a b c d = customFloating (RationalRect a b c d)
@@ -171,6 +172,8 @@ myKeys XConfig{modMask = m, terminal = term, workspaces = sps} = fromList $ [
   , ((m .|. shiftMask, xK_o), spawn "thunar")
   -- , ((m              , xK_p), shellPrompt (greenXPConfig {historyFilter = nub}))
   , ((m              , xK_p), shellPrompt (greenXPConfig {historyFilter = nub}))
+  -- fzf as dmenu replacement: https://gist.github.com/MahouShoujoMivutilde/b1fa83bc234b68dd164cb6e843965d75
+  , ((m .|. shiftMask, xK_p), spawn "mlterm -N fzfmenu -e zsh -c 'eval \"$(cut -d\\; -f2- ~/.zhistory | tac | awk !seen\\[\\$0\\]++ | fzf --print-query --bind tab:replace-query | tail -1)\"'")
   , ((m              , xK_r), spawn  "rofi -show run")
   , ((m .|. shiftMask, xK_r), spawn  "rofi -show drun")
 
